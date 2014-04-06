@@ -118,14 +118,53 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Dynamický strom}
-\begin{frame}
-    \frametitle{Dynamický strom}
-\end{frame}
-
 \subsection{Ordered file}
 \begin{frame}
     \frametitle{Ordered file}
+    \begin{itemize}
+        \item Problém: udržiavať usporiadanú postupnosť prvkov, možnosť vkladať/odstraňovať, ako pole veľkosti $\bigO(N)$ $\Rightarrow$ medzery $O(1)$, vieme rýchlo prechádzať
+        \item Riešenie: rozdelíme súvislé pole na imaginárne bloky veľkosti $\bigO(\log N)$ a vyrobíme nad nimi imaginárny úplný binárny strom
+        \item {\em Hustota} vrcholu bude $\frac{\text{počet plných}}{\text{kapacita}}$, udržiavame podla istých hraníc aby nebolo príliš plné (nie je kam vložiť) ani príliš prázdne (pomalé prechádzanie)
+        \item {\em Vloženie prvku}: Upravíme blok a postupujeme hore v strome, kým nenájdeme vrchol, ktorý má hustotu v medziach a rovnomerne prerozdelíme prvky v príslušných blokoch
+        \item {\em Zmazanie prvku} podobne
+        \item Každá operácia upraví súvislý interval veľkosti $\bigO(\lg^2 N)$ (amortizovane, dá sa aj worst-case)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+        \includegraphics[width=0.8\textwidth,]{../figures/downloaded_dont_use/fig2-ofm.jpg}
+    \end{center}
+\end{frame}
+
+\subsection{Dynamický strom}
+\begin{frame}
+    \frametitle{Dynamický strom}
+    \begin{itemize}
+        \item Skombinujeme predošlé dve štruktúry a dostaneme dynamický vyhľadávací strom
+        \item Máme OF v ktorom sú kľúče a medzery, použijeme ako listy pre BST uložený v vEB layoute
+        \item Vo vnútorných uzloch ukladáme maximum z podstromov
+    \end{itemize}
+    \begin{center}
+        \includegraphics[height=0.5\textheight]{../figures/downloaded_dont_use/vEBpOFM.pdf}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+        \item Vyhľadávanie: rovnako ako v statickom $\bigO(\log_B N)$
+        \item Vkladanie
+        \begin{itemize}
+            \item Nájdeme nasledujúci kľúč v OF, vložíme nový za neho
+            \item Musíme upraviť strom pre zmenený interval veľkosti $\bigO(\lg^2 N)$
+            \item Prechod cez zasiahnuté vnútorné uzly vyžaduje $\bigO(\frac{\lg^2 N}{B})$ pamäťových operácií
+        \end{itemize}
+        \item Vkladanie a odstraňovanie spolu potrebuje $\bigO(\log_B N + \frac{\lg^2 N}{B})$
+        \item Dá sa zredukovať na $\bigO(\log_B N)$ ak ukladáme $\bigO(\log N)$ bloky
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth]{../figures/downloaded_dont_use/dyn-insert.pdf}
+    \end{center}
 \end{frame}
 
 \section{Vizualizácie}
