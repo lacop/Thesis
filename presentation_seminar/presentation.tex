@@ -5,6 +5,8 @@
 \usepackage[slovak]{babel}
 \usepackage[utf8x]{inputenc}
 
+\usepackage{pdfpcnotes}
+
 \newcommand{\bigO}{\ensuremath{\mathcal{O}}}
 
 \title{Cache-oblivious algoritmy a ich vizualizácia}
@@ -52,6 +54,7 @@
 		\item Poznáme $B$ a $M$, každá operácia čítania/zápisu na disk je explicitne vykonaná algoritmom
 		\item Ak je cache plná musí vybrať, ktorý blok zahodí
 	\end{itemize}
+	\pnote{Pri zahadzovani bloku v cache ak bol zmeneny treba zapisat}
 \end{frame}
 
 \begin{frame}
@@ -59,8 +62,9 @@
 	\begin{itemize}
 		\item Treba explicitne čítať a zapisovať bloky, riešiť asociatívnosť cache
 		\item Čo ak sa zmenia parametre $B$ alebo $M$?
-		\item Čo v prípade viac úrovní? Treba pre každú susediacu dvojicu poznať $B, M$  a spravovať bloky.
+		\item Čo v prípade viac úrovní? Treba pre každú susediacu dvojicu poznať $B, M$  a spravovať bloky
 	\end{itemize}
+	\pause
 	\begin{center}
 		\begin{tabular}{|l|l|l|}
 			\hline
@@ -69,10 +73,15 @@
 			L2 & $\approx$ 1MiB & 10-12clk $\approx$ 3ns (pri 3.5GHz) \\ \hline
 			L3 & $\approx$ 8MiB & 20-50clk $\approx$ 10ns (pri 3.5GHz) \\ \hline
 			RAM & $\approx$ 4GiB & $\approx$ 100ns \\ \hline
-			HDD & $\approx$ 1TiB & $\approx$ 0.1-10ms \\
+			Disk & $\approx$ 1TiB & $\approx$ 0.1-10ms \\
 			\hline
 		\end{tabular}
 	\end{center}
+	\pnote{B pre disk/ram je cca 4KB}
+	\pnote{Zistenie B a M - pri kompilacii, za behu?}
+	\pnote{Treba pri zmene prekompilovat? Prepisat algoritmus}
+	\pnote{L3 - RAM : 10x pomalsie, 100x vacsie}
+	\pnote{RAM - Disk: 1 000x - 100 000x pomalsie, 1000x vacsie}
 \end{frame}
 
 \subsection{Cache-oblivious model}
@@ -85,6 +94,7 @@
 		\end{itemize}
 		\item Chceme (asymptoticky) rovnaký počet presunov ako optimálny cache-aware algoritmus, ale bez znalosti parametrov $B$ a $M$
 	\end{itemize}
+	\pnote{Pozname pri analyze, ale nie pocas behu}
 \end{frame}
 
 \section{Algoritmy a dátové štruktúry}
@@ -116,6 +126,7 @@
         \end{itemize}
         \item Spolu teda $\bigO(\log_{B}{N})$ čo je spodná hranica pre external-memory model
     \end{itemize}
+    \pnote{Analogia v cache-aware je B-strom}
 \end{frame}
 
 \subsection{Ordered file}
@@ -125,16 +136,28 @@
         \item Problém: udržiavať usporiadanú postupnosť prvkov, možnosť vkladať/odstraňovať, ako pole veľkosti $\bigO(N)$ $\Rightarrow$ medzery $O(1)$, vieme rýchlo prechádzať
         \item Riešenie: rozdelíme súvislé pole na imaginárne bloky veľkosti $\bigO(\log N)$ a vyrobíme nad nimi imaginárny úplný binárny strom
         \item {\em Hustota} vrcholu bude $\frac{\text{počet plných}}{\text{kapacita}}$, udržiavame podla istých hraníc aby nebolo príliš plné (nie je kam vložiť) ani príliš prázdne (pomalé prechádzanie)
-        \item {\em Vloženie prvku}: Upravíme blok a postupujeme hore v strome, kým nenájdeme vrchol, ktorý má hustotu v medziach a rovnomerne prerozdelíme prvky v príslušných blokoch
-        \item {\em Zmazanie prvku} podobne
-        \item Každá operácia upraví súvislý interval veľkosti $\bigO(\lg^2 N)$ (amortizovane, dá sa aj worst-case)
     \end{itemize}
+    \pnote{Hranice hustoty:}
+    \pnote{Listy: 1/4 - 1}
+    \pnote{Koren: 1/2 - 3/4}
 \end{frame}
 
 \begin{frame}
 \begin{center}
         \includegraphics[width=0.8\textwidth,]{../figures/downloaded_dont_use/fig2-ofm.jpg}
     \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Operácie}
+    \begin{itemize}
+        \item {\em Vloženie prvku}: Upravíme blok a postupujeme hore v strome, kým nenájdeme vrchol, ktorý má hustotu v medziach a rovnomerne prerozdelíme prvky v príslušných blokoch
+        \item {\em Zmazanie prvku} podobne
+        \item Každá operácia upraví súvislý interval veľkosti $\bigO(\lg^2 N)$
+    \end{itemize}
+    \pnote{Imaginarny strom, scan v dvoch smeroch}
+    \pnote{Odhad - amortizovane, dá sa aj worst-case}
+    \pnote{Conjencture lowerbound}    
 \end{frame}
 
 \subsection{Dynamický strom}
@@ -155,7 +178,7 @@
         \item Vyhľadávanie: rovnako ako v statickom $\bigO(\log_B N)$
         \item Vkladanie
         \begin{itemize}
-            \item Nájdeme nasledujúci kľúč v OF, vložíme nový za neho
+            \item Nájdeme nasledujúci kľúč v OF, vložíme nový pred neho
             \item Musíme upraviť strom pre zmenený interval veľkosti $\bigO(\lg^2 N)$
             \item Prechod cez zasiahnuté vnútorné uzly vyžaduje $\bigO(\frac{\lg^2 N}{B})$ pamäťových operácií
         \end{itemize}
@@ -170,6 +193,13 @@
 \section{Vizualizácie}
 \begin{frame}
     \frametitle{Vizualizácie}
+    \begin{itemize}
+        \item Pridanie týchto troch DŠ do {\em alg-vis} (+ možno ďalšie)
+        \item Krokovanie s animáciami, vysvetlenie krokov, undo/redo, \dots
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth]{../figures/screenshots/slides_cobtree.png}
+    \end{center}
 \end{frame}
 
 \end{document}

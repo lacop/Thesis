@@ -1,0 +1,27 @@
+[notes]
+### 4
+Pri zahadzovani bloku v cache ak bol zmeneny treba zapisat
+### 5
+B pre disk/ram je cca 4KB
+Zistenie B a M - pri kompilacii, za behu?
+Treba pri zmene prekompilovat? Prepisat algoritmus
+L3 - RAM : 10x pomalsie, 100x vacsie
+RAM - Disk: 1 000x - 100 000x pomalsie, 1000x vacsie
+### 5
+B pre disk/ram je cca 4KB
+Zistenie B a M - pri kompilacii, za behu?
+Treba pri zmene prekompilovat? Prepisat algoritmus
+L3 - RAM : 10x pomalsie, 100x vacsie
+RAM - Disk: 1 000x - 100 000x pomalsie, 1000x vacsie
+### 6
+Pozname pri analyze, ale nie pocas behu
+### 8
+Analogia v cache-aware je B-strom
+### 9
+Hranice hustoty:
+Listy: 1/4 - 1
+Koren: 1/2 - 3/4
+### 11
+Imaginarny strom, scan v dvoch smeroch
+Odhad - amortizovane, dá sa aj worst-case
+Conjencture lowerbound
