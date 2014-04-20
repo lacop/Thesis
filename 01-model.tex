@@ -1,0 +1,122 @@
+\chapter{Cache-oblivious algoritmy a dátové štruktúry}
+%Skôr, ako popíšeme \obliv model návrhu a analýzy algoritmov, uvedieme 
+\section{Model}
+Klasický model pre analýzu pamäťovej hierarchie s dvoma úrovňami je {\em external-memory} model. Ten popisuje procesor, ktorý ma k dispozícií pracovnú pamäť ({\em cache}) obmedzenej veľkosti $M$. Všetky dáta, s ktorými algoritmus pracuje sa musia nachádzať niekde v tejto pamäti, ako bloky veľkosti $B$ (spolu teda $M/B$ blokov). Ostatné dáta sa nachádzajú na disku, ktorý ma prakticky neobmedzenú veľkosť, no s jeho blokmi nie je možné pracovať priamo. Je potrebné najprv pomocou operácií čítania a zápisu na disk presunúť blok z disku do cache a naopak.
+
+\
+
+Pre tento model je možné vyrobiť algoritmy, ktoré budú tieto dve úrovne pamäte používať efektívne, za predpokladu, že poznajú parametre $B$ a $M$. Nevýhodou je nutnosť algoritmu explicitne spravovať pamäť a presúvať jednotlivé bloky medzi diskom a cache.
+
+\
+
+Na rozdiel od klasického modelu, \obliv model používa tieto parametre iba pri analýze a nie pri samotnom návrhu. To znamená, že keď funguje efektívne pre neznáme parametre, musí fungovať rovnako efektívne pre ľubovolné také parametre. Vďaka tomu bude fungovať pre systémy s rôznou konfiguráciou pamäte bez nutnosti úprav. Taktiež, pre systémy s viacerými úrovňami pamäte bude fungovať medzi každou dvojicou v hierarchií. A keďže bez znalosti $B$ nie je možné explicitne spravovať pamäť a presúvať bloky, \obliv algoritmy prenechávajú túto činnosť na iné úrovne (operačný systém, hardware).
+
+\section{Výmena stránok}
+
+V prípade, že sa \obliv algoritmus pokúsi o čítanie z bloku pamäte, ktorý sa momentálne nenachádza v cache, je potrebné ho tam najskôr skopírovať. Ak cache nie je plná tak to nie je problém. V opačnom prípade je však potrebné uvolniť miesto tým, že sa vyberie blok z cache, jeho obsah sa zapíše na disk a následne sa požadovaný blok uloží na jeho miesto v cache. Tento proces sa nazýva výmena stránok ({\em page replacement}), a algoritmus rozhodujúci, ktorý blok z cache odstrániť, voláme stratégia výmeny stránok ({\em page-replacement strategy})
+
+\
+
+Ak by sa táto stratégia správala tak, že vždy odstráni blok, ktorý bude potrebný v ďalšom kroku algoritmu, tak by bolo zakaždým presúvať bloky medzi diskom a cache. To by znamenalo, že počet blokov, s ktorými cache môžeme pracovať je prakticky $1 = M/B$. Ďalším problémom je asociatívnosť cache - z praktických dôvodov je často možné daný blok z disku uložiť len na niekoľko pozícií v cache. Inak by bolo potrebné ukladať spolu s každým blokom jeho adresu, čo by redukovalo celkový počet blokov, ktoré sa do cache zmestia. V prípade nízkej asociativity môžu opäť nastať situácie, kedy je algoritmus schopný využiť iba malý počet blokov v cache.
+
+\
+
+Tieto problémy \obliv model obchádza predpokladom ideálnej cache - cache, ktorá je plne asociatívna (každý blok disku je možné uložiť v každom bloku cache) a používa optimálnu stratégiu výmeny stránok, ktorá vždy odstráni blok, ktorý bude potrebný najneskôr. Prvý predpoklad je síce v reálnych systémoch nepraktický, no z teoretického hľadiska je v poriadku. Čo však s druhým predpokladom, kedy stratégia výmeny stránok je schopná predpovedať budúcnosť? Ako ukazujú nasledovné lemy, bez týchto predpokladov na reálnom systéme s nízkou asociativitou a jednoduchou stratégiou výmeny stránok sa algoritmus zhorší len o konštantný faktor.
+
+\begin{lema}
+Algoritmus, ktorý v ideálnej cache veľkosti $M$ s blokmi veľkosti $B$ vykoná $T$ pamäťových operácií, vykoná najviac $2T$ pamäťových operácií v cache veľkosti $2M$ s blokmi veľkosti $B$ pri použití stratégie {\em LRU} alebo {\em FIFO}. \citep[Lemma 12]{FrigoLePr99}
+\end{lema}
+
+Stratégia {\em LRU} (least recently used) vyberá vždy blok, ktorý bol najdlhšie nepoužitý. Implementácia vyžaduje udržiavať si ku každej položke počítadlo, ktoré sa pri prístupe nastaví na nulu a pri prístupe k iným položkám zvýši o jedna. Potom stačí odstrániť položku s najväčšou hodnotou počítadla.
+
+Stratégia {\em FIFO} (first in, first out) je ešte jednoduchšia - položky sú udržiavané vo fronte, pričom nové vkladáme na koniec a v prípade, že sa minie miesto v cache a je potrebné nejaké uvoľniť, tak vezmeme prvok na začiatku fronty a odstránime ho.
+
+\begin{lema}
+Plne asociatívna cache veľkosti $M$ sa dá simulovať s použitím $\bigO{M}$ pamäte tak, že prístup ku každému bloku v cache zaberie v priemernom prípade $\bigO{1}$ času. \citep[Lemma 16]{FrigoLePr99}
+\end{lema}
+
+\section{Základné algoritmy}
+
+Najjednoduchším \obliv algoritmom je prechod poľa a výpočet agregačnej funkcie. Majme pole $A$ veľkosti $|A| = N$ a označme jeho prvky $A_1,\cdots,A_n$. Chceme vypočítať hodnotu $f(g, A)$, kde $g$ je agregačná funkcia, $g_0$ je počiatočná hodnota a $f$ je definovaná následovne:
+\[
+\begin{aligned}
+f(A_1,\cdots,A_n) &= g(A_1, f(A_2,\cdots,A_n)) \\
+f(\emptyset) &= g_0
+\end{aligned}
+\]
+
+Tento algoritmus s použitím vhodnej funkcie $g$ a hodnoty $g_0$ je možné použiť na rôzne, často užitočné výpočty, ako napríklad maximum ($g(x, y) = max(x, y)$, $g_0 = -\infty$), minimum, suma ($g(x,y) = x+y$, $g_0 = 0$) a podobne.
+
+\
+
+V prípade \aware algoritmu by sme pole $A$ mali uložené v $\lceil N/B \rceil$ blokoch veľkosti $B$. Pri výpočte $f$ by sme postupne tieto bloky načítali do cache a pracovali s nimi. V rámci jedného bloku počas výpočtu nedochádza k pamäťovým presunom. Zároveň stačí každý prvok spracovať raz a teda celkový počet pamäťových operácií bude presne rovný počtu blokov, $\lceil N/B \rceil$. Tento algoritmus však požaduje znalosť parametra $B$.
+
+\
+
+Jednoducho však vieme dosiahnuť (takmer) rovnakú zložitosť aj v prípade \obliv. Uložíme si pole $A$ do súvislého úseku pamäte - k tomu nepotrebujeme poznať hodnotu $B$ ani žiadne iné parametre. Zvyšok algoritmu prebieha rovnako ako v predchádzajúcom prípade. Každý blok obsahujúci nejaký prvok poľa $A$ bude teda presunutý do cache práve raz, a žiadne iné presuny nenastanú. Ostáva zistiť, koľko takých blokov môže byť.
+
+\
+
+Keďže nepoznáme veľkosti blokov v pamäti, nevieme pri ukladaní prvkov poľa zaručiť zarovnanie so začiatkom bloku. V najhoršom prípade uložíme do prvého bloku iba jeden prvok. Potom bude nasledovať $\lfloor N/B \rfloor$ plných blokov a nakoniec ešte najviac jeden blok, ktorý opäť nie je plný. Spolu máme teda $\lfloor N/B \rfloor + 2$. Pokiaľ $\lfloor N/B \rfloor < \lceil N/B \rceil$ a teda najviac $\lceil N/B \rceil + 1$ blokov. V opačnom prípade $B$ delí $N$, teda v prvom a poslednom bloku je spolu presne $B$ prvkov a medzi nimi sa nachádza najviac $\frac{N-B}{B} = N/B - 1$ plných. Teda blokov je vždy najviac $\lceil N/B \rceil +1$, čo je až aditívnu konštantu rovnaký výsledok ako uvedený \aware algoritmus.
+
+\section{Matice}
+
+\subsection{Násobenie matíc}
+
+Ďalším jednoduchým \obliv algoritmom je násobenie matíc. Majme dve matice $A, B$ typu $N \times N$ a chceme vypočítať ich súčin $S = A \cdot B$. Klasický algoritmus bude pri výpočte každého prvku $S$ postupne prechádzať maticu $A$ po riadkoch a maticu $B$ po stĺpoch. Za predpokladu, že sa do cache súčasne zmestia aspoň tri bloky - po jednom z matíc $A$ a $B$, a jeden blok $S$ obsahujúci prvok, ktorý práve počítame - budeme na každý prvok $S$ potrebovať najviac $\bigO{1+N/B}$ presunov. Celkovo teda vykonáme najviac $\bigO{N^2 + N^3/B}$ pamäťových presunov. 
+
+\
+
+\todo[inline]{Doplniť \obliv verziu + analýzu}
+
+%\subsection{Invertovanie matíc}
+
+\section{Stromy}
+\subsection{Statické stromy}
+
+\todo[inline]{...}
+
+%\subsubsection{Packed memory array}
+%\subsubsection{B-Stromy}
+
+%\subsubsection{Prioritné fronty} % funnel heap?
+
+\section{Triedenie}
+
+V \aware modely pamäte je spodným odhadom na počet pamäťových presunov pri triedení porovnávaním $\Theta(\frac{N}{B}log_{M/B}\frac{N}{B})$. \citep{AggVitt88, Demaine02}. Algoritmus, ktorý túto hranicu dosahuje je $M/B$-cestný mergesort (triedenie zlučovaním). Na rozdiel od klasického mergesortu si pri zlučovaní pamätá $B$ prvkov z každého z $M/B$ zoznamov a pri vyprázdnení načíta opäť cely blok s $B$ prvkami. Zlúčenie listov celkovej dĺžky $N$ teda vyžaduje $\bigO{N/B}$ pamäťových presunov.
+
+\
+
+Avšak \obliv algoritmy musia fungovať bez znalosti $M$ a $B$ a teda bez možnosti vypočítať $M/B$, najväčší počet zoznamov, ktoré môžeme súčasne zlučovať a pamätať si z každého $B$ prvkov v cache. Najlepšie, čo môžeme predpokladať je $M/B \ge 2$, teda vieme aspoň dva zoznamy zlučovať. Teda implementácia $2$-cestného mergesort algoritmu je \obliv, a funguje pre ľubovolné parametre. Avšak počet pamäťových presunov bude $\Theta(\frac{N}{B}log_{2}\frac{N}{B})$, to znamená, že zväčšenie $M$ tento algoritmus nezrýchli, keďže využívame vždy iba malú časť cache. 
+
+\
+
+Ideálny \obliv algoritmus by dosahoval rovnakú, optimálnu hranicu počtu presunov ako $M/B$-cestný mergesort, no bez znalosti týcho parametrov. Jedným z takýchto efektívnych \obliv algoritmov je takzvaný {\em funnel sort} - lievikové triedenie. Skôr ako ho môžeme popísať však potrebujeme definovať dátovú štruktúru {\em funnel} (lievik).
+
+\subsection{Funnel}
+
+K-lievik nazveme štruktúru, ktorá je na vstupe dostane $K$ usporiadaných zoznamov, s celkovou dĺžkou $K^3$ a skombinuje tieto prvky do jedného, usporiadaného výstupného zoznamu, pričom použije najviac $\bigO{\frac{K^3}{B} log_{M/B} \frac{K^3}{B} + K}$ pamäťových operácií.
+
+\
+
+Reprezentácia $K$-lievika bude úplný binárny strom s $K$ listami, uložený v pamäti vo van Emde Boasovom usporiadaní, ako pri statických stromoch (rekurzívne podstromy veľkosti $\sqrt{K}$). Hrany medzi vnútornými rekurzívnymi podstromami si uchovávajú {\em buffer} (pomocné pole) veľkosti $K^{3/2}$, pričom podstromov je $\sqrt{K}$ a teda spolu potrebujú $K^2$ pamäte. V podstromoch, ktoré tvoria $\sqrt{K}$-lieviky, sú všetky buffery rekurzívne menšie.
+
+\
+
+Spolu teda $K$-lievik potrebuje $S(K)$ pamäte. Každý sa skladá z $1+\sqrt{K}$ podstromov, ktoré reprezentujú $\sqrt{K}$-lieviky a teda $S(K) = (1+\sqrt{K})S(\sqrt{K}) + K^2$. Z toho jednoducho dostaneme, že veľkosť $K$-lievika v pamäti je $\bigO{K^2}$.
+
+\
+
+\todo[inline]{Obrázok + analýza počtu pamäťových presunov}
+
+\subsection{Funnelsort}
+
+Vezmime vstupné pole veľkosti $N$ a rozdelme ho na $K = N^{1/3}$ súvislých segmentov. Veľkosť každého bude $N^2/3$. Následne rekurzívne utriedime tieto segmenty. Pre ich spojenie použijeme $K$-lievik, ktorého výstupom bude usporiadané pole.
+
+\
+
+Počet pamäťových presunov bude
+\[
+T(N) = N^{1/3}T(N^{2/3}) + \bigO{\frac{N}{B} log_{M/B} \frac{N}{B} + N^{1/3}}
+\]
+keďže rozdelenie poľa je voči spájaniu zanedbateľné. Táto rekurencia platí pre $N > M$. V prípade, že sa cele pole zmestí do cache, teda $N \le M$, a za predpokladu $M \ge B^2$, dostávame $T(N) = T(B^2) = \bigO{B}$. Celkové riešenie tejto rekurencie, a teda výsledný počet pamäťových presunov potrebných na usporiadanie poľa veľkosti $N$ je $\bigO{\frac{N}{B} log_{M/B} \frac{N}{B}}$.
