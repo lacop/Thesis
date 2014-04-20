@@ -1,102 +1,120 @@
-%\documentclass[11pt,a4paper]{article} 
-\documentclass[12pt,a4paper]{article} 
-\renewcommand\baselinestretch{1.2} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Univerzita Komenskeho - Thesis template
+% Based on "Vnutorny predpis c. 12/2013"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Global document settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cl.7/2 - font size 12pt, portrait, A4
+% Cl.7/6 - single side printing
+\documentclass[a4paper,12pt,oneside,final]{memoir}
+% Cl.7/2 - 1.5x line spacing
+\OnehalfSpacing
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Page geometry
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cl.7/3 - 3.5cm left, 2cm right
+\setlrmarginsandblock{3.5cm}{2cm}{*}
+% Cl.7/3 - 2.5cm left, 2.5cm right
+\setulmarginsandblock{2.5cm}{2.5cm}{*}
+\checkandfixthelayout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Language, encoding, fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[slovak]{babel}
-\usepackage[utf8x]{inputenc}
+\usepackage{fontspec}
 
-\usepackage{geometry} % to change the page dimensions
-\usepackage{layout}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Important packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{microtype} % Typographical improvements
+\usepackage{booktabs} % Better looking tables
+\usepackage{pdfpages} % Include PDFs
+\usepackage[bottom]{footmisc} % Move footnotes to the bottom
 
-\textheight=23cm
+% Figures
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 
-\usepackage{graphicx} 
-
-\usepackage{fancyhdr}
-\usepackage{extramarks}
-\usepackage{lastpage}
+% Math related
 \usepackage{amsmath,amsthm}
 \usepackage{amsfonts}
 \usepackage{mathtools}
-\usepackage{pgf}
-\usepackage{tikz}
-\usepackage{bm}
-\usepackage{mathrsfs}
+\usepackage{bm, mathrsfs}
 
-\usepackage{todonotes}
+% Code syntax highlighting
+\usepackage[chapter]{minted}
+\usemintedstyle{tango}
+\renewcommand\listingscaption{Zdrojový kód}
 
-%%% PACKAGES
-\usepackage{booktabs} % for much better looking tables
-\usepackage{array} % for better arrays (eg matrices) in maths
-\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
-\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
-\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
-% These packages are all incorporated in the memoir class to one degree or another...
-
-\usepackage[sort,numbers]{natbib}
-
-%%% HEADERS & FOOTERS
-\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
-\pagestyle{fancy} % options: empty , plain , fancy
-\renewcommand{\headrulewidth}{0pt} % customise the layout...
-\lhead{}\chead{}\rhead{}
-\lfoot{}\cfoot{\thepage}\rfoot{}
-
-%%% SECTION TITLE APPEARANCE
-\usepackage{sectsty}
-\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
-% (This matches ConTeXt defaults)
-
-%%% ToC (table of contents) APPEARANCE
-\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
-\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
-\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
-\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
-
-%%% END Article customizations
-
-%%% The "real" document content comes below...
-
-%\title{Brief Article}
-%\author{The Author}
-%\date{} % Activate to display a given date or no date (if empty),
-         % otherwise the current date is printed 
-
-\begin{document}
-%\maketitle
-
-\newcommand{\aware}{{\em cache-aware} }
-\newcommand{\obliv}{{\em cache-oblivious} }
-
-\newtheorem{lema}{Lema}
-
-\newcommand{\bigO}{\ensuremath{\mathcal{O}}}
-
-
-%\layout
-
-\include{01-uvod}
-
-\clearpage
-\include{02-cacheobliv}
-
-%
-%\clearpage
-%\section{Implementácia}
-%\subsection{Existujúce riešenia}
-%\subsection{Merania rýchlosti}
-%
-%\clearpage
-%\section{Vizualizácia}
-%\subsection{Existujúce riešenia}
-%\subsection{Algvis}
-%\subsection{Implementácia}
-%
-%\clearpage
-%\section{Záver}
-
-\nocite{*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[authoryear,square,sort]{natbib}
 \bibliographystyle{natdin}
-\bibliography{research}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Misc packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{lipsum} % Lorem ipsum (for testing)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Setup document preferences
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapterstyle{veelo} % TODO pick - veelo, madsen, ?
+
+\pagestyle{ruled}
+\makeoddhead{ruled}{\sffamily\leftmark}{}{\sffamily\rightmark}
+
+% Create custom plain page style with pagenumbers on right instead of centered
+\makepagestyle{plainright}
+\makeoddfoot{plainright}{}{}{\thepage}
+\aliaspagestyle{chapter}{plainright}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\unnumberedchapter}[1]{
+    \chapter*[#1]{#1}
+    \addcontentsline{toc}{chapter}{#1}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Include document settings (title, name, ...)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{settings}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Start of document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\frontmatter
+    \input{cover}
+
+    \includepdf[pages=1]{\settingsAISfile}
+    \newpage
+    
+    \thispagestyle{plain}
+    \input{thanks}
+    \newpage
+    
+    \input{abstracts}
+    \newpage
+    
+    \tableofcontents*
+    \newpage
+    \listoffigures*
+    \newpage
+    \listoftables*
+    
+\mainmatter
+    \input{contents}
+
+\backmatter
+    \nocite{*} % Add all bibliography uncited in text
+    \bibliography{research}
 \end{document}
