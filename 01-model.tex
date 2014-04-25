@@ -19,26 +19,41 @@ Všetky výpočty prebiehajú nad dátami v \cache, ktorá má obmedzenú veľko
 
 Samotné presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk aj \cache sa skladajú z takýchto blokov a za jednu operáciu považujeme presun jedného bloku medzi nimi. \Cache má obmedzenú veľkosť $M$ a skladá sa teda z $\frac{M}{B}$ blokov.  
 
+\todo{obrazok}
+
+\subsection{Cache-aware algoritmy}
+Pokiaľ poznáme parametre $B$ a $M$, môžeme skonštruovať algoritmus, ktorý bude túto dvojicu pamätí využívať efektívne. Takéto algoritmy voláme \aware (uvedomujúci si \cache). Súčasťou tohto algoritmu by bolo explicitné spravovanie presunov pamäte - je potrebné riešiť čítanie blokov z disku a ich umiestňovanie do \cache, nahrádzanie blokov v \cache pri zaplnení a spätný zápis blokov na disk.
+
+% TODO asociativita
+
+Tento model tiež popisuje len dve úrovne pamäte a teda funguje efektívne len pre danú susednú dvojicu, pre ktorú ho na základe znalosti parametrov optimalizujeme. V moderných systémoch ale máme takýchto dvojíc niekoľko. Keby sme poznali parametre pre všetky tieto dvojice môžeme zovšeobecniť tento model pre viac úrovní a explicitne riešiť presun blokov medzi nimi. Takto sa však samotná správa pamäte potenciálne stáva komplikovanejším problémom ako pôvodný algoritmus.
 
 
+\section{Cache-oblivious model}
+Riešením týchto problémov je \emph{cache-oblivious model} (na \cache nedbajúci), v ktorom uvažujeme rovnakú dvoj-úrovňovú pamäť zloženú z disku a \cache. Na rozdiel od \aware modelu však algoritmus nepozná parametre $B$ a $M$. Pokiaľ sa nám napriek tomu podarí navrhnúť algoritmus, ktorý vykonáva (asymptoticky) rovnaký počet pamäťových presunov ako \aware algoritmus, bude bežať efektívne pre ľubovolné takéto parametre.
 
+Takéto algoritmy majú na rozdiel od \aware algoritmov v \extmem modely mnohé výhody. Samotná implementácia algoritmu nemôže explicitne riešiť presun blokov pokiaľ nepozná veľkosť bloku ani koľko blokov môže do \cache uložiť. Táto úloha zostane ponechaná na nižšiu vrstvu (operačný systém resp. hardware v prípade \cache na procesore) - algoritmus bude pristupovať k pamäti priamo bez ohľadu na to, či sa nachádza v \cache alebo nie a v prípade potreby prebehnú nutné prenosy na nižšej úrovni (z pohľadu algoritmu) automaticky.
 
+Ďalšou výhodou je automatická optimalizácia pre dané parametre. V prípade \aware algoritmov môže byť problémom získať presné hodnoty týchto parametrov a potrebné pri ich zmene upraviť algoritmus. Vývoj algoritmu, ktorý bude fungovať na rozličných architektúrach, môže byť problematický.
 
+V neposlednom rade bude takýto \obliv algoritmus efektívny medzi každou dvojicou susedných úrovní. Vzhľadom na to, že hodnoty parametrov nepozná, musí pre ľubovolnú takú dvojicu pracovať rovnako efektívne. 
+
+% TODO assumptions (replacement + associativity)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %Skôr, ako popíšeme \obliv model návrhu a analýzy algoritmov, uvedieme 
-\section{Model}
-Klasický model pre analýzu pamäťovej hierarchie s dvoma úrovňami je {\em external-memory} model. Ten popisuje procesor, ktorý ma k dispozícií pracovnú pamäť ({\em cache}) obmedzenej veľkosti $M$. Všetky dáta, s ktorými algoritmus pracuje sa musia nachádzať niekde v tejto pamäti, ako bloky veľkosti $B$ (spolu teda $M/B$ blokov). Ostatné dáta sa nachádzajú na disku, ktorý ma prakticky neobmedzenú veľkosť, no s jeho blokmi nie je možné pracovať priamo. Je potrebné najprv pomocou operácií čítania a zápisu na disk presunúť blok z disku do cache a naopak.
+%\section{Model}
+%Klasický model pre analýzu pamäťovej hierarchie s dvoma úrovňami je {\em external-memory} model. Ten popisuje procesor, ktorý ma k dispozícií pracovnú pamäť ({\em cache}) obmedzenej veľkosti $M$. Všetky dáta, s ktorými algoritmus pracuje sa musia nachádzať niekde v tejto pamäti, ako bloky veľkosti $B$ (spolu teda $M/B$ blokov). Ostatné dáta sa nachádzajú na disku, ktorý ma prakticky neobmedzenú veľkosť, no s jeho blokmi nie je možné pracovať priamo. Je potrebné najprv pomocou operácií čítania a zápisu na disk presunúť blok z disku do cache a naopak.
+%
+%\
+%
+%Pre tento model je možné vyrobiť algoritmy, ktoré budú tieto dve úrovne pamäte používať efektívne, za predpokladu, že poznajú parametre $B$ a $M$. Nevýhodou je nutnosť algoritmu explicitne spravovať pamäť a presúvať jednotlivé bloky medzi diskom a cache.
 
 \
 
-Pre tento model je možné vyrobiť algoritmy, ktoré budú tieto dve úrovne pamäte používať efektívne, za predpokladu, že poznajú parametre $B$ a $M$. Nevýhodou je nutnosť algoritmu explicitne spravovať pamäť a presúvať jednotlivé bloky medzi diskom a cache.
-
-\
-
-Na rozdiel od klasického modelu, \obliv model používa tieto parametre iba pri analýze a nie pri samotnom návrhu. To znamená, že keď funguje efektívne pre neznáme parametre, musí fungovať rovnako efektívne pre ľubovolné také parametre. Vďaka tomu bude fungovať pre systémy s rôznou konfiguráciou pamäte bez nutnosti úprav. Taktiež, pre systémy s viacerými úrovňami pamäte bude fungovať medzi každou dvojicou v hierarchií. A keďže bez znalosti $B$ nie je možné explicitne spravovať pamäť a presúvať bloky, \obliv algoritmy prenechávajú túto činnosť na iné úrovne (operačný systém, hardware).
+%Na rozdiel od klasického modelu, \obliv model používa tieto parametre iba pri analýze a nie pri samotnom návrhu. To znamená, že keď funguje efektívne pre neznáme parametre, musí fungovať rovnako efektívne pre ľubovolné také parametre. Vďaka tomu bude fungovať pre systémy s rôznou konfiguráciou pamäte bez nutnosti úprav. Taktiež, pre systémy s viacerými úrovňami pamäte bude fungovať medzi každou dvojicou v hierarchií. A keďže bez znalosti $B$ nie je možné explicitne spravovať pamäť a presúvať bloky, \obliv algoritmy prenechávajú túto činnosť na iné úrovne (operačný systém, hardware).
 
 \section{Výmena stránok}
 

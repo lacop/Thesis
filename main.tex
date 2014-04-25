@@ -40,7 +40,7 @@
 
 % Figures
 \usepackage{graphicx}
-\usepackage{caption}
+\usepackage{caption} % TODO remove?
 \usepackage{subcaption}
 
 % Math related
@@ -71,6 +71,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapterstyle{veelo} % TODO pick - veelo, madsen, ?
 
+% Subsections and higher - numbered and in TOC
+\setsecnumdepth{subsection}
+\maxtocdepth{subsection}
+
+% Headers / footers
 \pagestyle{ruled}
 \makeoddhead{ruled}{\sffamily\leftmark}{}{\sffamily\rightmark}
 
@@ -90,9 +95,10 @@
 % Shortcuts
 \newcommand{\cache}{\emph{cache}\xspace}
 \newcommand{\Cache}{\emph{Cache}\xspace}
+\newcommand{\disk}{\emph{disk}\xspace}
 \newcommand{\aware}{\emph{cache-aware}\xspace}
 \newcommand{\obliv}{\emph{cache-oblivious}\xspace}
-\newcommand{\disk}{\emph{disk}\xspace}
+\newcommand{\extmem}{\emph{external-memory}\xspace}
 
 \newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
 
