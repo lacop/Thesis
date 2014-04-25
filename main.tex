@@ -35,6 +35,8 @@
 \usepackage{pdfpages} % Include PDFs
 \usepackage[bottom]{footmisc} % Move footnotes to the bottom
 
+\usepackage[binary-units=true]{siunitx} % SI units + binary prefix (Mi, Gi, ...)
+
 % Figures
 \usepackage{graphicx}
 \usepackage{caption}
@@ -84,9 +86,10 @@
     \addcontentsline{toc}{chapter}{#1}
 }
 
-
-\newcommand{\aware}{{\em cache-aware} }
-\newcommand{\obliv}{{\em cache-oblivious} }
+% Shortcuts
+\newcommand{\cache}{\emph{cache} }
+\newcommand{\aware}{\emph{cache-aware} }
+\newcommand{\obliv}{\emph{cache-oblivious} }
 
 \newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
 

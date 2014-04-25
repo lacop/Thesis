@@ -1,4 +1,21 @@
-\chapter{Cache-oblivious algoritmy a dátové štruktúry}
+\chapter{Pamäťový model}
+
+Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \emph{RAM model} (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovolnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
+
+V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku\todo{referencie}. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{128}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu, kapacita rádovo \SI{1}{\tebi\byte}). Podrobné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-level-size}.
+
+% Praktickým dôvodom pre túto hierarchiu je cena a jednoduchosť výroby.
+% TODO: 1ns * c = 30cm, limit
+
+\todo{tabulka}
+% TODO: tabulka - uroven, velkost, odozva, rychlost prenosu, velkost bloku, ... + referencie
+
+Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. V skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať avšak nejaký čas bol algoritmus nečinný a čakalo sa na presun dát. Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
+
+
+
+
+
 %Skôr, ako popíšeme \obliv model návrhu a analýzy algoritmov, uvedieme 
 \section{Model}
 Klasický model pre analýzu pamäťovej hierarchie s dvoma úrovňami je {\em external-memory} model. Ten popisuje procesor, ktorý ma k dispozícií pracovnú pamäť ({\em cache}) obmedzenej veľkosti $M$. Všetky dáta, s ktorými algoritmus pracuje sa musia nachádzať niekde v tejto pamäti, ako bloky veľkosti $B$ (spolu teda $M/B$ blokov). Ostatné dáta sa nachádzajú na disku, ktorý ma prakticky neobmedzenú veľkosť, no s jeho blokmi nie je možné pracovať priamo. Je potrebné najprv pomocou operácií čítania a zápisu na disk presunúť blok z disku do cache a naopak.
