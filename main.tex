@@ -36,6 +36,7 @@
 \usepackage[bottom]{footmisc} % Move footnotes to the bottom
 
 \usepackage[binary-units=true]{siunitx} % SI units + binary prefix (Mi, Gi, ...)
+\usepackage{xspace} % Smart space for macros
 
 % Figures
 \usepackage{graphicx}
@@ -87,9 +88,11 @@
 }
 
 % Shortcuts
-\newcommand{\cache}{\emph{cache} }
-\newcommand{\aware}{\emph{cache-aware} }
-\newcommand{\obliv}{\emph{cache-oblivious} }
+\newcommand{\cache}{\emph{cache}\xspace}
+\newcommand{\Cache}{\emph{Cache}\xspace}
+\newcommand{\aware}{\emph{cache-aware}\xspace}
+\newcommand{\obliv}{\emph{cache-oblivious}\xspace}
+\newcommand{\disk}{\emph{disk}\xspace}
 
 \newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
 

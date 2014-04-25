@@ -10,10 +10,22 @@ V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pam
 \todo{tabulka}
 % TODO: tabulka - uroven, velkost, odozva, rychlost prenosu, velkost bloku, ... + referencie
 
-Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. V skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať avšak nejaký čas bol algoritmus nečinný a čakalo sa na presun dát. Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
+Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. V skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať rovnako rýchlo ako v druhom prípade, avšak nejaký čas bol algoritmus nečinný a čakalo sa na presun dát. Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
+
+\section{External-memory model}
+Spôsobom ako zohľadniť tieto skutočnosti pri analýze algoritmov je takzvaný \emph{external-memory model} (model externej pamäte), nazývaný tiež \emph{I/O model} alebo \emph{cache-aware model}. Ten popisuje pamäť skladajúcu sa z dvoch častí, ktoré voláme \cache a \disk.
+
+Všetky výpočty prebiehajú nad dátami v \cache, ktorá má obmedzenú veľkosť. Ostatné dáta sú uložené na disku neobmedzenej veľkosti, no nemôžeme s nimi priamo manipulovať a je ich potrebné najskôr preniesť do \cache. V samotnej analýze algoritmov potom počítame počet týchto prenosov z disku do \cache a naopak.
+
+Samotné presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk aj \cache sa skladajú z takýchto blokov a za jednu operáciu považujeme presun jedného bloku medzi nimi. \Cache má obmedzenú veľkosť $M$ a skladá sa teda z $\frac{M}{B}$ blokov.  
 
 
 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %Skôr, ako popíšeme \obliv model návrhu a analýzy algoritmov, uvedieme 
