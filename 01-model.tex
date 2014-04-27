@@ -1,6 +1,6 @@
 \chapter{Pamäťový model}
 
-Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \emph{RAM model} (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovolnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
+Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovolnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
 
 V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku\todo{referencie}. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{128}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu\footnote{Klasické pevné disky (HDD) alebo disky bez pohyblivých častí (SSD)}, kapacita rádovo \SI{1}{\tebi\byte}). Podrobné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-level-size}.
 
@@ -49,6 +49,7 @@ Ak by sa táto stratégia správala tak, že vždy odstráni blok, ktorý bude p
 Tieto problémy \obliv model obchádza predpokladom ideálnej cache - cache, ktorá je plne asociatívna (každý blok disku je možné uložiť v každom bloku cache) a používa optimálnu stratégiu výmeny stránok, ktorá vždy odstráni blok, ktorý bude potrebný najneskôr. Prvý predpoklad je síce v reálnych systémoch nepraktický, no z teoretického hľadiska je v poriadku. Druhý predpoklad je však nerealizovateľný, keďže by stratégia výmeny stránok musela predpovedať budúce kroky algoritmu. Nasledovné lemy však ukazujú, že bez týchto predpokladov na reálnom systéme s nízkou asociativitou a jednoduchou stratégiou výmeny stránok sa algoritmus zhorší len o konštantný faktor.
 
 % TODO better translation - more exact + explicit corollaries?
+% TODO change from 'lema' to 'tvrdenie' or something?
 \begin{lema}
 Algoritmus, ktorý v ideálnej cache veľkosti $M$ s blokmi veľkosti $B$ vykoná $T$ pamäťových operácií, vykoná najviac $2T$ pamäťových operácií v cache veľkosti $2M$ s blokmi veľkosti $B$ pri použití stratégie \emph{LRU} alebo \emph{FIFO}. \citep[Lemma 12]{FrigoLePr99}
 \end{lema}

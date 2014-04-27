@@ -49,6 +49,13 @@
 \usepackage{mathtools}
 \usepackage{bm, mathrsfs}
 
+% Algoritms / pseudo-code
+% TODO put in TOC under source code listings
+\usepackage[chapter]{algorithm}
+\makeatletter \renewcommand{\ALG@name}{Algoritmus}
+\usepackage[noend]{algpseudocode} % No explicit "end function" line
+\newcommand*\AlgLet[2]{\State #1 $\gets$ #2} % X <- Y assignment 
+
 % Code syntax highlighting
 \usepackage[chapter]{minted}
 \usemintedstyle{tango}
@@ -97,10 +104,14 @@
 \newcommand{\Cache}{\emph{Cache}\xspace}
 \newcommand{\disk}{\emph{disk}\xspace}
 \newcommand{\aware}{\emph{cache-aware}\xspace}
+\newcommand{\Aware}{\emph{Cache-aware}\xspace}
 \newcommand{\obliv}{\emph{cache-oblivious}\xspace}
 \newcommand{\extmem}{\emph{external-memory}\xspace}
+\newcommand{\RAM}{\emph{RAM model}\xspace}
 
 \newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
+
+\newcommand{\inlcode}[1]{\texttt{#1}\xspace}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lema}[theorem]{Lema}
