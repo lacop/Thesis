@@ -44,7 +44,9 @@
 % Figures
 \newsubfloat{figure} % Allow subfigures
 \usepackage{graphicx} % Images
+
 \usepackage{tikz}
+\usepackage{tikz-qtree}
 \usetikzlibrary{calc}
 
 % Math related
@@ -103,6 +105,10 @@
 \newfixedcaption{\figcaption}{figure}
 \newfixedcaption{\algcaption}{algorithm}
 
+% Custom theorem enviroments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lema}[theorem]{Lema}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Macros
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -111,7 +117,11 @@
     \addcontentsline{toc}{chapter}{#1}
 }
 
-% Shortcuts
+% Generic shortcuts
+\newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
+\newcommand{\inlcode}[1]{\texttt{#1}\xspace}
+
+% Shortcuts specific to this document
 \newcommand{\cache}{\emph{cache}\xspace}
 \newcommand{\Cache}{\emph{Cache}\xspace}
 \newcommand{\disk}{\emph{disk}\xspace}
@@ -120,13 +130,7 @@
 \newcommand{\obliv}{\emph{cache-oblivious}\xspace}
 \newcommand{\extmem}{\emph{external-memory}\xspace}
 \newcommand{\RAM}{\emph{RAM model}\xspace}
-
-\newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
-
-\newcommand{\inlcode}[1]{\texttt{#1}\xspace}
-
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lema}[theorem]{Lema}
+\newcommand{\vEB}{van Emde Boas\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Include document settings (title, name, ...)

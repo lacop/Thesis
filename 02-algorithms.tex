@@ -72,9 +72,7 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov. To zodpovedá dolnej hranici vo vete \todo{dokaz}.
 
 \subsection{Naivné \obliv riešenie}
-Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob ako usporiadať uzly binárneho stromu v pamäti je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrchola na pozícií $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícií $\lfloor\frac{x}{2}\rfloor$.
-
-\todo[inline]{obrazok (rovnaky ako vEB layout ale ine cisla)}
+Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob ako usporiadať uzly binárneho stromu v pamäti je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrchola na pozícií $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícií $\lfloor\frac{x}{2}\rfloor$. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
 
 Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v \todo{algoritmus}.
 
@@ -116,7 +114,57 @@ kde $k+l<B$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ al
 x &\le B-2
 \end{aligned}
 \]
-To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $O(\log{B})$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je horšie ako pri \aware B-strome.
+To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je horšie ako pri \aware B-strome. \todo{porovnat fnc?}
+
+\subsection{Statický \obliv vyhľadávací strom}
+Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
+
+Riešením je takzvané \emph{\vEB usporiadanie} (\emph{\vEB layout}, nazvané podla \vEB stromov s podobnou myšlienkou), ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude $(v)$.
+
+Pre $h>1$ rozdelíme vstupný strom na podstrom $\tau_0$ výšky $\frac{h}{2}$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Rekurzívne ich uložíme do \vEB usporiadania a následne uložíme za seba, výstupom teda bude $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
+
+Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže ich výška je $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$.
+
+\begin{figure}
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+        \input{figures/vEB_tree/vEBlayout_scheme}
+    }
+    \caption{Schematické znázornenie rekurzívneho delenia pri \vEB usporiadaní. Podstromy $\tau_0,\dotsc,\tau_k$ sa uložia do súvislého pola.}
+    \label{fig:veblayout_scheme}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subbottom[Klasické usporiadanie] {
+        \resizebox{0.8\textwidth}{!}{
+            \input{figures/vEB_tree/node_order_naive}
+        }
+        \label{fig:node_order_naive}
+    }
+    \subbottom[\vEB usporiadanie] {
+        \resizebox{0.8\textwidth}{!}{
+            \input{figures/vEB_tree/node_order_veb}
+        }
+        \label{fig:node_order_veb}
+    }
+    \caption{Porovnanie klasického a \vEB usporiadania na úplnom binárnom strome výšky $5$. Čísla vo vrcholoch určujú poradie v pamäti.}
+    \label{fig:node_order_comparison}
+\end{figure}
+
+\subsubsection{Vyhľadávanie}
+
+\todo[inline]{pointers vs implicit indexing}
+
+Pri analýze vyhľadávania sa pozrime na také podstromy predošlého delenia, že ich veľkosť je $\Theta(B)$. Ďalšie delenie a preusporiadanie je už zbytočné, no to \obliv algoritmus nemá ako vedieť. Keďže ale po rekurzívnom volaní získame len iné usporiadanie, ktoré uložíme v súvislom úseku pamäte, bude stále možné tento podstrom načítať v $\bigO{1}$ blokoch.
+
+Majme teda vyhľadávací strom zložený z takýchto podstromov, ktorých veľkosť je medzi $\Omega(\sqrt{B})$ a $\bigO{B}$. Ich výška je teda $\Omega(\log{B})$. Pri strome výšky $\bigO{\log N}$ teda prejdeme cez $\bigO{\frac{\log{N}}{\log{B}}}$ takých podstromov a každý vyžaduje konštantný počet pamäťových presunov a spolu sa ich teda vykoná $\bigO{\log_B{N}}$, čo zodpovedá spodnej hranici tohto problému.
+
+Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimálne. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky - pri každej zmene by bolo potrebné strom preusporiadať. Máme teda \obliv ekvivalent statických \aware B-stromov. 
+
+Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v nasledovnej sekcií.
+
+\section{Usporiadané pole}
 
 
 %- static search trees

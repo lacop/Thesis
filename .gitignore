@@ -26,3 +26,7 @@
 *.snm
 *.nav
 *.pyg
+*.idea/
+*.pyc
+*.preview.*
+*.preview_BB.*
