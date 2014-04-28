@@ -1,0 +1,23 @@
+Model
+- cache info table
+?
+
+Alg / DS
+- intro
++ basic
+- static search trees
+  - aware solution - btree
+  - naive solution - too slow
+  - obliv solution
+    - vEB layout
+    - analysis
+- ordered file
+  - desc
+  - analysis
+- dynamic search tree
+  - aware solution - btree again
+  - basic version
+    - analysis
+  - indirection
+    - analysis
+
