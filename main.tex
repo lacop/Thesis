@@ -24,8 +24,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Language, encoding, fonts
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[slovak]{babel}
 \usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{slovak}
+
+% TODO pick fonts
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Important packages
@@ -40,14 +43,17 @@
 
 % Figures
 \usepackage{graphicx}
-\usepackage{caption} % TODO remove?
-\usepackage{subcaption}
+\usepackage{tikz}
 
 % Math related
 \usepackage{amsmath,amsthm}
 \usepackage{amsfonts}
 \usepackage{mathtools}
 \usepackage{bm, mathrsfs}
+
+% TODO? remove amsfonts, use unicode-math
+% TODO? but change the ugly fonts
+%\usepackage[]{unicode-math}
 
 % Algoritms / pseudo-code
 % TODO put in TOC under source code listings
