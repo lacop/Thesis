@@ -65,21 +65,7 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 
 \section{Vyhľadávacie stromy}
 
-\begin{figure}
-    \centering
-    
-    \subbottom[Abc] {
-        \resizebox{0.4\textwidth}{!}{
-            \input{figures/vEB_tree/vEBlayout_scheme}
-        }
-    }
-    \subbottom[Def] {
-        \resizebox{0.4\textwidth}{!}{
-            \input{figures/vEB_tree/vEBlayout_scheme}
-        }
-    }
-    \caption{Test}
-\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -145,3 +131,22 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 %T(N) = N^{1/3}T(N^{2/3}) + \bigO{\frac{N}{B} log_{M/B} \frac{N}{B} + N^{1/3}}
 %\]
 %keďže rozdelenie poľa je voči spájaniu zanedbateľné. Táto rekurencia platí pre $N > M$. V prípade, že sa cele pole zmestí do cache, teda $N \le M$, a za predpokladu $M \ge B^2$, dostávame $T(N) = T(B^2) = \bigO{B}$. Celkové riešenie tejto rekurencie, a teda výsledný počet pamäťových presunov potrebných na usporiadanie poľa veľkosti $N$ je $\bigO{\frac{N}{B} log_{M/B} \frac{N}{B}}$.
+
+
+
+
+%\begin{figure}
+%    \centering
+%    
+%    \subbottom[Abc] {
+%        \resizebox{0.4\textwidth}{!}{
+%            \input{figures/vEB_tree/vEBlayout_scheme}
+%        }
+%    }
+%    \subbottom[Def] {
+%        \resizebox{0.4\textwidth}{!}{
+%            \input{figures/vEB_tree/vEBlayout_scheme}
+%        }
+%    }
+%    \caption{Test}
+%\end{figure}
