@@ -47,7 +47,6 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 
-
 % Math related
 \usepackage{amsmath,amsthm}
 \usepackage{amsfonts}
@@ -99,6 +98,10 @@
 \makepagestyle{plainright}
 \makeoddfoot{plainright}{}{}{\thepage}
 \aliaspagestyle{chapter}{plainright}
+
+% Custom caption rules
+\newfixedcaption{\figcaption}{figure}
+\newfixedcaption{\algcaption}{algorithm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Macros

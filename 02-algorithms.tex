@@ -65,7 +65,76 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 
 \section{Vyhľadávacie stromy}
 
+\todo[inline]{intro ...}
+\todo[inline]{lowerbound}
 
+\subsection{\Aware riešenie}
+V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov. To zodpovedá dolnej hranici vo vete \todo{dokaz}.
+
+\subsection{Naivné \obliv riešenie}
+Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob ako usporiadať uzly binárneho stromu v pamäti je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrchola na pozícií $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícií $\lfloor\frac{x}{2}\rfloor$.
+
+\todo[inline]{obrazok (rovnaky ako vEB layout ale ine cisla)}
+
+Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v \todo{algoritmus}.
+
+% TODO caption/labels
+% TODO side by side
+%\begin{algorithm}
+%    \caption{Left}
+%    \begin{algorithmic}[1]
+%        \Function{left}{$x$}
+%            \State \Return{$2x$}
+%        \EndFunction
+%    \end{algorithmic}
+%\end{algorithm}
+%\begin{algorithm}
+%    \caption{Right}
+%    \begin{algorithmic}[1]
+%        \Function{right}{$x$}
+%            \State \Return{$2x+1$}
+%        \EndFunction
+%    \end{algorithmic}
+%\end{algorithm}
+%\begin{algorithm}
+%    \caption{Parent}
+%    \begin{algorithmic}[1]
+%        \Function{parent}{$x$}
+%            \State \Return{$\lfloor\frac{x}{2}\rfloor$}
+%        \EndFunction
+%    \end{algorithmic}
+%\end{algorithm}
+
+Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícií $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
+\[
+x-k,\dotsc,x-1,x,x+1,\dotsc,x+l
+\]
+kde $k+l<B$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ alebo $2x+1$ a teda nás pozície menšie ako $x$ nezaujímajú. V najlepšom prípade teda bude $k=0$ a $l=B-1$. Aby sa v tomto intervale nachádzali požadované vrcholy musí platiť
+\[
+\begin{aligned}
+2x+1 &\le x+l = x+B-1 \\
+x &\le B-2
+\end{aligned}
+\]
+To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $O(\log{B})$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je horšie ako pri \aware B-strome.
+
+
+%- static search trees
+%  - aware solution - btree
+%  - naive solution - too slow
+%  - obliv solution
+%    - vEB layout
+%      - indexing - pointers vs compute position
+%    - analysis
+%- ordered file
+%  - desc
+%  - analysis
+%- dynamic search tree
+%  - aware solution - btree again
+%  - basic version
+%    - analysis
+%  - indirection
+%    - analysis
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OLD %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
