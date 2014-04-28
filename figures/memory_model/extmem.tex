@@ -1,0 +1,92 @@
+% % Based on https://tex.stackexchange.com/questions/86372/torn-paper-matching-up-the-torn-edges
+\newcounter{mathseed}%
+\setcounter{mathseed}{42}%
+\pgfmathsetseed{\arabic{mathseed}}%
+%
+\pgfdeclarelayer{background}%
+\pgfsetlayers{background,main}%
+\pgfdeclaredecoration{irregular fractal line}{init}%
+{%
+  \state{init}[width=\pgfdecoratedinputsegmentremainingdistance]%
+  {%
+    \pgfpathlineto{\pgfpoint{random*\pgfdecoratedinputsegmentremainingdistance}{(random*\pgfdecorationsegmentamplitude-0.02)*\pgfdecoratedinputsegmentremainingdistance}}%
+    \pgfpathlineto{\pgfpoint{\pgfdecoratedinputsegmentremainingdistance}{0pt}}%
+  }%
+}%
+%
+\begin{tikzpicture}
+\tikzset{
+   paper/.style={draw, fill=none},
+   irregular border/.style={decoration={irregular fractal line, amplitude=0.2},
+           decorate,
+     },
+   ragged border/.style={ decoration={random steps, segment length=7mm, amplitude=2mm},
+           decorate,
+   }
+}
+\newcommand{\raggedline}[1]{
+\begin{pgfonlayer}{background}  % Draw the shape behind
+  \fill[paper]
+     \pgfextra{\pgfmathsetseed{\arabic{mathseed}}\addtocounter{mathseed}{1}}%
+      { decorate[irregular border]{decorate{decorate{decorate{decorate[ragged border]{
+        #1
+      }}}}}};
+\end{pgfonlayer}
+}
+
+\newcommand{\width}{8}
+\newcommand{\height}{2}
+\newcommand{\cacheheight}{8}
+\newcommand{\cachebox}{\height}
+\newcommand{\cachewidth}{4} % TODO divide?
+\newcommand{\off}{1}
+\newcommand{\diskoff}{3*\width}
+
+\newcommand{\arrangle}{20}
+\newcommand{\arroff}{1}
+
+\foreach \i in {1,...,\cacheheight}
+{
+\draw (0, \i*\height-\height) rectangle (\width, \i*\height);
+}
+
+\foreach \i in {1,...,\cachewidth}
+{
+\draw (\i*\cachebox-\cachebox, 0) rectangle (\i*\cachebox, \height);
+}
+
+\draw [thick, |-|] (0,-\off) -- (\width, -\off) node [midway, fill=white,minimum width=2cm] {\Huge $B$};
+\draw [thick, |-|] (-\off,0) -- ++ ($(0, \cacheheight*\height) $) node [midway, fill=white, minimum height=2cm] {\Huge $\frac{M}{B}$};
+
+% Dont draw bottom edge
+\foreach \i in {2,...,\cacheheight}
+{
+\draw (\diskoff, \i*\height-\height) rectangle (\diskoff+\width, \i*\height);
+}
+\draw (\diskoff, 0) -- (\diskoff, \height);
+\draw (\diskoff+\width, 0) -- (\diskoff+\width, \height);
+\raggedline{(\diskoff, 0) -- (\diskoff+\width, 0)}
+
+\coordinate (BBL) at (0.5*\diskoff, 0.5*\height*\cacheheight);
+\coordinate (BTR) at ($ (BBL) +(\width, \height) $);
+\coordinate (BC) at ($ 0.5*(BBL) + 0.5*(BTR) $);
+\draw (BBL) rectangle (BTR);
+
+\node at (0.5*\width, \height*\cacheheight+\off) {\Huge Cache};
+\node at (0.5*\width+\diskoff, \height*\cacheheight+\off) {\Huge Disk};
+%\node at ($ (BC) + (0, 0.5*\height+\off) $) {\Huge Presúvaný blok};
+\node at (BC) {\Huge Presúvaný blok};
+
+\coordinate (LB) at (\width, 0.5*\height*\cacheheight);
+\coordinate (RB) at ($ (LB) + (\diskoff-\width, 0) $);
+\coordinate (LT) at ($ (LB) + (0, \height) $);
+\coordinate (RT) at ($ (RB) + (0, \height) $);
+
+%\draw [->,thick,decoration={markings,mark=at position 1 with {\arrow[scale=2]{>}}},postaction={decorate}]  ($(LB) + (-\arrangle:\arroff) $) to  [out=-\arrangle,in=180+\arrangle] ($(RB) + (180+\arrangle:\arroff) $);
+%\draw [->,thick,decoration={markings,mark=at position 1 with {\arrow[scale=2]{>}}},postaction={decorate}]  ($(RT) + (180-\arrangle:\arroff) $) to  [out=180-\arrangle,in=\arrangle] ($(LT) + (\arrangle:\arroff) $);
+
+\draw [->,ultra thick,]  ($(LB) + (-\arrangle:\arroff) $) to  [out=-\arrangle,in=180+\arrangle] node[below,midway]{\huge Zápis} ($(RB) + (180+\arrangle:\arroff) $);
+\draw [->,ultra thick]  ($(RT) + (180-\arrangle:\arroff) $) to  [out=180-\arrangle,in=\arrangle] node[above,midway]{\huge Čítanie} ($(LT) + (\arrangle:\arroff) $);
+
+
+\end{tikzpicture}
