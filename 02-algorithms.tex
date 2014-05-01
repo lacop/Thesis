@@ -255,7 +255,7 @@ Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statick
 
 Kľúče, ktoré táto štruktúra obsahuje, sú uložené v usporiadanom poli (s medzerami). Listy statického stromu obsahujú v svojich kľúčoch rovnakú hodnotu ako k ním prislúchajúce položky usporiadaného pola. Medzeru reprezentujeme hodnotou, ktorá je pri použitom usporiadaní najmenšia. Ostatné vrcholy stromu obsahujú ako kľúč maximum z kľúčov svojich synov.
 
-\subsection{Vyhľadávanie}
+\subsection{Vyhľadávanie} \label{sec:dynamic-obliv-search}
 Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa, porovnáme hľadaný kľúč s kľúčom v ľavom synovi. Pokiaľ je hľadaný väčší, bude v pravom podstrome (keďže maximum z celého ľavého podstromu je práve kľúč ľavého syna), ktorý rekurzívne prehľadáme. V opačnom prípade prehľadáme ľavý podstrom. Keď dosiahneme list, porovnáme jeho kľúč s hľadaným. Ak sa zhodujú tak sme požadovanú položku našli, inak sa v štruktúre nenachádza. \todo{dokaz ze tam nie je}
 
 \subsubsection{Analýza}
@@ -314,7 +314,20 @@ Označme ako $T_1,\dotsc,T_l$ tie stromy veľkosti $>B$ obsahujúce postromy ve�
 Počet vrcholov $U$ je najviac dvojnásobok počtu listov a teda $|U| = \bigO{l} = \bigO{\frac{K}{B}}$. Keďže pri \emph{post-order} prechode navštívime každý vrchol $\bigO{1}$ krát (najprv pri prechode z koreňa ku listom, pričom následne rekurzívne prejdeme ľavého a pravého syna, a potom pri návrate z rekurzie) a teda celkovo budeme potrebovať $\bigO{\frac{K}{B}}$ pamäťových presunov na aktualizáciu $U$.
 
 \subsubsection{Horná úroveň - cesta z najbližšieho spoločného predka do koreňa}
+Posledná množina vrcholov, ktoré je potrebné aktualizovať je cesta z koreňa $U$ do koreňa statického stromu. Dĺžka tejto cesty je obmedzená výškou stromu $\bigO{\log{N}}$ a pri aktualizovaní prechádzame cez jej vrcholy postupne. Podobne ako pri vyhľadávaní (časť \ref{sec:dynamic-obliv-search}) bude potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
 
+\subsubsection{Výsledná zložitosť}
+Sčítaním nasledovných zložitostí počtu pamäťových operácii
+\[
+\begin{aligned}
+&\text{Nájdenie pozície v usporiadanom poli:} ~~ &&\bigO{\log_B{N}} \\
+&\text{Vloženie do usporiadaného poľa:} &&\bigO{\frac{K}{B}} \\
+&\text{Aktualizácia spodných dvoch úrovní:} &&\bigO{\frac{K}{B}} \\
+&\text{Aktualizácia strednej úrovne:} &&\bigO{\frac{K}{B}} \\
+&\text{Aktualizácia hornej úrovne:} &&\bigO{\log_B{N}} \\
+\end{aligned}
+\]
+dostávame celkovú zložitosť $\bigO{\log_B{N} + \frac{K}{B}}$. Keďže amortizovaná veľkosť upraveného intervalu je $K = \bigO{\log^2{N}}$ dostávame výslednú amortizovanú zložitosť počtu pamäťových operácii pri vkladaní: $\bigO{\log_B{N} + \frac{\log^2{N}}{B}}$.
 
 % OUTLINE
 %- static search trees
