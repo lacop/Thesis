@@ -4,7 +4,7 @@ Model
 
 Alg / DS
 - intro
-+ basic
+- basic
 - static search trees
   - aware solution - btree
   - naive solution - too slow
@@ -21,3 +21,28 @@ Alg / DS
   - indirection
     - analysis
 
+
+Visualization
+- intro
+- existing - none?
+- algvis history
+- list of structures
+  - static tree
+    - intro
+    - array order
+    - cache simulation
+    - order switching
+  - ordered file
+    - intro
+    - insert
+  - cobtree
+    - intro
+    - layout
+    - find
+    - insert
+- implementation details
+  - cache simulation
+  - ...
+
+Conclusion
+  - ?
