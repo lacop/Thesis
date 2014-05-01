@@ -292,7 +292,14 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
 
 \subsection{Analýza vkladania}
 
-\todo[inline]{obrazok demaine l7 1:16:00}
+\begin{figure}
+    \centering
+    \resizebox{0.9\textwidth}{!}{
+        \input{figures/dynamic_tree/three_parts}
+    }
+    \caption{\todo[inline]{caption}}
+    \label{fig:cobtree_analysis_parts}
+\end{figure}
 
 Túto analýzu rozdelíme na tri časti, v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať.
 
@@ -338,7 +345,7 @@ Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v pr
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
 \subsection{Vyhľadávanie}
-Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}-\log_B{\log{N}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$.
+Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}-\log_B{\log{N}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$. \todo{popis najdenia bloku - min/max, left child, ...}
 
 \subsection{Vkladanie a odstraňovanie}
 Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z neho kompletným prepísaním, čo vyžaduje $\bigO{\frac{\log{N}}{B}}$ presunov. Zároveň budeme udržiavať veľkosti blokov medzi $\frac{1}{4}\log{N}$ a $\log{N}$. Príliš malé skupiny môžeme spojiť do väčších a veľké rozdeliť na niekoľko menších. Skupina prekročí svoje hranice najskôr po $\Omega(\log{N})$ operáciách. V takom prípade po rozdelení alebo spojení bude potrebné vykonať vloženie alebo odstránenie z B-stromu. Vydelením dostaneme amortizovanú zložitosť vkladania a odstraňovania v takto upravenej štruktúre: $\bigO{\log_B{N}}$.

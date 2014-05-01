@@ -1,0 +1,155 @@
+\begin{tikzpicture}
+
+% Triangle
+\newcommand{\width}{16}
+\newcommand{\height}{8}
+\newcommand{\hoff}{0.25}
+\newcommand{\voff}{0.25}
+% Inner
+\newcommand{\hhoff}{\hoff*4}
+\newcommand{\hheight}{\height*0.3}
+% Center / LCA top
+\newcommand{\choff}{-1}
+\newcommand{\cvoff}{1}
+
+% Memory layout box
+\newcommand{\memoff}{0.25}
+\newcommand{\memw}{2}
+\newcommand{\memh}{1}
+
+\newcommand{\extd}{0.1}
+\newcommand{\braceoff}{0.05}
+
+\newcommand{\trianglecenter}[4]{
+  \coordinate (#1) at ($1/3*(#2)+1/3*(#3)+1/3*(#4)$);
+}
+
+% Big Left/Right/Top
+\coordinate (BL) at (0, 0);
+\coordinate (BR) at (\width, 0);
+\coordinate (BT) at (\width/2, \height);
+% Top Left/Right/Top
+%\coordinate (TL) at (0.25*\width + \hoff, 0.5*\height);
+%\coordinate (TR) at (0.75*\width - \hoff, 0.5*\height);
+%\coordinate (TT) at ($ (BT)+(0, -\voff) $);
+% Left Left/Right Right
+\coordinate (LL) at ($ (\voff, \voff) + (\hhoff, 0) $);
+\coordinate (RL) at ($ (\width - \voff, \voff) - (\hhoff, 0) $);
+% Left+Right Center
+\coordinate (LRC) at (0.5*\width, \voff);
+\coordinate (LR) at ($ (LRC) - (0.5*\hoff, 0) $);
+\coordinate (RR) at ($ (LRC) + (0.5*\hoff, 0) $);
+
+\coordinate (TL) at ($ (LL)!0.5!(LR) + (0, \hheight) $);
+\coordinate (TR) at ($ (RL)!0.5!(RR) + (0, \hheight) $);
+
+% Centers
+\trianglecenter{BC}{BL}{BR}{BT}
+%\trianglecenter{TC}{TL}{TR}{TT}
+\trianglecenter{LC}{LL}{LR}{TL}
+\trianglecenter{RC}{RL}{RR}{TR}
+
+% Outer triangle
+\draw [ultra thick] (BL) -- (BR) -- (BT) -- (BL);
+% Inner triangles
+%\draw (TL) -- (TR) -- (TT) -- (TL);
+\draw [thick] (LL) -- (TL) -- (LR) -- (LL);
+\draw [thick] (RL) -- (TR) -- (RR) -- (RL);
+
+%\node at (BC) {\Huge $\cdots$};
+%\node at (TC) {\Huge $\tau_0$};
+%\node at (LC) {\Huge $\tau_1$};
+%\node at (RC) {\Huge $\tau_k$};
+
+\coordinate (BM) at ($ (LC)!0.5!(RC) $);
+\node at ($ (BM) + (0, \voff) $) {\Large $\cdots$};
+%\node at ($ (BM)-(LC) + (RC)  $) {\Large $\cdots$};
+%\node at ($ (BM)-(RC) + (LC)  $) {\Large $\cdots$};
+
+% Inner
+\newcommand{\innertriangles}[4]{
+	\coordinate (#1TT) at ($ #2 - (0, \voff*0.5) $);
+	\coordinate (#1LL) at ($ #3 + (\hoff, \voff*0.5) $);
+	\coordinate (#1RR) at ($ #4 + (-\hoff, \voff*0.5) $);
+	\coordinate (#1TL) at ($ (#1TT)!0.5!(#1LL) $);
+	\coordinate (#1TR) at ($ (#1TT)!0.5!(#1RR) $);
+	\coordinate (#1LRC) at ($ (#1LL)!0.5!(#1RR) $);
+	\coordinate (#1LR) at ($ (#1LRC) - (0.25*\hoff, 0) $);
+	\coordinate (#1RL) at ($ (#1LRC) + (0.25*\hoff, 0) $);
+	
+	%\draw (#1TT) -- (#1LL) -- (#1RR) -- (#1TT);
+	
+	\draw [thin] (#1TT) -- (#1TL) -- (#1TR) -- (#1TT);
+	\draw [thin] (#1LL) -- (#1TL) -- (#1LR) -- (#1LL);
+	\draw [thin] (#1RL) -- (#1TR) -- (#1RR) -- (#1RL);
+	
+	\trianglecenter{#1LC}{#1LL}{#1TL}{#1LR}
+	\trianglecenter{#1RC}{#1RL}{#1TR}{#1RR}
+	\trianglecenter{#1TC}{#1TT}{#1TR}{#1TL}
+	\node at ($ (#1LC)!0.5!(#1RC) + (0, \voff*0.5) $) {$\cdots$};
+	
+	\node at (#1LC) {\small $\le B$};
+	\node at (#1RC) {\small $\le B$};
+	\node at (#1TC) {\small $\le B$};
+}
+
+\innertriangles{IL}{(TL)}{(LL)}{(LR)}
+\innertriangles{IR}{(TR)}{(RR)}{(RL)}
+
+\draw [thick, decorate, decoration={brace, amplitude=10pt, raise=1pt}] (LL) -- (TL) node [midway, anchor=south east, xshift=10pt, yshift=8pt] {$>B$};
+
+
+% Center (LCA)
+\coordinate (CT) at (\width*0.5+\choff, \height*0.5+\cvoff);
+\draw [thick] (CT) -- (TL) -- (TR) -- (CT);
+
+\trianglecenter{CC}{CT}{TL}{TR}
+\node at (CC) {\Large $U$};
+
+% LCA - root path
+%\draw [->,ultra thick,]  ($(LB) + (-\arrangle:\arroff) $) to  [out=-\arrangle,in=180+\arrangle] node[below,midway]{\huge Zápis} ($(RB) + (180+\arrangle:\arroff) $);
+\draw [thick, out=130, in=-70] (CT) to (BT);
+
+% Vertical separators
+\newdimen\XCoord
+\newdimen\YCoord
+
+\coordinate (S1L) at ($ (\height*0.5+\cvoff, \height*0.5+\cvoff) $);
+\coordinate (S1R) at ($ (BR) - (S1L |- 0,0) + (S1L -| 0, 0) $);
+
+\path (TL);
+\pgfgetlastxy{\XCoord}{\YCoord}
+\coordinate (S2L) at ($ (\YCoord, \YCoord) $);
+\coordinate (S2R) at ($ (BR) - (S2L |- 0,0) + (S2L -| 0, 0) $);
+
+\draw [dashed] ($ (S1L) - (\extd, 0) $)  -- ($ (S1R) + (\extd, 0) $);
+\draw [dashed] ($ (S2L) - (\extd, 0) $)  -- (TL);
+\draw [dashed] (TR)  -- ($ (S2R) + (\extd, 0) $);
+
+\draw [thick, decorate, decoration={brace, amplitude=15pt, raise=1pt}] (BT) -- ($ (S1R) + (-\braceoff, \braceoff) $) node [midway, anchor=south west, xshift=10pt] {Horná časť};
+\draw [thick, decorate, decoration={brace, amplitude=15pt, raise=1pt}] ($ (S1R) - (-\braceoff, \braceoff) $) -- ($ (S2R) + (-\braceoff, \braceoff) $) node [midway, anchor=south west, xshift=10pt] {Stredná časť};
+\draw [thick, decorate, decoration={brace, amplitude=15pt, raise=1pt}] ($ (S2R) - (-\braceoff, \braceoff) $) -- (BR) node [midway, anchor=south west, xshift=10pt] {Spodné dve úrovne};
+
+
+% Ordered file
+\coordinate (M0LT) at ($ (BL) - (0, \memoff) $);
+\coordinate (M0LB) at ($ (M0LT) - (0, \memh) $);
+\coordinate (M0RB) at ($ (M0LT) + (\memw, -\memh) $);
+\coordinate (M1RT) at ($ (M0RB) + (\memw, \memh) $);
+\coordinate (M3RT) at ($ (BR) - (0, \memoff) $);
+\coordinate (M3RB) at ($ (M3RT) - (0, \memh) $);
+\coordinate (M3LB) at ($ (M3RT) - (\memw, \memh) $);
+\coordinate (M4LB) at ($ (M3LB) - (\memw, 0) $);
+\coordinate (M1RB) at ($ (M1RT) - (0, \memh) $);
+
+\draw [ultra thick] (M0LT) rectangle (M3RB);
+\draw (M0LT) rectangle (M1RB);
+\draw [pattern=north west lines, pattern color=blue, ] (M1RT) rectangle (M4LB);
+\draw (M4LB) rectangle (M3RT);
+
+\node [fill=white, align=center] at  ($ (M1RT)!0.5!(M4LB) $) {Upravený interval};
+\draw [thick, decorate, decoration={brace, amplitude=15pt, raise=2pt, mirror}] (M1RB) -- (M4LB) node [midway, anchor=north, yshift=-15pt] {$K$};
+\draw [thick, decorate, decoration={brace, amplitude=5pt, raise=2pt}] (M3RT) -- (M3RB) node [midway, anchor=west, xshift=5pt] {Usporiadané pole};
+
+\draw [thick, decorate, decoration={brace, amplitude=15pt, raise=2pt, mirror}] (BT)--(BL) node [rotate=45, midway, anchor=south, yshift=15pt] {Statický strom};
+\end{tikzpicture}
