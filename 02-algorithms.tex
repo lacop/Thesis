@@ -329,6 +329,24 @@ Sčítaním nasledovných zložitostí počtu pamäťových operácii
 \]
 dostávame celkovú zložitosť $\bigO{\log_B{N} + \frac{K}{B}}$. Keďže amortizovaná veľkosť upraveného intervalu je $K = \bigO{\log^2{N}}$ dostávame výslednú amortizovanú zložitosť počtu pamäťových operácii pri vkladaní: $\bigO{\log_B{N} + \frac{\log^2{N}}{B}}$.
 
+\subsection{Odstraňovanie}
+Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli ho odstránime, čím sa zmení súvislý amortizovanej veľkosti $\bigO{\log^2{N}}$. Následne aktualizujeme kľúče v statickom poli rovnako ako pri vkladaní. Výsledná zložitosť bude taktiež rovnaká.
+
+\section{Vylepšený dynamický B-strom}
+Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Odstrániť ho môžeme jednoduchou modifikáciou.
+
+Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
+
+\subsection{Vyhľadávanie}
+Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}-\log_B{\log{N}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$.
+
+\subsection{Vkladanie a odstraňovanie}
+Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z neho kompletným prepísaním, čo vyžaduje $\bigO{\frac{\log{N}}{B}}$ presunov. Zároveň budeme udržiavať veľkosti blokov medzi $\frac{1}{4}\log{N}$ a $\log{N}$. Príliš malé skupiny môžeme spojiť do väčších a veľké rozdeliť na niekoľko menších. Skupina prekročí svoje hranice najskôr po $\Omega(\log{N})$ operáciách. V takom prípade po rozdelení alebo spojení bude potrebné vykonať vloženie alebo odstránenie z B-stromu. Vydelením dostaneme amortizovanú zložitosť vkladania a odstraňovania v takto upravenej štruktúre: $\bigO{\log_B{N}}$.
+
+Opäť sme teda dosiahli rovnaký počet operácií ako ekvivalentná \aware dátová štruktúra, avšak tentokrát v amortizovane.
+
+\todo[inline]{jedine amortizovane je OF, to sa da worstcase, potom bude aj toto worstcase}
+
 % OUTLINE
 %- static search trees
 %  - aware solution - btree
