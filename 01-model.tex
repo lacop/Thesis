@@ -2,12 +2,31 @@
 
 Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovolnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
 
-V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku\todo{referencie}. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{128}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu\footnote{Klasické pevné disky (HDD) alebo disky bez pohyblivých častí (SSD)}, kapacita rádovo \SI{1}{\tebi\byte}). Podrobné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-level-size}.
+V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku\todo{referencie}. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{64}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu\footnote{Klasické pevné disky (HDD) alebo disky bez pohyblivých častí (SSD)}, kapacita rádovo \SI{1}{\tebi\byte}). Približné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-levels}.
+
+\begin{table}
+    \centering
+    \caption{Približné parametre rôznych úrovní pamäte. Hodnoty troch úrovní \cache na procesore (L1, L2 a L3) sú pre mikroarchitektúru Intel Haswell. \citep{inteloptimize}}
+    \label{tbl:memory-levels}
+    \begin{threeparttable}
+        \begin{tabular}{r r l}
+            \toprule
+            \textbf{Úroveň} & \textbf{Veľkosť} & \textbf{Odozva} \\ \toprule
+            L1 & \SI{64}{\kibi\byte} & 4clk\tnote{1} $\approx$ \SI{1}{\nano\second} \\
+            L2 & \SI{256}{\kibi\byte} & 11clk\tnote{1} $\approx$ \SI{4}{\nano\second} \\
+            L3 & \SI[parse-numbers=false]{2\mbox{--}20}{\mebi\byte} & 36clk\tnote{1} $\approx$ \SI{12}{\nano\second} \\ \midrule
+            RAM & $\approx$ \SI{8}{\gibi\byte} & $\approx$ \SI{100}{\nano\second} \\
+            Disk & $\approx$ \SI{1}{\tebi\byte} & $\approx$ \SI[parse-numbers=false]{0.1\mbox{--}10}{\milli\second} \\
+            \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+            \item[1] Počet cyklov procesora, uvedené časové aproximácie pri \SI{3}{\giga\hertz}.
+        \end{tablenotes}
+    \end{threeparttable}
+\end{table}
 
 % Praktickým dôvodom pre túto hierarchiu je cena a jednoduchosť výroby.
 % TODO: 1ns * c = 30cm, limit
-
-\todo{tabulka}
 % TODO: tabulka - uroven, velkost, odozva, rychlost prenosu, velkost bloku, ... + referencie
 
 Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. V skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať rovnako rýchlo ako v druhom prípade, avšak nejaký čas bol algoritmus nečinný a čakalo sa na presun dát. Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
