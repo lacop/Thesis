@@ -74,34 +74,35 @@ V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľad
 \subsection{Naivné \obliv riešenie}
 Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob ako usporiadať uzly binárneho stromu v pamäti je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrchola na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícii $\lfloor\frac{x}{2}\rfloor$. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
 
-Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v \todo{algoritmus}.
+Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v algoritme \ref{alg:naive_indexing}.
 
 % TODO caption/labels
 % TODO side by side
-%\begin{algorithm}
-%    \caption{Left}
-%    \begin{algorithmic}[1]
-%        \Function{left}{$x$}
-%            \State \Return{$2x$}
-%        \EndFunction
-%    \end{algorithmic}
-%\end{algorithm}
-%\begin{algorithm}
-%    \caption{Right}
-%    \begin{algorithmic}[1]
-%        \Function{right}{$x$}
-%            \State \Return{$2x+1$}
-%        \EndFunction
-%    \end{algorithmic}
-%\end{algorithm}
-%\begin{algorithm}
-%    \caption{Parent}
-%    \begin{algorithmic}[1]
-%        \Function{parent}{$x$}
-%            \State \Return{$\lfloor\frac{x}{2}\rfloor$}
-%        \EndFunction
-%    \end{algorithmic}
-%\end{algorithm}
+\begin{algorithm}[H]
+    \label{alg:naive_indexing}
+	\caption{Algoritmy pre získanie pozícií ľavého syna, pravého syna a rodiča vrcholu na pozícii $x$}
+	\begin{minipage}[t]{0.3\textwidth}
+	    \begin{algorithmic}[1]
+	        \Function{left}{$x$}
+	            \State \Return{$2x$}
+	        \EndFunction
+	    \end{algorithmic}
+	\end{minipage} \hfill
+	\begin{minipage}[t]{0.3\textwidth}
+	    \begin{algorithmic}[1]
+	        \Function{right}{$x$}
+	            \State \Return{$2x+1$}
+	        \EndFunction
+	    \end{algorithmic}
+	\end{minipage} \hfill
+	\begin{minipage}[t]{0.3\textwidth}
+	    \begin{algorithmic}[1]
+	        \Function{parent}{$x$}
+	            \State \Return{$\lfloor\frac{x}{2}\rfloor$}
+	        \EndFunction
+	    \end{algorithmic}
+	\end{minipage}
+\end{algorithm}
 
 Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícii $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
 \[
