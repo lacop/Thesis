@@ -65,11 +65,10 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 
 \section{Vyhľadávacie stromy}
 
-Jednou z najzákladnejších, no zároveň najdôležitejších a najpoužívanejších dátových štruktúr sú vyhľadávacie stromy. Tie umožňujú ukladať kľúče v istom usporiadaní a podporujú operácie vkladania a vyhľadávania v čase závislom od výšky stromu. Jedným z mnohých variantov sú B-stromy, ktoré majú variabilný faktor vetvenia. To je dôležitá vlasnosť pri \extmem modely a ako popíšeme v sekcii \ref{sec:static-aware} je ich možné jednoducho použiť na dosiahnutie asymptoticky optimálneho riešenia.
+Jednou z najzákladnejších, no zároveň najdôležitejších a najpoužívanejších dátových štruktúr sú vyhľadávacie stromy. Tie umožňujú ukladať kľúče v istom usporiadaní a podporujú operácie vkladania a vyhľadávania v čase závislom od výšky stromu. Jedným z mnohých variantov sú B-stromy \citep{bayerbtree}, ktoré majú variabilný faktor vetvenia. To je dôležitá vlasnosť pri \extmem modely a ako popíšeme v sekcii \ref{sec:static-aware} je ich možné jednoducho použiť na dosiahnutie asymptoticky optimálneho riešenia.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-\todo{cite proof source}
-Na nájdenie daného kľúča v strome obsahujúcom $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto kľúča - $N$ možných existujúcich kľúčov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci kľúč. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
+Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview}. Na nájdenie daného kľúča v strome obsahujúcom $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto kľúča - $N$ možných existujúcich kľúčov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci kľúč. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
 \[
 \frac{\lg(2N+1)}{\lg(2B+1)} = \frac{\lg N + \bigO{1}}{\lg B + \bigO{1}} = \log_B{N} + \bigO{1}
 \]
@@ -125,7 +124,7 @@ To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun 
 \subsection{Statický \obliv vyhľadávací strom} \label{sec:static-obliv}
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
 
-Riešením je takzvané \emph{\vEB usporiadanie} (\emph{\vEB layout}, nazvané podla \vEB stromov s podobnou myšlienkou), ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude $(v)$.
+Riešením je takzvané \emph{\vEB usporiadanie} (\emph{\vEB layout}, nazvané podla \vEB stromov s podobnou myšlienkou), popísané v \citep{prokop1999cache,btreeshort,demaineoverview} ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude $(v)$.
 
 Pre $h>1$ rozdelíme vstupný strom na podstrom $\tau_0$ výšky $\frac{h}{2}$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Rekurzívne ich uložíme do \vEB usporiadania a následne uložíme za seba, výstupom teda bude $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
 
@@ -160,7 +159,7 @@ Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupné
 
 \subsubsection{Vyhľadávanie} \label{sec:static-search}
 
-\todo[inline]{pointers vs implicit indexing}
+\todo[inline]{pointers vs implicit indexing (kasheff)}
 
 Pri analýze vyhľadávania sa pozrime na také podstromy predošlého delenia, že ich veľkosť je $\Theta(B)$. Ďalšie delenie a preusporiadanie je už zbytočné, no to \obliv algoritmus nemá ako vedieť. Keďže ale po rekurzívnom volaní získame len iné usporiadanie, ktoré uložíme v súvislom úseku pamäte, bude stále možné tento podstrom načítať v $\bigO{1}$ blokoch.
 
@@ -170,14 +169,14 @@ Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimáln
 
 Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v nasledovnej sekcii.
 
-\section{Usporiadané pole} \label{sec:orderedfil}
+\section{Usporiadané pole} \label{sec:orderedfile}
 
 \todo[inline]{obrazky}
 Problémom \emph{údržby usporiadaného poľa} (z anglického \emph{ordered-file maintenance}) budeme volať problém spočívajúci v udržiavaní zoradenej postupnosti prvkov, do ktorej možno pridávať nové prvky medzi ľubovolné dva existujúce a tiež prvky odstraňovať. Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štruktúra zhustenej pamäte} (\emph{packed-memory structure}). Táto štruktúra udržiava prvky v súvislom poli veľkosti $\bigO{N}$ s \emph{medzerami} medzi prvkami veľkosti $\bigO{1}$. Vďaka tomu bude načítanie $K$ po sebe idúcich prvkov vyžadovať $\bigO{\frac{K}{B}}$ pamäťových presunov.
 
 \subsection{Popis štruktúry} \label{sec:of-desc}
 
-Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^k$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S = 2^l$ tak, že $S=\Theta(\log{N})$. Počet blokov tak bude tiež mocnina dvoch.
+Popíšeme dátovú štruktúru z \citep{btreeshort} s malými úpravami. Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^k$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S = 2^l$ tak, že $S=\Theta(\log{N})$. Počet blokov tak bude tiež mocnina dvoch.
 
 Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom, ktorého listy sú bloky udržiavaného poľa. \emph{Hĺbkou} vrchola označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = k-l$.
 
@@ -251,9 +250,10 @@ Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľk
 
 \section{Dynamický B-strom} \label{sec:dynamic-obliv}
 \todo[inline]{nazov? nie moc bstrom ked b=2... lepsie dictionary/tree?}
-\todo[inline]{intro, historia, ...}
 
-\subsection{\aware riešenie}
+V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry pochádza z \citep{btreeshort,btreefull}, bola avšak značne komplikovaná. Preto použijeme zjednodušenú verziu z \citep{bender2002}, ktorá dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
+
+\subsection{\Aware riešenie}
 V prípade \aware modelu použijeme opäť B-strom s vetvením $Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov. \todo{odvodenie?}
 
 \subsection{Popis \obliv štruktúry}

@@ -1,3 +1,4 @@
+%%%%%%%%%%%%%%%%%%%%%%%%% MEMORY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 @article{drepper2007every,
   title={What every programmer should know about memory},
   author={Drepper, Ulrich},
@@ -25,6 +26,8 @@
   publisher={ACM}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%% CACHEOBLIV %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 @inproceedings{frigo1999cache,
   title={Cache-oblivious algorithms},
   author={Frigo, Matteo and Leiserson, Charles E and Prokop, Harald and Ramachandran, Sridhar},
@@ -40,6 +43,63 @@
   year={1999},
   school={Massachusetts Institute of Technology}
 }
+
+@InProceedings{btreeshort,
+  AUTHOR        = {Michael A. Bender and Erik D. Demaine and Martin
+                   Farach-Colton},
+  TITLE         = {Cache-Oblivious B-Trees},
+  BOOKTITLE     = {Proceedings of the 41st Annual Symposium on Foundations of
+                   Computer Science (FOCS 2000)},
+  BOOKURL       = {http://www.cs.cmu.edu/~FOCS2000/},
+  ADDRESS       = {Redondo Beach, California},
+  MONTH         = {November 12--14},
+  YEAR          = 2000,
+  PAGES         = {399--409},
+
+  LENGTH        = {11 pages},
+  PAPERS        = {CacheObliviousBTrees_SICOMP}
+}
+
+@Article{btreefull,
+  AUTHOR        = {Michael A. Bender and Erik D. Demaine and Martin
+                   Farach-Colton},
+  TITLE         = {Cache-Oblivious B-Trees},
+  JOURNAL       = {SIAM Journal on Computing},
+  journalurl    = {http://www.siam.org/journals/sicomp/sicomp.htm},
+  VOLUME        = 35,
+  NUMBER        = 2,
+  YEAR          = 2005,
+  PAGES         = {341--358},
+
+  comments      = {This paper is also available from <A HREF="http://epubs.siam.org/SICOMP/volume-35/art_38995.html">SIAM</A>.},
+  papers        = {FOCS2000b},
+  replaces      = {FOCS2000b},
+  length        = {19 pages},
+}
+
+@inproceedings{bender2002,
+  title={A locality-preserving cache-oblivious dynamic dictionary},
+  author={Bender, Michael A and Duan, Ziyang and Iacono, John and Wu, Jing},
+  booktitle={Proceedings of the thirteenth annual ACM-SIAM symposium on Discrete algorithms},
+  pages={29--38},
+  year={2002},
+  organization={Society for Industrial and Applied Mathematics}
+}
+
+@InCollection{demaineoverview,
+  AUTHOR        = {Erik D. Demaine},
+  TITLE         = {Cache-Oblivious Algorithms and Data Structures},
+  BOOKTITLE     = {Lecture Notes from the EEF Summer School on Massive Data Sets},
+  BOOKURL       = {http://www.brics.dk/MassiveData02/},
+  ADDRESS       = {BRICS, University of Aarhus, Denmark},
+  MONTH         = {June 27--July 1},
+  YEAR          = 2002,
+
+  length        = {29 pages}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%% ALGVIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @mastersthesis{algviskuko,
     author    = "Jakub Kováč",
@@ -71,4 +131,22 @@
     school    = "Univerzita Komenského v Bratislave",
     type      = "bakalárska práca",
     year      = "2013",
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% MISC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{bayerbtree,
+ author = {Bayer, Rudolf},
+ title = {Binary B-trees for Virtual Memory},
+ booktitle = {Proceedings of the 1971 ACM SIGFIDET (Now SIGMOD) Workshop on Data Description, Access and Control},
+ series = {SIGFIDET '71},
+ year = {1971},
+ location = {San Diego, California},
+ pages = {219--235},
+ numpages = {17},
+ url = {http://doi.acm.org/10.1145/1734714.1734731},
+ doi = {10.1145/1734714.1734731},
+ acmid = {1734731},
+ publisher = {ACM},
+ address = {New York, NY, USA},
 }

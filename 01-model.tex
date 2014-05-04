@@ -1,4 +1,4 @@
-\chapter{Pamäťový model} \label{sec:memmodel}
+\chapter{Pamäťový model}
 
 Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovolnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
 
@@ -31,7 +31,7 @@ V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pam
 
 Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. V skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať rovnako rýchlo ako v druhom prípade, avšak nejaký čas bol algoritmus nečinný a čakalo sa na presun dát. Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
 
-\section{External-memory model}
+\section{External-memory model} \label{sec:extmem}
 Spôsobom ako zohľadniť tieto skutočnosti pri analýze algoritmov je takzvaný \emph{external-memory model} (model externej pamäte), nazývaný tiež \emph{I/O model} alebo \emph{cache-aware model} \citep{aggarwal1988input}. Ten popisuje pamäť skladajúcu sa z dvoch častí (obrázok \ref{fig:exmem_model}), ktoré voláme \cache a \disk.
 
 Všetky výpočty prebiehajú nad dátami v \cache, ktorá má obmedzenú veľkosť. Ostatné dáta sú uložené na disku neobmedzenej veľkosti, no nemôžeme s nimi priamo manipulovať a je ich potrebné najskôr preniesť do \cache. V samotnej analýze algoritmov potom počítame počet týchto prenosov z disku do \cache a naopak.
