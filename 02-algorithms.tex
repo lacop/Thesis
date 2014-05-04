@@ -1,6 +1,6 @@
 \chapter{Cache-oblivius algoritmy a dátové štruktúry}
 
-\todo[inline]{Intro text - obsah kapitoly (alg/ds, analyza, ...)}
+V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modely. Miestami tiež uvedieme ekvivalentnú \aware dátovú štruktúru pre vzájomné porovnanie efektívnosti.
 
 \section{Základné algoritmy}
 
@@ -65,19 +65,24 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 
 \section{Vyhľadávacie stromy}
 
-\todo[inline]{intro ...}
-\todo[inline]{lowerbound}
+Jednou z najzákladnejších, no zároveň najdôležitejších a najpoužívanejších dátových štruktúr sú vyhľadávacie stromy. Tie umožňujú ukladať kľúče v istom usporiadaní a podporujú operácie vkladania a vyhľadávania v čase závislom od výšky stromu. Jedným z mnohých variantov sú B-stromy, ktoré majú variabilný faktor vetvenia. To je dôležitá vlasnosť pri \extmem modely a ako popíšeme v sekcii \ref{sec:static-aware} je ich možné jednoducho použiť na dosiahnutie asymptoticky optimálneho riešenia.
+
+\subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
+\todo{cite proof source}
+Na nájdenie daného kľúča v strome obsahujúcom $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto kľúča - $N$ možných existujúcich kľúčov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci kľúč. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
+\[
+\frac{\lg(2N+1)}{\lg(2B+1)} = \frac{\lg N + \bigO{1}}{\lg B + \bigO{1}} = \log_B{N} + \bigO{1}
+\]
+pamäťových presunov. 
 
 \subsection{\Aware riešenie} \label{sec:static-aware}
-V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov. To zodpovedá dolnej hranici vo vete \todo{dokaz}.
+V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov. To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Naivné \obliv riešenie}
 Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob ako usporiadať uzly binárneho stromu v pamäti je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrchola na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícii $\lfloor\frac{x}{2}\rfloor$. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
 
 Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v algoritme \ref{alg:naive_indexing}.
 
-% TODO caption/labels
-% TODO side by side
 \begin{algorithm}[H]
     \label{alg:naive_indexing}
 	\caption{Algoritmy pre získanie pozícií ľavého syna, pravého syna a rodiča vrcholu na pozícii $x$}
@@ -115,7 +120,7 @@ kde $k+l<B$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ al
 x &\le B-2
 \end{aligned}
 \]
-To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je horšie ako pri \aware B-strome. \todo{porovnat fnc?}
+To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je horšie ako pri \aware B-strome.
 
 \subsection{Statický \obliv vyhľadávací strom} \label{sec:static-obliv}
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
@@ -165,7 +170,7 @@ Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimáln
 
 Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v nasledovnej sekcii.
 
-\section{Usporiadané pole} \label{sec:orderedfile}
+\section{Usporiadané pole} \label{sec:orderedfil}
 
 \todo[inline]{obrazky}
 Problémom \emph{údržby usporiadaného poľa} (z anglického \emph{ordered-file maintenance}) budeme volať problém spočívajúci v udržiavaní zoradenej postupnosti prvkov, do ktorej možno pridávať nové prvky medzi ľubovolné dva existujúce a tiež prvky odstraňovať. Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štruktúra zhustenej pamäte} (\emph{packed-memory structure}). Táto štruktúra udržiava prvky v súvislom poli veľkosti $\bigO{N}$ s \emph{medzerami} medzi prvkami veľkosti $\bigO{1}$. Vďaka tomu bude načítanie $K$ po sebe idúcich prvkov vyžadovať $\bigO{\frac{K}{B}}$ pamäťových presunov.
@@ -298,11 +303,12 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
     \resizebox{0.9\textwidth}{!}{
         \input{figures/dynamic_tree/three_parts}
     }
-    \caption{\todo[inline]{caption}}
+    \caption{Rozdelenie statického stromu na tri časti pri analýze počtu pamäťových presunov.}
     \label{fig:cobtree_analysis_parts}
 \end{figure}
+\todo{Center triangle only, ignore labels}
 
-Túto analýzu rozdelíme na tri časti, v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať.
+Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať.
 
 \subsubsection{Spodné dve úrovne}
 Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB delenia, ktoré sa ako prvé zmestia do bloku \cache a teda ich veľkosť je medzi $\sqrt{B}$ a $B$. Pozrime sa na spodné dve úrovne takýchto podstromov. Listy spodnej teda budú listy celého statického strom a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
