@@ -165,7 +165,7 @@ Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimáln
 
 Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v nasledovnej sekcii.
 
-\section{Usporiadané pole}
+\section{Usporiadané pole} \label{sec:orderedfile}
 
 \todo[inline]{obrazky}
 Problémom \emph{údržby usporiadaného poľa} (z anglického \emph{ordered-file maintenance}) budeme volať problém spočívajúci v udržiavaní zoradenej postupnosti prvkov, do ktorej možno pridávať nové prvky medzi ľubovolné dva existujúce a tiež prvky odstraňovať. Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štruktúra zhustenej pamäte} (\emph{packed-memory structure}). Táto štruktúra udržiava prvky v súvislom poli veľkosti $\bigO{N}$ s \emph{medzerami} medzi prvkami veľkosti $\bigO{1}$. Vďaka tomu bude načítanie $K$ po sebe idúcich prvkov vyžadovať $\bigO{\frac{K}{B}}$ pamäťových presunov.
@@ -244,7 +244,7 @@ Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov - tie
 
 Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľkosti $\bigO{N}$ a podporuje operácie vkladania a odstraňovania, ktoré upravujú súvislý interval priemernej veľkosti $\bigO{\log^2{N}}$ a je ich teda možné realizovať pomocou $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov.
 
-\section{Dynamický B-strom}
+\section{Dynamický B-strom} \label{sec:dynamic-obliv}
 \todo[inline]{nazov? nie moc bstrom ked b=2... lepsie dictionary/tree?}
 \todo[inline]{intro, historia, ...}
 
