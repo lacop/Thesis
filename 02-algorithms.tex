@@ -7,7 +7,7 @@ V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr,
 Na demonštráciu \obliv algoritmov a ich analýzy v \extmem modeli použijeme jednoduchý algoritmus, ktorý počíta agregačnú funkciu nad hodnotami uloženými v poli.
 
 \subsection{Popis algoritmu}
-
+\todo[inline]{simplify}
 Majme pole $A$ veľkosti $|A|=N$ a označme jeho prvky $A = \{a_1,\dotsc,a_N\} \in X^N$. Chceme vypočítať hodnotu $f_g(A)$, kde $g: X \times Y \rightarrow Y$ je agregačná funkcia, $g_0 \in Y$ je počiatočná hodnota a $f_g: X^\infty \rightarrow Y$ je rozšírenie agregačnej funkcie definované následovne: \todo{Spravna notacia pre x infinity?}
 \[
 \begin{aligned}
@@ -68,6 +68,7 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 Jednou z najzákladnejších, no zároveň najdôležitejších a najpoužívanejších dátových štruktúr sú vyhľadávacie stromy. Tie umožňujú ukladať kľúče v istom usporiadaní a podporujú operácie vkladania a vyhľadávania v čase závislom od výšky stromu. Jedným z mnohých variantov sú B-stromy \citep{bayerbtree}, ktoré majú variabilný faktor vetvenia. To je dôležitá vlasnosť pri \extmem modely a ako popíšeme v sekcii \ref{sec:static-aware} je ich možné jednoducho použiť na dosiahnutie asymptoticky optimálneho riešenia.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
+\todo{info complexity}
 Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview}. Na nájdenie daného kľúča v strome obsahujúcom $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto kľúča - $N$ možných existujúcich kľúčov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci kľúč. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
 \[
 \frac{\lg(2N+1)}{\lg(2B+1)} = \frac{\lg N + \bigO{1}}{\lg B + \bigO{1}} = \log_B{N} + \bigO{1}
@@ -78,9 +79,9 @@ pamäťových presunov.
 V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov. To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Naivné \obliv riešenie} \label{sec:static-naive}
-Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob ako usporiadať uzly binárneho stromu v pamäti je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrchola na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícii $\lfloor\frac{x}{2}\rfloor$. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
+Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob, ako usporiadať uzly binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícii $\lfloor\frac{x}{2}\rfloor$. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
 
-Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v algoritme \ref{alg:naive_indexing}.
+Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v algoritme \ref{alg:naive_indexing}. \todo{broken ref}
 
 \begin{algorithm}[H]
     \label{alg:naive_indexing}
@@ -125,8 +126,8 @@ To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun 
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
 
 Riešením je takzvané \emph{\vEB usporiadanie} (\emph{\vEB layout}, nazvané podla \vEB stromov s podobnou myšlienkou), popísané v \citep{prokop1999cache,btreeshort,demaineoverview} ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude $(v)$.
-
-Pre $h>1$ rozdelíme vstupný strom na podstrom $\tau_0$ výšky $\frac{h}{2}$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Rekurzívne ich uložíme do \vEB usporiadania a následne uložíme za seba, výstupom teda bude $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
+\todo{rounding}
+Pre $h>1$ rozdelíme vstupný strom na podstrom $\tau_0$ výšky $\frac{h}{2}$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Rekurzívne ich uložíme do \vEB usporiadania a následne uložíme za seba, výstupom teda bude poradie $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
 
 Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže ich výška je $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$.
 

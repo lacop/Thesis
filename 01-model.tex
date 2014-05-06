@@ -1,8 +1,8 @@
 \chapter{Pamäťový model}
 
-Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovolnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
+Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovoľnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
 
-V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu \citep{drepper2007every}. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku\todo{referencie}. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{64}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu\footnote{Klasické pevné disky (HDD) alebo disky bez pohyblivých častí (SSD)}, kapacita rádovo \SI{1}{\tebi\byte}). Približné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-levels}.
+V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu \citep{drepper2007every}. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku\todo{referencie}. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{64}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu\footnote{Klasické pevné disky (HDD) alebo disky bez pohyblivých častí (SSD)}, kapacita rádovo \SI{1}{\tebi\byte}). To znamená, že rozdiel v prístupovej dobe je $10\,000\,000$-násobný a len ťažko môžeme hovoriť o konštantnom čase. Približné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-levels}.
 
 \begin{table}
     \centering
@@ -24,12 +24,12 @@ V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pam
         \end{tablenotes}
     \end{threeparttable}
 \end{table}
-% TODO: tabulka - pridat rychlost, asociativitu, velkost bloku, pocet blokov, ...
+\todo[inline]{velkost bloku, pocet, assoc, ...}
 
 % Praktickým dôvodom pre túto hierarchiu je cena a jednoduchosť výroby.
 % TODO: 1ns * c = 30cm, limit
 
-Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. V skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať rovnako rýchlo ako v druhom prípade, avšak nejaký čas bol algoritmus nečinný a čakalo sa na presun dát. Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
+Dôsledkom tejto hierarchie je závislosť výslednej rýchlosti algoritmu od jeho prístupov k pamäti. Operácie, ktoré využívajú dáta uložene na disku potrvajú dlhšie ako tie, ktoré využívajú iba dáta v registroch. Dôvodom je, že pri prístupe k dátam na disku sa v skutočnosti sa tieto dáta postupne presunú z disku do hlavnej pamäte, do \cache na procesore a napokon do registrov. Následne sa môže požadovaná operácia vykonať rovnako rýchlo ako v druhom prípade (keď už je v registroch), avšak nejaký čas bol algoritmus nečinný a čakal na presun dát. \todo{rewrite}Pre všetky susedné dvojice pamäťových úrovní teda slúži tá menšia a rýchlejšia ako vyrovnávacia pamäť pre tú väčšiu a pomalšiu. 
 
 \section{External-memory model} \label{sec:extmem}
 Spôsobom ako zohľadniť tieto skutočnosti pri analýze algoritmov je takzvaný \emph{external-memory model} (model externej pamäte), nazývaný tiež \emph{I/O model} alebo \emph{cache-aware model} \citep{aggarwal1988input}. Ten popisuje pamäť skladajúcu sa z dvoch častí (obrázok \ref{fig:exmem_model}), ktoré voláme \cache a \disk.
@@ -48,11 +48,11 @@ Samotné presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk a
 \end{figure}
 
 \subsection{Cache-aware algoritmy}
-Pokiaľ poznáme parametre $B$ a $M$, môžeme skonštruovať algoritmus, ktorý bude túto dvojicu pamätí využívať efektívne. Takéto algoritmy voláme \aware (uvedomujúci si \cache). Súčasťou tohto algoritmu by bolo explicitné spravovanie presunov pamäte - je potrebné riešiť čítanie blokov z disku a ich umiestňovanie do \cache, nahrádzanie blokov v \cache pri zaplnení a spätný zápis blokov na disk.
+Pokiaľ poznáme parametre $B$ a $M$, môžeme skonštruovať algoritmus, ktorý bude túto dvojicu pamätí využívať efektívne. Takýto algoritmus voláme \aware (uvedomujúci si \cache). Súčasťou tohto algoritmu by bolo explicitné spravovanie presunov pamäte - je potrebné riešiť čítanie blokov z disku a ich umiestňovanie do \cache, nahrádzanie blokov v \cache pri zaplnení a spätný zápis blokov na disk.
 
 % TODO asociativita
 
-Tento model tiež popisuje len dve úrovne pamäte a teda funguje efektívne len pre danú susednú dvojicu, pre ktorú ho na základe znalosti parametrov optimalizujeme. V moderných systémoch ale máme takýchto dvojíc niekoľko. Keby sme poznali parametre pre všetky tieto dvojice môžeme zovšeobecniť tento model pre viac úrovní a explicitne riešiť presun blokov medzi nimi. Takto sa však samotná správa pamäte potenciálne stáva komplikovanejším problémom ako pôvodný algoritmus.
+Tento model popisuje len dve úrovne pamäte a teda funguje efektívne len pre danú susednú dvojicu, pre ktorú ho na základe znalosti parametrov optimalizujeme. V~moderných systémoch ale máme takýchto dvojíc niekoľko. Keby sme poznali parametre pre všetky tieto dvojice, môžeme zovšeobecniť tento model pre viac úrovní a explicitne riešiť presun blokov medzi nimi. Takto sa však samotná správa pamäte potenciálne stáva komplikovanejším problémom ako pôvodný algoritmus.
 
 
 \section{Cache-oblivious model}
@@ -68,7 +68,7 @@ V neposlednom rade bude takýto \obliv algoritmus efektívny medzi každou dvoji
 % TODO \cache vs cache (+ cache-obliv, ... ) - when to use \emph?
 
 \subsection{Správa pamäte}
-V momente keď sa \obliv algoritmus pokúsi o vykonanie operácie, ktorá potrebuje dáta mimo cache je potrebné ich najskôr z disku skopírovať. V prípade, že je v cache voľný blok tak je možné presunúť dáta bez nutnosti nahradenia. V opačnom prípade je však potrebné uvoľniť miesto tým, že sa vyberie blok z cache, v prípade, že bol upravený sa jeho obsah zapíše späť na disk a následne sa požadovaný blok z disku zapíše na jeho miesto v cache. Tento proces sa nazýva výmena stránok ({\em page replacement}), a algoritmus rozhodujúci, ktorý blok z cache odstrániť, voláme stratégia výmeny stránok ({\em page-replacement strategy}).
+V momente, keď sa \obliv algoritmus pokúsi o vykonanie operácie, ktorá potrebuje dáta mimo cache je potrebné ich najskôr z disku skopírovať. V prípade, že je v cache voľný blok, je možné presunúť dáta bez nutnosti nahradenia. V opačnom prípade je však potrebné uvoľniť miesto tým, že sa vyberie blok z cache, v prípade, že bol upravený sa jeho obsah zapíše späť na disk a následne sa požadovaný blok z disku zapíše na jeho miesto v cache. Tento proces sa nazýva výmena stránok ({\em page replacement}), a algoritmus rozhodujúci, ktorý blok z cache odstrániť, voláme stratégia výmeny stránok ({\em page-replacement strategy}).
 
 Ak by sa táto stratégia správala tak, že vždy odstráni blok, ktorý bude potrebný v ďalšom kroku algoritmu, tak by bolo zakaždým presúvať bloky medzi diskom a cache. To by znamenalo, že počet blokov, s ktorými v cache môžeme pracovať je $M/B = 1$. Ďalším problémom je \emph{asociatívnosť} cache - z praktických dôvodov je často možné daný blok z disku uložiť len na niekoľko pozícií v cache. Inak by bolo potrebné ukladať spolu s každým blokom jeho plnú adresu na disku, čo by redukovalo celkový počet blokov, ktoré sa do cache zmestia. Znížením asociativity je možné ukladať iba časť adresy, pričom zvyšok je implicitne určený pozíciou v cache. V prípade nízkej asociativity však môžu opäť nastať situácie, kedy je algoritmus schopný využiť iba malý počet blokov v cache.
 
@@ -76,6 +76,7 @@ Tieto problémy \obliv model obchádza predpokladom ideálnej cache - cache, kto
 
 % TODO better translation - more exact + explicit corollaries?
 % TODO change from 'lema' to 'tvrdenie' or something?
+% TODO proof sketch?
 \begin{lema}
 Algoritmus, ktorý v ideálnej cache veľkosti $M$ s blokmi veľkosti $B$ vykoná $T$ pamäťových operácií, vykoná najviac $2T$ pamäťových operácií v cache veľkosti $2M$ s blokmi veľkosti $B$ pri použití stratégie \emph{LRU} alebo \emph{FIFO}. \citep[Lemma 12]{frigo1999cache}
 \end{lema}
@@ -84,6 +85,7 @@ Algoritmus, ktorý v ideálnej cache veľkosti $M$ s blokmi veľkosti $B$ vykon�
 Plne asociatívna cache veľkosti $M$ sa dá simulovať s použitím $\bigO{M}$ pamäte tak, že prístup ku každému bloku v cache zaberie v priemernom prípade $\bigO{1}$ času. \citep[Lemma 16]{frigo1999cache}
 \end{lema}
 
+\todo{move above,rewrite}
 Stratégia \emph{LRU} (least recently used) vyberá vždy blok, ktorý bol najdlhšie nepoužitý. Implementácia vyžaduje udržiavať si ku každému bloku počítadlo, ktoré sa pri prístupe nastaví na nulu a pri prístupe k iným blokom zvýši o jedna. Pri potrebe uvoľniť miesto v cache vyberieme blok s najväčšou hodnotou počítadla - ten, ku ktorému najdlhšie nebol prístup.
 
 Stratégia \emph{FIFO} (first in, first out) je ešte jednoduchšia - bloky sú udržiavame zoradené podla poradia ich vloženia do cache. Keď vyberáme blok na odstránenie tak vezmeme ten, ktorý bol pridaný najskôr a teda je na začiatku tohto usporiadania.
