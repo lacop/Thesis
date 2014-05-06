@@ -65,11 +65,11 @@ def order_veb(v, height, i = 1):
 # def full_tikz(root):
 #     return '\\' + get_tikz(root) + ';'
 
-def get_tikz(v, tab='  '):
-    out = '[.' + str(v.order) + ' '
+def get_tikz(v, tab='  ', name='T'):
+    out = '[.\\node (' + name + ') {' + str(v.order) + '}; '
     if v.left is not None:
-        out += '\n' + tab + get_tikz(v.left, tab+'  ')
-        out += '\n' + tab + get_tikz(v.right, tab+'  ')
+        out += '\n' + tab + get_tikz(v.left, tab+'  ', name+'L')
+        out += '\n' + tab + get_tikz(v.right, tab+'  ', name+'R')
     out += ']'
     return out
 
@@ -87,3 +87,48 @@ def generate(type, height):
         return "Unknown"
 
     print(full_tikz(root))
+
+from itertools import product
+
+def vebbox(name, height, sep, sepstep):
+    if height < 2:
+        print('\\node[draw, rectangle, fit = ({0}), inner sep = {1}] {{}};'.format(name, sep))
+    elif height == 2:
+        print('\\node[draw, rectangle, fit = ({0})({0}L)({0}R), inner sep = {1}] {{}};'.format(name, sep))
+    else:
+        print('\\node[draw, rectangle, thick, fit = ({0})({0}{1})({0}{2}), inner sep = {3}] {{}};'.format(name, 'L'*(height-1), 'R'*(height-1), sep))
+
+        bottom = 1
+        while bottom*2 < height:
+            bottom *= 2
+        top = height - bottom
+        vebbox(name, top, sep - sepstep, sepstep)
+
+        for p in product('LR', repeat=top):
+            vebbox(name + ''.join(p), bottom, sep - sepstep, sepstep)
+
+def numtoname(i):
+    name = ''
+    while i > 1:
+        if i % 2 == 0:
+            name += 'L'
+        else:
+            name += 'R'
+        i //=2
+    name += 'T'
+    return name[::-1]
+
+def naivearrows(height, shorten='3pt', control='(5, -1)'):
+    wrap = 1
+    for i in range(1, 2**height-1):
+        out = '\\draw [->, shorten >= {0}, shorten <= {0}] '.format(shorten)
+        this = numtoname(i)
+        next = numtoname(i+1)
+
+        if i == wrap:
+            wrap = 2*wrap + 1
+            out += '({0}.east) .. controls ($({0}) + {2}$) and ($({1}) - {2}$) .. ({1}.west);'.format(this, next, control)
+        else:
+            out += '({0}) to ({1});'.format(this, next)
+
+        print(out)
