@@ -2,8 +2,12 @@ import node_order
 
 # height = 8
 # find = 201
+# height = 7
+# find = 55
+
 height = 9
 find = 202
+#find = 427
 blocksize = 4
 
 nodewidth = 0.25
@@ -12,6 +16,8 @@ colormiss = 'red!60!white'
 coloraccess = 'green'
 colorcache = 'yellow!40!white'
 colornone = 'white'
+
+poslabel = 'node [midway, draw, circle, inner sep = 0, minimum size=2, fill=black] {}'
 
 offstep = 0.125
 
@@ -51,7 +57,7 @@ def treesearch(v, key):
             v = v.left
     return (accessed, loaded, miss)
 
-array = range(1, 2**height + 1)
+array = range(1, 2**height)
 
 def binsearch(arr, key):
     loaded = []
@@ -62,11 +68,11 @@ def binsearch(arr, key):
     right = len(arr)
     while True:
         mid = (left+right) // 2
-        accessed.append(mid+1)
-        if mid+1 not in loaded:
-            miss.append(mid+1)
+        accessed.append(mid)
+        if mid not in loaded:
+            miss.append(mid)
             for i in range(blocksize):
-                loaded.append(mid + 1 + i)
+                loaded.append(mid + i)
 
         #print(mid, left, right)
         if left == right:
@@ -78,7 +84,7 @@ def binsearch(arr, key):
             left = mid
         else:
             right = mid
-
+    #print(accessed, loaded, miss)
     return (accessed, loaded, miss)
 
 def drawnode(order, key, info, y, meh=False):
@@ -95,10 +101,13 @@ def drawnode(order, key, info, y, meh=False):
     if meh: order = order - 1
     x = nodewidth*(order // blocksize)
     y = y + nodeheight*(order % blocksize)
-    out = r'\draw [fill = {}] ({}, {}) rectangle ({}, {});'.format(col, x, y, x+nodewidth, y+nodeheight)
+    out = r'\draw [fill = {}] ({}, {}) rectangle ({}, {})'.format(col, x, y, x+nodewidth, y+nodeheight)
     #out += 'node [midway] {' + str(key) + '};'
 
-    print(out)
+    if key == find:
+        out += poslabel
+
+    print(out + ';')
 
 def drawtree(v, y, info):
     if v is None:
@@ -114,8 +123,10 @@ def drawarray(arr, y, info):
 
 def printarrows(accessed, y):
     for i in range(len(accessed)-1):
-        sx = accessed[i]*nodewidth + nodewidth*0.5 #+ nodewidth*0.75
-        ex = accessed[i+1]*nodewidth + nodewidth*0.5 #+ nodewidth*0.25
+        sx = nodewidth*(accessed[i] // blocksize) + nodewidth*0.5
+        sy = y + nodeheight*(accessed[i] % blocksize) + nodeheight*0.5
+        ex = nodewidth*(accessed[i+1] // blocksize) + nodewidth*0.5
+        ey = y + nodeheight*(accessed[i+1] % blocksize) + nodeheight*0.5
 
         off = (len(accessed)-i-1) * offstep
 
@@ -128,7 +139,8 @@ def printarrows(accessed, y):
         #     out += 'node [midway, above] {' + str(i+1) + '} '
         #out += '({}, {}) --'.format(ex, y+nodeheight+off)
         #out += '({}, {});'.format(ex, y+nodeheight)
-        out = r'\draw ({0}, {1}) .. controls ({0}, {2}) and ({3}, {2}) ..     ({3}, {1});'.format(sx, y+nodeheight, y+nodeheight+off, ex)
+        #out = r'\draw ({0}, {1}) .. controls ({0}, {2}) and ({3}, {2}) ..     ({3}, {1});'.format(sx, y+nodeheight, y+nodeheight+off, ex)
+        out = r'\draw [->] ({0}, {1}) to ({2}, {3});'.format(sx, sy, ex, ey)
         print(out)
 
 def printblocks(blocks, y):
@@ -144,14 +156,14 @@ def printtree(tree, y=0):
 
     drawtree(tree, y, info)
 
-    #accessed, _, blocks = info
+    accessed, _, blocks = info
     #printarrows(accessed, y)
     #printblocks(blocks, y)
 
 def printarray(arr, y=0):
     info = binsearch(arr, find)
     drawarray(arr, y, info)
-    #accessed, _, blocks = info
+    accessed, _, blocks = info
     #printarrows(accessed, y)
     #printblocks(blocks, y)
 
