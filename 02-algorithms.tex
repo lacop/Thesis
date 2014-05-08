@@ -220,17 +220,42 @@ Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimáln
 Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v sekcii \ref{sec:orderedfile}.
 
 \subsection{Rozdiely v prístupe ku pamäti}
-Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami v \emph{BFS} a \vEB usporiadaniach sú vizuálne znázornené na obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} na strane \pageref{fig:search_comparison1}. 
+Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami v \emph{BFS} a \vEB usporiadaniach sú vizuálne znázornené na obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} na strane \pageref{fig:search_comparison1}. Pozrime sa však najskôr na menší obrázok \ref{fig:search_comparison_small}, na ktorom vysvetlíme princíp tejto vizualizácie.
 
-Jednotlivé políčka sú hodnoty poľa respektíve kľúče vo vrcholoch stromov, pričom v pamäti sú usporiadané v poradí zdola nahor a zľava doprava. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 511\}$ čo je počet vrcholov úplného binárneho stromu výšky $9$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. 
+\begin{figure}[h]
+    \centering
+    \subtop[Binárne vyhľadávanie] {
+        \resizebox{0.3\textwidth}{!} {
+            \input{figures/search_comparison/small_binsearch}
+        }
+    }
+    \subtop[\emph{BFS} strom] {
+        \resizebox{0.3\textwidth}{!} {
+            \input{figures/search_comparison/small_bfstree}
+        }
+    }
+    \subtop[\vEB strom] {
+        \resizebox{0.3\textwidth}{!} {
+            \input{figures/search_comparison/small_vebtree}
+        }
+    }
+    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $17$ medzi $31$ prvkami}
+    \label{fig:search_comparison_small}
+\end{figure}
+
+Jednotlivé políčka sú hodnoty poľa respektíve kľúče vo vrcholoch stromov, pričom v pamäti sú usporiadané v poradí zhora nadol a zľava doprava. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 2^h-1\}$ čo je počet vrcholov úplného binárneho stromu výšky $h$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. 
 
 \todo[inline]{definovat cachemiss/hit v intre, pouzit tu}
 
-Červená farba reprezentuje prvky, ktoré sa v momente prístupu nenachádzali v \cache a bolo potrebné ich načítať. Zelená naopak označuje prvky, ktoré už v \cache boli -- načítali sa spolu s nejakým červeným prvkom v rovnakom bloku. Ostatné prvky, ktoré sa načítali ako súčasť bloku ale neboli použité, sú označené žltou farbou. Políčko s bodkou označuje pozíciu, na ktorej bol napokon požadovaný prvok nájdený.
+Červená farba reprezentuje prvky, ktoré sa v momente prístupu nenachádzali v \cache a bolo potrebné ich načítať. Zelená naopak označuje prvky, ktoré už v \cache boli -- načítali sa spolu s nejakým červeným prvkom v rovnakom bloku. Ostatné prvky, ktoré sa načítali ako súčasť bloku ale neboli použité, sú označené žltou farbou.
 
-Keďže obe hľadané hodnoty ($243$ a $427$) boli zvolené ako listy týchto vyhľadávacích stromov, pristúpili operácie vyhľadávania vo všetkých troch prípadoch práve k $9$ prvkom. Rozdiel je však v pomere počtu červených (ktoré v \cache neboli a bolo ich potrebné načítať) a zelených (na ktoré nebol potrebný pamäťový presun) prvkov.
+V malom obrázku \ref{fig:search_comparison_small} (výška stromu $h=5$) šípky určujú poradie, v akom vyhľadávanie pristupovalo k jednotlivým prvkom. Vo veľkých obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} (výška stromu $h=9$) sú šípky pre prehľadnosť vynechané a políčko s bodkou označuje pozíciu, na ktorej bol napokon požadovaný prvok nájdený. Rozdiely medzi týmito troma prístupmi k vyhľadávaniu je lepšie vidieť práva na väčších obrázkoch.
 
-Ako ľahko vidieť, binárne vyhľadávanie sa presúva medzi vzdialenými prvkami až do konca, kedy už je prehľadávaný interval dostatočne malý na to, aby sa zmestil do bloku. Naopak strom v \emph{BFS} usporiadaní robí stále väčšie a väčšie \emph{skoky} a porovnávané prvky sa do bloku zmestia iba na začiatku.
+Keďže všetky hľadané hodnoty ($17$, $243$ a $427$) boli zvolené ako listy týchto vyhľadávacích stromov, pristúpili operácie vyhľadávania vo všetkých troch prípadoch práve k $h$ prvkom. Rozdiel je však v pomere počtu červených (ktoré v \cache neboli a bolo ich potrebné načítať) a zelených (na ktoré nebol potrebný pamäťový presun) prvkov.
+
+Ako ľahko vidieť, binárne vyhľadávanie začne v strede a presúva sa medzi prvkami, ktoré sú od seba  čoraz menej vzdialené až do momentu, kedy už je prehľadávaný interval dostatočne malý na to, aby sa zmestil do bloku.
+
+Naopak strom v \emph{BFS} usporiadaní robí stále väčšie a väčšie \emph{skoky} a porovnávané prvky sa do jedného bloku zmestia iba na začiatku.
 
 Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalších krokoch pristupuje k prvkom, ktoré sú v pamäti blízko a veľký \emph{skok}, ktorý pristúpi mimo \cache vykonáva menej často. Vďaka tomu dosahuje v oboch príkladoch najviac zelených políčok.
 
@@ -260,7 +285,7 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
             \input{figures/search_comparison/height9_find243_vebtree}
         }
     }
-    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $243$}
+    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $243$ medzi $511$ prvkami}
     \label{fig:search_comparison1}
 
     \vspace*{2cm} % TODO autofill?
@@ -280,7 +305,7 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
             \input{figures/search_comparison/height9_find427_vebtree}
         }
     }
-    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $427$}
+    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $427$ medzi $511$ prvkami}
     \label{fig:search_comparison2}
 \end{sidewaysfigure}
 

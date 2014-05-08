@@ -1,0 +1,45 @@
+\begin{tikzpicture}
+
+% height=5, finding=17, blocksize=4
+
+% BFS tree
+\draw [color=darkgray, fill = red!60!white] (0.0, -1.125) rectangle (0.25, -1.375)node [midway] (A0) {};
+\draw [color=darkgray, fill = yellow!40!white] (0.0, -1.375) rectangle (0.25, -1.625);
+\draw [color=darkgray, fill = yellow!40!white] (0.0, -1.875) rectangle (0.25, -2.125);
+\draw [color=darkgray, fill = yellow!40!white] (0.25, -1.875) rectangle (0.5, -2.125);
+\draw [color=darkgray, fill = white] (0.75, -1.875) rectangle (1.0, -2.125);
+\draw [color=darkgray, fill = white] (1.0, -1.125) rectangle (1.25, -1.375);
+\draw [color=darkgray, fill = yellow!40!white] (0.5, -1.125) rectangle (0.75, -1.375);
+\draw [color=darkgray, fill = white] (1.0, -1.375) rectangle (1.25, -1.625);
+\draw [color=darkgray, fill = white] (1.0, -1.625) rectangle (1.25, -1.875);
+\draw [color=darkgray, fill = white] (0.25, -1.125) rectangle (0.5, -1.375);
+\draw [color=darkgray, fill = white] (0.5, -1.375) rectangle (0.75, -1.625);
+\draw [color=darkgray, fill = white] (1.0, -1.875) rectangle (1.25, -2.125);
+\draw [color=darkgray, fill = white] (1.25, -1.125) rectangle (1.5, -1.375);
+\draw [color=darkgray, fill = white] (0.5, -1.625) rectangle (0.75, -1.875);
+\draw [color=darkgray, fill = white] (1.25, -1.375) rectangle (1.5, -1.625);
+\draw [color=darkgray, fill = white] (1.25, -1.625) rectangle (1.5, -1.875);
+\draw [color=darkgray, fill = green] (0.0, -1.625) rectangle (0.25, -1.875)node [midway] (A1) {};
+\draw [color=darkgray, fill = red!60!white] (0.25, -1.375) rectangle (0.5, -1.625)node [midway] (A2) {};
+\draw [color=darkgray, fill = red!60!white] (0.5, -1.875) rectangle (0.75, -2.125)node [midway] (A3) {};
+\draw [color=darkgray, fill = red!60!white] (1.25, -1.875) rectangle (1.5, -2.125)node [midway] (LAST) {};
+\draw [color=darkgray, fill = yellow!40!white] (1.5, -1.125) rectangle (1.75, -1.375);
+\draw [color=darkgray, fill = yellow!40!white] (0.75, -1.125) rectangle (1.0, -1.375);
+\draw [color=darkgray, fill = yellow!40!white] (1.5, -1.375) rectangle (1.75, -1.625);
+\draw [color=darkgray, fill = yellow!40!white] (1.5, -1.625) rectangle (1.75, -1.875);
+\draw [color=darkgray, fill = yellow!40!white] (0.25, -1.625) rectangle (0.5, -1.875);
+\draw [color=darkgray, fill = yellow!40!white] (0.75, -1.375) rectangle (1.0, -1.625);
+\draw [color=darkgray, fill = white] (1.5, -1.875) rectangle (1.75, -2.125);
+\draw [color=darkgray, fill = white] (1.75, -1.125) rectangle (2.0, -1.375);
+\draw [color=darkgray, fill = yellow!40!white] (0.75, -1.625) rectangle (1.0, -1.875);
+\draw [color=darkgray, fill = white] (1.75, -1.375) rectangle (2.0, -1.625);
+\draw [color=darkgray, fill = white] (1.75, -1.625) rectangle (2.0, -1.875);
+
+\draw [->, shorten <=1, shorten >= 1] (A0.center) to (A1.center);
+\draw [->, shorten <=1, shorten >= 1] (A1.center) .. controls ($(A1) + (0.25,0)$) .. (A2.center);
+\draw [->, shorten <=1, shorten >= 1] (A2.center) .. controls ($(A2) + (0.25,0)$) .. (A3.center);
+\draw [->, shorten <=1, shorten >= 1] (A3.center) to (LAST.center);
+
+%\draw [thin, black, rounded corners] (A0.north west) -- ++(0, -1) -- ++ (0.25, 0) -- ++ (0, 1) -- cycle;
+
+\end{tikzpicture}

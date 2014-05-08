@@ -1,10 +1,10 @@
 import node_order
 
-# height = 8
-# find = 201
-# height = 7
-# find = 55
+# SMALL
+#height=5
+#find=17
 
+# LARGE
 height = 9
 find = 243
 #find = 427
@@ -13,13 +13,13 @@ blocksize = 4
 nodewidth = 0.25
 nodeheight = 0.25
 
-coloredge = 'gray'
+coloredge = 'darkgray'
 colormiss = 'red!60!white'
 coloraccess = 'green'
 colorcache = 'yellow!40!white'
 colornone = 'white'
 
-poslabel = 'node (LAST) [midway, draw, circle, inner sep = 0, minimum size=2, fill=black] {}'
+poslabel = 'node (LAST) [midway, draw, circle, inner sep = 0, outer sep=2.5, minimum size=2, fill=black] {}'
 
 offstep = 0.125
 
@@ -91,6 +91,7 @@ def binsearch(arr, key):
 
 def drawnode(order, key, info, y, meh=False):
     accessed, loaded, miss = info
+    #print(accessed, miss, loaded)
 
     if order in miss:
         col = colormiss
@@ -100,10 +101,11 @@ def drawnode(order, key, info, y, meh=False):
         col = colorcache
     else:
         col = colornone
-    if meh: order = order - 1
-    x = nodewidth*(order // blocksize)
-    y = y + nodeheight*(order % blocksize)
-    out = r'\draw [color={}, fill = {}] ({}, {}) rectangle ({}, {})'.format(coloredge, col, x, y, x+nodewidth, y+nodeheight)
+    posorder = order
+    if meh: posorder = order - 1
+    x = nodewidth*(posorder // blocksize)
+    y = y - nodeheight*(posorder % blocksize)
+    out = r'\draw [color={}, fill = {}] ({}, {}) rectangle ({}, {})'.format(coloredge, col, x, y, x+nodewidth, y-nodeheight)
     #out += 'node [midway] {' + str(key) + '};'
 
     if key == find:
@@ -187,13 +189,54 @@ def printall():
     printtree(veb, -2*sep)
     print()
 
-print(r"""
-\documentclass[tikz, border=10pt]{standalone}
-\begin{document}
-\begin{tikzpicture}
-""")
-printall()
-print(r"""
-\end{tikzpicture}
-\end{document}
-""")
+from os import open, close, dup, O_WRONLY, O_CREAT
+
+def printfiles():
+    print('Writing to files...')
+    old = dup(1)
+    close(1)
+
+    open('height{}_find{}_binsearch.tex'.format(height, find), O_WRONLY|O_CREAT)
+    print('\\begin{tikzpicture}')
+    print('% height={}, finding={}, blocksize={}'.format(height, find, blocksize))
+    print()
+    print('% Binary search')
+    printarray(array, 0)
+    print('\\end{tikzpicture}')
+    close(1)
+
+    open('height{}_find{}_bfstree.tex'.format(height, find), O_WRONLY|O_CREAT)
+    print('\\begin{tikzpicture}')
+    print('% height={}, finding={}, blocksize={}'.format(height, find, blocksize))
+    print()
+    print('% BFS tree')
+    printtree(bfs, 0)
+    print('\\end{tikzpicture}')
+    close(1)
+
+    open('height{}_find{}_vebtree.tex'.format(height, find), O_WRONLY|O_CREAT)
+    print('\\begin{tikzpicture}')
+    print('% height={}, finding={}, blocksize={}'.format(height, find, blocksize))
+    print()
+    print('% vEB tree')
+    printtree(veb, 0)
+    print('\\end{tikzpicture}')
+    close(1)
+
+    dup(old)
+    close(old)
+    print('Done')
+
+printfiles()
+#printall()
+
+# print(r"""
+# \documentclass[tikz, border=10pt]{standalone}
+# \begin{document}
+# \begin{tikzpicture}
+# """)
+# printall()
+# print(r"""
+# \end{tikzpicture}
+# \end{document}
+# """)
