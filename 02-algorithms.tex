@@ -63,29 +63,76 @@ Pokiaľ $\lfloor \frac{N}{B} \rfloor < \lceil \frac{N}{B} \rceil$ máme spolu na
 
 Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bigO{\frac{N}{B}}$ ako optimálny \aware algoritmus, ktorého implementácia je však jednoduchšia, keďže nemusí explicitne spravovať presun blokov do cache.
 
-\section{Vyhľadávacie stromy}
+\section{Vyhľadávanie v statických dátach}
+Častým problémom v informatike je nutnosť rýchlo a efektívne vyhľadávať prvok v nejakej statickej množine prvkov. V tejto sekcii popíšeme niekoľko algoritmov a dátových štruktúr, ktoré tento problém riešia. Všetky majú v \emph{RAM} modeli časovú zložitosť $\bigO{N}$, kde $N$ je počet prvkov v prehľadávanej množine, no v \aware a \obliv modeloch sa budú líšiť počtom pamäťových presunov, ktoré vykonajú.
 
-Jednou z najzákladnejších, no zároveň najdôležitejších a najpoužívanejších dátových štruktúr sú vyhľadávacie stromy. Tie umožňujú ukladať kľúče v istom usporiadaní a podporujú operácie vkladania a vyhľadávania v čase závislom od výšky stromu. Jedným z mnohých variantov sú B-stromy \citep{bayerbtree}, ktoré majú variabilný faktor vetvenia. To je dôležitá vlasnosť pri \extmem modely a ako popíšeme v sekcii \ref{sec:static-aware} je ich možné jednoducho použiť na dosiahnutie asymptoticky optimálneho riešenia.
+\subsection{Binárne vyhľadávanie}
+Pozrime sa najskôr na binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde prvok $K$ v usporiadanom poli \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
+
+\begin{algorithm}
+    \caption{Implementácia binárneho vyhľadávania}
+    \label{alg:binsearch}
+    \begin{algorithmic}[1]
+        \Function{find}{$A, K$}
+            \AlgLet{$left$}{$0$}
+            \AlgLet{$right$}{$N$}
+            \While{$left < right$}
+                \AlgLet{$mid$}{$\lfloor\frac{left+right}{2}\rfloor$}
+                \If{$A[mid] = key$}
+                    \State \Return{$mid$}
+                \ElsIf{$A[mid] < key$}
+                    \AlgLet{$right$}{$mid$}
+                \Else
+                    \AlgLet{$left$}{$mid+1$}
+                \EndIf
+            \EndWhile
+            \State \Return{$-1$} \Comment{$K \notin A$}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+Vidíme, že algoritmus nikde nepožaduje znalosť parametrov $B$ ani $M$ a teda ide o \obliv algoritmus, tak ako v prípade agregačného algoritmu $\ref{alg:aggregate}$.
+
+\subsubsection{Analýza zložitosti}
+Pri každej iterácií zmenšíme oblasť, ktorú treba preskúmať na polovicu. Iterácií bude teda $\bigO{\log N}$ a zložitosť bude riešenie rekurentného vzťahu
+\[
+T(N) = T(N/2) + \bigO{1}
+\]
+V prípade časovej analýzy je bázou rekurencie $T(1) = \bigO{1}$ a výsledná časová zložitosť bude $\bigO{\log N}$.
+
+Pri pamäťovej analýze bude bázou $T(B) = \bigO{1}$, pretože po zredukovaní prehľadávaného intervalu na veľkosť $B$ vieme všetky potenciálne prvky načítať v $\bigO{1}$ blokoch a k ďalším presunom už nedôjde. Riešením a celkovou pamäťovo zložitosťou teda bude $\bigO{\log{N}-\log{B}} = \bigO{\log{\frac{N}{B}}}$.
+
+Ako však uvidíme v ďalšej sekcii, toto riešenie nie je optimálne.
+
+%Ďalším jednoduchým algoritmom je binárne vyhľadávanie, ktorým vieme nájsť kľúč $K$ v usporiadanom poli $A$ veľkosti $N$ v čase $\bigO{\log N}$. 
+
+%\section{Vyhľadávacie stromy}
+
+%Jednou z najzákladnejších, no zároveň najdôležitejších a najpoužívanejších dátových štruktúr sú vyhľadávacie stromy. Tie umožňujú ukladať kľúče v istom usporiadaní a podporujú operácie vkladania a vyhľadávania v čase závislom od výšky stromu. Jedným z mnohých variantov sú B-stromy \citep{bayerbtree}, ktoré majú variabilný faktor vetvenia. To je dôležitá vlasnosť pri \extmem modely a ako popíšeme v sekcii \ref{sec:static-aware} je ich možné jednoducho použiť na dosiahnutie asymptoticky optimálneho riešenia.
+
+\subsection{\Aware riešenie} \label{sec:static-aware}
+V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
+
+Toto je lepší výsledok ako dosahuje binárne vyhľadávanie. Stále však zostáva otázka, či neexistuje  ešte efektívnejšie riešenie. Pozrime sa teda na spodnú hranicu tohto problému.
+%To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-\todo{info complexity}
-Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview}. Na nájdenie daného kľúča v strome obsahujúcom $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto kľúča - $N$ možných existujúcich kľúčov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci kľúč. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
+Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku - $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
 \[
 \frac{\lg(2N+1)}{\lg(2B+1)} = \frac{\lg N + \bigO{1}}{\lg B + \bigO{1}} = \log_B{N} + \bigO{1}
 \]
 pamäťových presunov. 
 
-\subsection{\Aware riešenie} \label{sec:static-aware}
-V prípade, že poznáme veľkosť blokov $B$ v cache, môžeme problém vyhľadávacích stromov riešiť B-stromom s vetvením $\Theta(B)$. Každý vrchol teda vieme načítať s použitím $\bigO{1}$ pamäťových presunov. Výška takého B-stromu, ktorý má $N$ listov, bude $\bigO{\log_B{N}}$. Celkovo teda vyhľadávanie v tomto strome vykoná $\bigO{\log_B{N}}$ pamäťových presunov. To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
+Vidíme teda, že na rozdiel od \obliv binárneho vyhľadávania, \aware B-strom je asymptoticky optimálnym riešením tohto problému. Chceli by sme teraz nájsť \obliv dátovú štruktúru, ktorá tiež dosahuje túto hranicu.
 
 \subsection{Naivné \obliv riešenie} \label{sec:static-naive}
-Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Jednoduchý a častý spôsob, ako usporiadať uzly binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícii $\lfloor\frac{x}{2}\rfloor$. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
+Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Asi najjednoduchší spôsob, ako usporiadať uzly (statického) binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude na pozícii $\lfloor\frac{x}{2}\rfloor$. Toto usporiadanie voláme \emph{BFS usporiadanie} (z anglického \emph{breadth-first search} -- prehľadávanie do šírky), keďže pozície vrcholov sa zvyšujú v rovnakom poradí ako by prebiehalo prehľadávanie tohto stromu do šírky. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
 
 Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v algoritme \ref{alg:naive_indexing}. \todo{broken ref}
 
 \begin{algorithm}[H]
-    \label{alg:naive_indexing}
 	\caption{Algoritmy pre získanie pozícií ľavého syna, pravého syna a rodiča vrcholu na pozícii $x$}
+    \label{alg:naive_indexing}
 	\begin{minipage}[t]{0.3\textwidth}
 	    \begin{algorithmic}[1]
 	        \Function{left}{$x$}
@@ -109,7 +156,7 @@ Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiava
 	\end{minipage}
 \end{algorithm}
 
-Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícii $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
+Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je\footnote{Nejde o vyvažovaný binárny strom a teda by výška mohla byť až $\bigO{N}$. Keďže však pracujeme so statickými dátami, môžeme ich vopred usporiadať a vyrobiť vyvážený statický strom} $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícii $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
 \[
 x-k,\dotsc,x-1,x,x+1,\dotsc,x+l
 \]
@@ -120,7 +167,7 @@ kde $k+l<B$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ al
 x &\le B-2
 \end{aligned}
 \]
-To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je horšie ako pri \aware B-strome.
+To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je rovnako ako binárne vyhľadávanie horšie v porovnaní s \aware B-stromom.
 
 \subsection{Statický \obliv vyhľadávací strom} \label{sec:static-obliv}
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
@@ -131,6 +178,8 @@ Pre $h>1$ rozdelíme vstupný strom na podstrom $\tau_0$ výšky $\frac{h}{2}$, 
 
 Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže ich výška je $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$.
 
+\todo[inline]{BFS - thickness, arrows go through nodes, ...}
+\todo[inline]{vEB - boxes overlap, use non-pt units?}
 \begin{figure}
     \centering
     \resizebox{0.4\textwidth}{!}{
@@ -168,7 +217,48 @@ Majme teda vyhľadávací strom zložený z takýchto podstromov, ktorých veľk
 
 Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimálne. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky - pri každej zmene by bolo potrebné strom preusporiadať. Máme teda \obliv ekvivalent statických \aware B-stromov. 
 
-Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v nasledovnej sekcii.
+Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v sekcii \ref{sec:orderedfile}.
+
+\subsection{Rozdiely v prístupe ku pamäti}
+\todo[inline]{better search keys, text...}
+\begin{sidewaysfigure}
+    \centering
+    \subbottom[Binárne vyhľadávanie] {
+        \resizebox{\textwidth}{!}{
+            \input{figures/search_comparison/height9_find202_binsearch}
+        }
+    }
+    \subbottom[Strom v \emph{BFS} usporiadaní] {
+        \resizebox{\textwidth}{!}{
+            \input{figures/search_comparison/height9_find202_bfstree}
+        }
+    }
+    \subbottom[Strom vo \vEB usporiadaní] {
+        \resizebox{\textwidth}{!}{
+            \input{figures/search_comparison/height9_find202_vebtree}
+        }
+    }
+    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $202$}
+    \label{fig:search_comparison1}
+    \subbottom[Binárne vyhľadávanie] {
+        \resizebox{\textwidth}{!}{
+            \input{figures/search_comparison/height9_find427_binsearch}
+        }
+    }
+    \subbottom[Strom v \emph{BFS} usporiadaní] {
+        \resizebox{\textwidth}{!}{
+            \input{figures/search_comparison/height9_find427_bfstree}
+        }
+    }
+    \subbottom[Strom vo \vEB usporiadaní] {
+        \resizebox{\textwidth}{!}{
+            \input{figures/search_comparison/height9_find427_vebtree}
+        }
+    }
+    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $427$}
+    \label{fig:search_comparison2}
+\end{sidewaysfigure}
+
 
 \section{Usporiadané pole} \label{sec:orderedfile}
 
@@ -360,7 +450,6 @@ Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z n
 
 Opäť sme teda dosiahli rovnaký počet operácií ako ekvivalentná \aware dátová štruktúra, avšak tentokrát v amortizovane.
 
-\todo[inline]{jedine amortizovane je OF, to sa da worstcase, potom bude aj toto worstcase}
 
 % OUTLINE
 %- static search trees

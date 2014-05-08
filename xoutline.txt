@@ -1,3 +1,45 @@
+- static searching
+  - lower bound
+  - aware - btree
+  - oblivious wrong
+    - binary search
+    - BFS tree
+  - vEB tree
+- dynamic searches
+  - aware - btree again
+  - cobtree
+- improved cobtree
+
+
+
+
+
+
+
+
+Done:
+intro = 1
+model = 4
+algds = 13
+TODO:
++++++++++++ = 18
+practical use = 1
+realworld perf = 1
+algds intros = 1
+algds detailed analysis (theorem+proof?) = 1
++++++++++++ = 22
+vizu intro+usage = 1
+vizu overview = 1
+vizu static tree = 2
+vizu ordered file = 2
+vizu cobtree = 3
+vizu implementation = 2
++++++++++++ = 33
+conclusion = 1
++++++++++++ = 34
+
+
+
 Model
 - cache info table
 ?
