@@ -12,12 +12,14 @@ blocksize = 4
 
 nodewidth = 0.25
 nodeheight = 0.25
+
+coloredge = 'gray'
 colormiss = 'red!60!white'
 coloraccess = 'green'
 colorcache = 'yellow!40!white'
 colornone = 'white'
 
-poslabel = 'node [midway, draw, circle, inner sep = 0, minimum size=2, fill=black] {}'
+poslabel = 'node (LAST) [midway, draw, circle, inner sep = 0, minimum size=2, fill=black] {}'
 
 offstep = 0.125
 
@@ -101,11 +103,13 @@ def drawnode(order, key, info, y, meh=False):
     if meh: order = order - 1
     x = nodewidth*(order // blocksize)
     y = y + nodeheight*(order % blocksize)
-    out = r'\draw [fill = {}] ({}, {}) rectangle ({}, {})'.format(col, x, y, x+nodewidth, y+nodeheight)
+    out = r'\draw [color={}, fill = {}] ({}, {}) rectangle ({}, {})'.format(coloredge, col, x, y, x+nodewidth, y+nodeheight)
     #out += 'node [midway] {' + str(key) + '};'
 
     if key == find:
         out += poslabel
+    elif order in accessed:
+        out += 'node [midway] (A{}) {{}}'.format(accessed.index(order))
 
     print(out + ';')
 
