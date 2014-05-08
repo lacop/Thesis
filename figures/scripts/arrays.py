@@ -6,7 +6,7 @@ import node_order
 # find = 55
 
 height = 9
-find = 202
+find = 243
 #find = 427
 blocksize = 4
 
