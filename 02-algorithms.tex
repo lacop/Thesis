@@ -78,9 +78,9 @@ Pozrime sa najskôr na binárne vyhľadávanie, ktoré je asi najznámejšie. V 
             \AlgLet{$right$}{$N$}
             \While{$left < right$}
                 \AlgLet{$mid$}{$\lfloor\frac{left+right}{2}\rfloor$}
-                \If{$A[mid] = key$}
+                \If{$A[mid] = K$}
                     \State \Return{$mid$}
-                \ElsIf{$A[mid] < key$}
+                \ElsIf{$A[mid] < K$}
                     \AlgLet{$right$}{$mid$}
                 \Else
                     \AlgLet{$left$}{$mid+1$}
