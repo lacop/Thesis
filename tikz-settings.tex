@@ -1,6 +1,7 @@
 \usetikzlibrary{calc, fit}
 \usetikzlibrary{patterns, shadings, shadows.blur}
 \usetikzlibrary{decorations.pathmorphing,decorations.pathreplacing}
+\usepgflibrary{decorations.markings}
 
 % Modified from http://tex.stackexchange.com/a/17578/23342
 % Center around any rect by redefining bounding box, can use node names
@@ -10,3 +11,5 @@
                     in
         ({min(\x2 + \x3 - \x1,\x0)},\y0) rectangle ({max(\x3 + \x2 - \x0,\x1)},\y1);
 }}}
+
+\newcommand*{\FiguresPath}{figures}
