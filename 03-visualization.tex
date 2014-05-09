@@ -82,9 +82,23 @@ To môžeme vidieť na jednoduchom príklade, kedy v strome výšky $5$ postupne
     \label{fig:ss_cachesim_compare}
 \end{figure}
 
-\todo[inline]{screenshot pola - farbicky}
+Ako vizualizácia prítomnosti v \cache slúži farba - vrcholy a položky poľa obsahujúce kľúče majú svetlejšiu farbu pozadia v prípade, že je daný blok v \cache a tmavšiu ak je mimo. V strome je vďaka tomu ľahko vidieť, ktorá časť je načítaná a je možné ňou prechádzať bez ďalších presunov. V prípade \vEB usporiadanie pôjde prevažne o časť podstromu aktuálne porovnávaného vrcholu, avšak pri klasickom usporiadaní to budú práve vrcholy mimo tohto podstromu, o ktorých už vieme, že nie sú pri vyhľadávaní potrebné.
 
-Ako vizualizácia \cache slúži farba - vrcholy a položky poľa obsahujúce kľúče majú svetlejšiu farbu pozadia v prípade, že je daný blok v \cache a tmavšiu ak je mimo. V strome je vďaka tomu ľahko vidieť, ktorá časť je načítaná a je možné ňou prechádzať bez ďalších presunov. V prípade \vEB usporiadanie pôjde prevažne o časť podstromu aktuálne porovnávaného vrcholu, avšak pri klasickom usporiadaní to budú práve vrcholy mimo tohto podstromu, o ktorých už vieme, že nie sú pri vyhľadávaní potrebné.
+\begin{figure}
+    \centering
+    \subtop[Nultý krok]{%
+        \includegraphics[width=0.25\textwidth]{figures/screenshots/cachesim_step1.pdf}}
+    \hspace{1cm}
+    \subtop[Prvý krok]{%
+        \includegraphics[width=0.25\textwidth]{figures/screenshots/cachesim_step2.pdf}}
+    \hspace{1cm}
+    \subtop[Druhý krok]{%
+        \includegraphics[width=0.25\textwidth]{figures/screenshots/cachesim_step3.pdf}}
+    \caption{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvok kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré su označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
+    \label{fig:ss_cachesim_colors}
+\end{figure}
+
+Pri krokovaní vyhľadávania je pri prístupe k vrcholu tiež použitá zelená alebo červená farba na jeho dočasné zafarbenie (podobne ako v časti \ref{sec:memaccess_patterns}) podľa toho, či sa v danom momente v \cache nachádzal (\hit) alebo nie (\miss). Ukážka tohto zafarbovania je na obrázku \ref{fig:ss_cachesim_colors}.
 
 \section{Usporiadané pole}
 \todo[inline]{Layout, intro}
