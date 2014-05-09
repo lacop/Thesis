@@ -25,6 +25,7 @@ V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pam
     \end{threeparttable}
 \end{table}
 \todo[inline]{velkost bloku, pocet, assoc, ...}
+\todo[inline]{align clk / ns, ...}
 
 % Praktickým dôvodom pre túto hierarchiu je cena a jednoduchosť výroby.
 % TODO: 1ns * c = 30cm, limit
@@ -36,7 +37,7 @@ Spôsobom ako zohľadniť tieto skutočnosti pri analýze algoritmov je takzvan�
 
 Všetky výpočty prebiehajú nad dátami v \cache, ktorá má obmedzenú veľkosť. Ostatné dáta sú uložené na disku neobmedzenej veľkosti, no nemôžeme s nimi priamo manipulovať a je ich potrebné najskôr preniesť do \cache. V samotnej analýze algoritmov potom počítame počet týchto prenosov z disku do \cache a naopak.
 
-Samotné presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk aj \cache sa skladajú z takýchto blokov a za jednu operáciu považujeme presun jedného bloku medzi nimi. \Cache má obmedzenú veľkosť $M$ a skladá sa teda z $\frac{M}{B}$ blokov.  
+Prístup k dátam, ktoré sa práve nachádzajú v \cache voláme \hit (zásah \cache). Naopak prístup, ktorý vyžaduje dáta najskôr presunúť z \disk-u do \cache voláme \miss (minutie \cache). Tieto presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk aj \cache sa skladajú z takýchto blokov a za jednu operáciu považujeme presun jedného bloku medzi nimi. \Cache má obmedzenú veľkosť $M$ a skladá sa teda z $\frac{M}{B}$ blokov.  
 
 \begin{figure}
     \centering

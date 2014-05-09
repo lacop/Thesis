@@ -248,9 +248,7 @@ Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami
 
 Jednotlivé políčka sú hodnoty poľa respektíve kľúče vo vrcholoch stromov, pričom v pamäti sú usporiadané v poradí zhora nadol a zľava doprava. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 2^h-1\}$ čo je počet vrcholov úplného binárneho stromu výšky $h$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. 
 
-\todo[inline]{definovat cachemiss/hit v intre, pouzit tu}
-
-Červená farba reprezentuje prvky, ktoré sa v momente prístupu nenachádzali v \cache a bolo potrebné ich načítať. Zelená naopak označuje prvky, ktoré už v \cache boli -- načítali sa spolu s nejakým červeným prvkom v rovnakom bloku. Ostatné prvky, ktoré sa načítali ako súčasť bloku ale neboli použité, sú označené žltou farbou.
+Červená farba reprezentuje prvky, ktoré sa v momente prístupu nenachádzali v \cache a bolo potrebné ich načítať (\miss). Zelená naopak označuje prvky, ktoré už v \cache boli (\hit) -- načítali sa spolu s nejakým červeným prvkom v rovnakom bloku. Ostatné prvky, ktoré sa načítali ako súčasť bloku ale neboli použité, sú označené žltou farbou.
 
 V malom obrázku \ref{fig:search_comparison_small} (výška stromu $h=5$) šípky určujú poradie, v akom vyhľadávanie pristupovalo k jednotlivým prvkom. Vo veľkých obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} (výška stromu $h=9$) sú šípky pre prehľadnosť vynechané a políčko s bodkou označuje pozíciu, na ktorej bol napokon požadovaný prvok nájdený. Rozdiely medzi týmito troma prístupmi k vyhľadávaniu je lepšie vidieť práva na väčších obrázkoch.
 
