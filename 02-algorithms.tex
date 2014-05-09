@@ -61,7 +61,7 @@ Keďže nepoznáme veľkosti blokov v pamäti, nevieme pri ukladaní prvkov poľ
 
 Pokiaľ $\lfloor \frac{N}{B} \rfloor < \lceil \frac{N}{B} \rceil$ máme spolu najviac $\lceil \frac{N}{B} \rceil + 1$ blokov. V opačnom prípade $B$ delí $N$, teda v prvom a poslednom bloku je spolu presne $B$ prvkov a medzi nimi sa nachádza najviac $\frac{N-B}{B} = \frac{N}{B} - 1$ plných. Teda blokov je vždy najviac $\lceil \frac{N}{B} \rceil +1$.
 
-Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bigO{\frac{N}{B}}$ ako optimálny \aware algoritmus, ktorého implementácia je však jednoduchšia, keďže nemusí explicitne spravovať presun blokov do cache.
+Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bigO{\frac{N}{B}}$ ako optimálny \aware algoritmus, ktorého implementácia je však jednoduchšia, keďže nemusí explicitne spravovať presun blokov do cache. Parameter $B$ sme použili len počas analýzy, v samotnom návrhu algoritmu nie.
 
 \section{Vyhľadávanie v statických dátach}
 Častým problémom v informatike je nutnosť rýchlo a efektívne vyhľadávať prvok v nejakej statickej množine prvkov. V tejto sekcii popíšeme niekoľko algoritmov a dátových štruktúr, ktoré tento problém riešia. Všetky majú v \emph{RAM} modeli časovú zložitosť $\bigO{N}$, kde $N$ je počet prvkov v prehľadávanej množine, no v \aware a \obliv modeloch sa budú líšiť počtom pamäťových presunov, ktoré vykonajú.
@@ -192,13 +192,13 @@ Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupné
 \begin{figure}
     \centering
     \subbottom[Klasické usporiadanie] {
-        \resizebox{0.9\textwidth}{!}{
+        \resizebox{\textwidth}{!}{
             \input{figures/vEB_tree/node_order_naive}
         }
         \label{fig:node_order_naive}
     }
     \subbottom[\vEB usporiadanie] {
-        \resizebox{0.9\textwidth}{!}{
+        \resizebox{\textwidth}{!}{
             \input{figures/vEB_tree/node_order_veb}
         }
         \label{fig:node_order_veb}
@@ -207,9 +207,12 @@ Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupné
     \label{fig:node_order_comparison}
 \end{figure}
 
-\subsubsection{Vyhľadávanie} \label{sec:static-search}
+\subsubsection{Prechod stromom v pamäti}
+Na rozdiel od klasického \emph{BFS} usporiadania nie je pri takomto usporiadaní v pamäti triviálne zistiť, na akej pozícii sa nachádzajú potomkovia alebo rodič aktuálneho vrcholu. Jedným možným riešením je spolu s každým vrcholom ukladať aj \emph{pointer} (ukazovateľ, adresa v pamäti) na tieto relevantné vrcholy. Tým znížime počet vrcholov, ktoré sa zmestia do jedného bloku o konštantný násobok -- v prípade, že je kľúč rovnako veľký ako \emph{pointer}, bude počet vrcholov v jednom bloku štvrtina pôvodného počtu.
 
-\todo[inline]{pointers vs implicit indexing (kasheff)}
+Iným riešením je vnútorne pracovať s \emph{BFS} usporiadaním a prechádzať medzi pozíciami funkciami uvedenými v algoritme \ref{alg:naive_indexing}. Pri prístupe k vrcholu túto \emph{BFS} pozíciu prevedieme na ekvivalentnú pozíciu vo \vEB usporiadaní. Pri strome s $N$ vrcholmi je možné túto konverziu realizovať v čase $\bigO{\log\log N}$ \citep{kasheff2004cache}.
+
+\subsubsection{Vyhľadávanie} \label{sec:static-search}
 
 Pri analýze vyhľadávania sa pozrime na také podstromy predošlého delenia, že ich veľkosť je $\Theta(B)$. Ďalšie delenie a preusporiadanie je už zbytočné, no to \obliv algoritmus nemá ako vedieť. Keďže ale po rekurzívnom volaní získame len iné usporiadanie, ktoré uložíme v súvislom úseku pamäte, bude stále možné tento podstrom načítať v $\bigO{1}$ blokoch.
 
