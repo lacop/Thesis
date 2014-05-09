@@ -63,7 +63,7 @@ Medzi uložením vo \vEB usporiadaní a klasickom \emph{BFS} usporiadaní (ako v
 \end{figure}
 
 \subsection{Simulácia \cache}
-Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Užívateľ si môže zvoliť parametre cache - počet vrcholov $B$, ktoré sa zmestia do jedného bloku a počet blokov $\frac{M}{B}$ v \cache. Tiež je možné \cache kedykoľvek vyprázdniť -- odstrániť z nej všetky načítané bloky.
+Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Užívateľ si môže zvoliť parametre cache - počet vrcholov $B$, ktoré sa zmestia do jedného bloku a počet blokov $\frac{M}{B}$ v \cache. Tiež je možné \cache kedykoľvek vyprázdniť -- odstrániť z nej všetky načítané bloky. Simulácia na výmenu stránok používa stratégiu \emph{FIFO}, ktorá je popísaná v časti \ref{sec:memmng}.
 
 Táto simulácia zároveň počíta počet prístupov k vrcholom pri vyhľadávaní a počet presunutých blokov do \cache. V najhoršom prípade by tieto dve čísla boli rovnaké (ak treba každý vrchol načítať osobitne) avšak pri \cache s blokmi veľkosti $B > 1$ a s \vEB usporiadaním dochádza k podstatnému zlepšeniu - ušetreniu počtu presunutých blokov.
 
