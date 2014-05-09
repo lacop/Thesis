@@ -6,26 +6,28 @@ V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pam
 
 \begin{table}
     \centering
-    \caption{Približné parametre rôznych úrovní pamäte. Hodnoty troch úrovní \cache na procesore (L1, L2 a L3) sú pre mikroarchitektúru Intel Haswell. \citep{inteloptimize}}
+    \caption{Približné parametre rôznych úrovní pamäte. Hodnoty troch úrovní \cache na procesore (L1, L2 a L3) sú pre mikroarchitektúru Intel Haswell. \citep{inteloptimize,inteldeveloper}}
     \label{tbl:memory-levels}
     \begin{threeparttable}
-        \begin{tabular}{r r l}
+        \begin{tabular}{r r r r c r}
             \toprule
-            \textbf{Úroveň} & \textbf{Veľkosť} & \textbf{Odozva} \\ \toprule
-            L1 & \SI{64}{\kibi\byte} & 4clk\tnote{1} $\approx$ \SI{1}{\nano\second} \\
-            L2 & \SI{256}{\kibi\byte} & 11clk\tnote{1} $\approx$ \SI{4}{\nano\second} \\
-            L3 & \SI[parse-numbers=false]{2\mbox{--}20}{\mebi\byte} & 36clk\tnote{1} $\approx$ \SI{12}{\nano\second} \\ \midrule
-            RAM & $\approx$ \SI{8}{\gibi\byte} & $\approx$ \SI{100}{\nano\second} \\
-            Disk & $\approx$ \SI{1}{\tebi\byte} & $\approx$ \SI[parse-numbers=false]{0.1\mbox{--}10}{\milli\second} \\
+            \multicolumn{1}{c}{\textbf{Úroveň}} & \multicolumn{1}{c}{\textbf{Veľkosť}} & \multicolumn{2}{c}{\textbf{Odozva}} & \multicolumn{1}{c}{\textbf{Asociativita}} & \multicolumn{1}{c}{\textbf{Veľkosť bloku}}\\ \toprule
+%            Registre & & 1clk\tnote{2} &$\approx$ \SI{0.3}{\nano\second} \\ \midrule
+            L1 & \SI{64}{\kibi\byte}\tnote{1} & 4clk\tnote{2} &$\approx$ \SI{1}{\nano\second} & 8 & \SI{64}{\byte} \\
+            L2 & \SI{256}{\kibi\byte}\tnote{1} & 11clk\tnote{2} &$\approx$ \SI{4}{\nano\second} &  8 & \SI{64}{\byte} \\
+            L3 & \SI[parse-numbers=false]{2\mbox{--}20}{\mebi\byte} & 36clk\tnote{2} &$\approx$ \SI{12}{\nano\second} & & \SI{64}{\byte} \\ \midrule
+            RAM & $\approx$ \SI{8}{\gibi\byte} & &$\approx$ \SI{100}{\nano\second} & & \SI{16}{\byte}\\
+            Disk & $\approx$ \SI{1}{\tebi\byte} & &$\approx$ \SI[parse-numbers=false]{0.1\mbox{--}10}{\milli\second} & & \SI{4}{\kibi\byte}--\SI{2}{\mebi\byte} \\
             \bottomrule
         \end{tabular}
         \begin{tablenotes}
-            \item[1] Počet cyklov procesora, uvedené časové aproximácie pri \SI{3}{\giga\hertz}.
+            \item[1] Hodnota pre jedno jadro procesora.
+            \item[2] Počet cyklov procesora, uvedené časové aproximácie pri \SI{3}{\giga\hertz}.
         \end{tablenotes}
     \end{threeparttable}
 \end{table}
-\todo[inline]{velkost bloku, pocet, assoc, ...}
-\todo[inline]{align clk / ns, ...}
+\todo[inline]{ram blok - dobre?}
+\todo[inline]{registre? tazko zratat velkost}
 
 % Praktickým dôvodom pre túto hierarchiu je cena a jednoduchosť výroby.
 % TODO: 1ns * c = 30cm, limit
