@@ -80,7 +80,7 @@ Pozrime sa najskôr na binárne vyhľadávanie, ktoré je asi najznámejšie. V 
                 \AlgLet{$mid$}{$\lfloor\frac{left+right}{2}\rfloor$}
                 \If{$A[mid] = K$}
                     \State \Return{$mid$}
-                \ElsIf{$A[mid] < K$}
+                \ElsIf{$A[mid] > K$}
                     \AlgLet{$right$}{$mid$}
                 \Else
                     \AlgLet{$left$}{$mid+1$}
