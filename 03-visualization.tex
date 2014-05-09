@@ -11,7 +11,7 @@ Výsledkom práce sú vizualizácie demonštrujúce dátové štruktúry popísa
 Tieto vizualizácie sú implementované ako rozšírenie programu \emph{Gnarley trees}, ktorý vznikol ako súčasť bakalárskej práca Jakuba Kováča \citep{algviskuko}. Tento nástroj na vizualizáciu (prevažne stromových) dátových štruktúr bol následne v bakalárskych prácach \citep{algviskotrlova, algvistomkovic, algvislukca} a ročníkových projektoch rozšírený o mnohé ďalšie dátové štruktúry a v súčastnosti podporuje desiatky štruktúr, ako napríklad červeno-čierne, sufixové a intervalové stromy, \emph{union-find}, haldy a mnohé ďalšie.
 
 \subsection{Funkcionalita}
-Program umožňuje užívateľom zobrazovať tieto štruktúry a manipulovať s nimi. Všetky operácie sú rozložené na malé, jednoduché kroky a každý je vysvetlený keď sa vykonáva. Je možné posúvať sa po krokoch dopredu ale aj vracať sa dozadu - história krokov je neobmedzená\todo{limit?} a teda sa dá kedykoľvek vrátiť až k počiatočnému stavu. Toto je dôležité pri experimentovaní s danou štruktúrou, kedy dve rôzne operácie (alebo jedna operácia s dvoma rôznymi parametrami) spôsobia rôzne správanie a výsledky. Užívateľ má takto možnosť jednoducho sa po vykonaní prvej operácie vrátiť do predošlého stavu a preskúmať správanie druhej z nich.
+Program umožňuje užívateľom zobrazovať tieto štruktúry a manipulovať s nimi. Všetky operácie sú rozložené na malé, jednoduché kroky a každý je vysvetlený keď sa vykonáva. Je možné posúvať sa po krokoch dopredu, ale aj vracať sa dozadu, a teda sa dá kedykoľvek vrátiť až k počiatočnému stavu. Toto je dôležité pri experimentovaní s danou štruktúrou, kedy dve rôzne operácie (alebo jedna operácia s dvoma rôznymi parametrami) spôsobia rôzne správanie a výsledky. Užívateľ má takto možnosť jednoducho sa po vykonaní prvej operácie vrátiť do predošlého stavu a preskúmať správanie druhej z nich.
 
 Celý program je taktiež dvojjazyčný - je možné prepnúť medzi angličtinou a slovenčinou, čo umožňuje širšie použitie týchto vizualizácií.
 
@@ -22,10 +22,16 @@ Celý program je taktiež dvojjazyčný - je možné prepnúť medzi angličtino
         \input{figures/screenshots/cobtree_menu}    
     }
     \caption{Užívateľské rozhranie počas operácie vkladania kľúča $10$ do dynamického \obliv B-stromu (sekcia \ref{sec:dynamic-obliv}).}
-    \label{fig:exmem_model}
+    \label{fig:ss_overview}
 \end{figure}
 
-\todo[inline]{prehlad (screenshot), panely, pouzivanie, ...}
+Program sa skladá z troch hlavných častí (obrázok \ref{fig:ss_overview}). Najvrchnejšia časť okna tvorí hlavné menu, v ktorej môžeme voliť dátové štruktúry a prepínať jazyk rozhrania. Dátové štruktúry sú pre prehľadnosť rozdelené do niekoľkých kategórií. Tie popísané a implementované v tejto práci sa nachádzajú v kategórii \texttt{Cache-oblivious}.
+
+V spodnej časti okna sa nachádza ovládací panel, ktorý obsahuje vstupné pole pre hodnotu, ktorú chceme vyhľadať alebo vložiť a tlačidlá na vykonanie týchto akcií. Ďalej obsahuje tlačidlá na prechod do ďalšieho kroku a návrat do predchádzajúceho stavu s možnosťou toto krokovanie vypnúť.
+
+Najväčšia, prostredná časť okna zobrazuje vizualizáciu aktuálnej dátovej štruktúry. Toto zobrazenie je vektorové a je možné ho posúvať, približovať a oddialovať. Zároveň sa tu zobrazujú informácie o aktuálne vykonávanej akcií (ak je povolené krokovanie) a ďalšie vizualizačné prvky ako šípky alebo význačné vrcholy.
+
+Podrobnejší popis užívateľského rozhrania a návod na používanie sa nachádza v bakalárskej práci Jakuba Kováča \citep{algviskuko} v siedmej kapitole.
 
 \section{Statický strom}
 Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implementovali sme vytvorenie tohto stromu a jeho uloženie v pamäti. Je možné strom zväčšiť alebo zmenšiť podľa preferencii - ukážky stromov rôznych veľkostí sú na obrázku \ref{fig:ss_static_sizes}. Čísla vo vnútorných vrcholoch sú kľúče, čísla nad vrcholom určujú jeho pozíciu v pamäti. Obdĺžnik nad stromom reprezentuje uloženie tohto stromu v poli. Vnútorné čísla sú opäť kľúče, pričom sú zoradené podla svojich pozícii zľava (pozícia $1$) doprava.
@@ -34,15 +40,17 @@ Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implem
     \centering
     \subtop[]{%
         \includegraphics[scale=0.25]{figures/screenshots/static_size_2.pdf}}
+    \hspace{0.5cm}
     \subtop[]{%
         \includegraphics[scale=0.25]{figures/screenshots/static_size_3.pdf}}
+    \hspace{0.5cm}
     \subtop[]{%
         \includegraphics[scale=0.25]{figures/screenshots/static_size_4.pdf}}
     \caption{Statické stromy rôznych veľkostí (výšok) vo \vEB usporiadaní.}
     \label{fig:ss_static_sizes}
 \end{figure}
 
-Medzi uložením vo \vEB poradí a klasickom poradí (ako v časti \ref{sec:static-naive}) je možné prepínať. Zmenia sa pritom čísla udávajúce pozície vrcholov v pamäti a ich poradie v poli nad stromom. Rozdiel medzi týmito dvoma usporiadaniami vidieť na obrázku \ref{fig:ss_static_order}. Pozície sa zhodujú s obrázkom \ref{fig:node_order_comparison}.
+Medzi uložením vo \vEB poradí a klasickom poradí (ako v časti \ref{sec:static-naive}) je možné prepínať. Zmenia sa pritom čísla udávajúce pozície vrcholov v pamäti a ich poradie v poli nad stromom. Rozdiel medzi týmito dvoma usporiadaniami vidieť na obrázku \ref{fig:ss_static_order}. Pozície sa zhodujú s obrázkom \ref{fig:node_order_comparison}. \todo{ref to subfigure}
 
 \begin{figure}
     \centering
