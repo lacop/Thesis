@@ -1,0 +1,12 @@
+\usetikzlibrary{calc, fit}
+\usetikzlibrary{patterns, shadings, shadows.blur}
+\usetikzlibrary{decorations.pathmorphing,decorations.pathreplacing}
+
+% Modified from http://tex.stackexchange.com/a/17578/23342
+% Center around any rect by redefining bounding box, can use node names
+\tikzset{xcenter around/.style 2 args={execute at end picture={%
+  \useasboundingbox let \p0 = (current bounding box.south west), \p1 = (current bounding box.north east),
+                        \p2 = #1, \p3 = #2
+                    in
+        ({min(\x2 + \x3 - \x1,\x0)},\y0) rectangle ({max(\x3 + \x2 - \x0,\x1)},\y1);
+}}}
