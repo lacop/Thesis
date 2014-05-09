@@ -50,7 +50,7 @@ Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implem
     \label{fig:ss_static_sizes}
 \end{figure}
 
-Medzi uložením vo \vEB poradí a klasickom poradí (ako v časti \ref{sec:static-naive}) je možné prepínať. Zmenia sa pritom čísla udávajúce pozície vrcholov v pamäti a ich poradie v poli nad stromom. Rozdiel medzi týmito dvoma usporiadaniami vidieť na obrázku \ref{fig:ss_static_order}. Pozície sa zhodujú s obrázkom \ref{fig:node_order_comparison}. \todo{ref to subfigure}
+Medzi uložením vo \vEB usporiadaní a klasickom \emph{BFS} usporiadaní (ako v časti \ref{sec:static-naive}) je možné prepínať. Zmenia sa pritom čísla udávajúce pozície vrcholov v pamäti a ich poradie v poli nad stromom. Rozdiel medzi týmito dvoma usporiadaniami vidieť na obrázku \ref{fig:ss_static_order}. Pozície sa zhodujú s obrázkom \ref{fig:node_order_comparison}. \todo{ref to subfigure}
 
 \begin{figure}
     \centering
@@ -58,14 +58,31 @@ Medzi uložením vo \vEB poradí a klasickom poradí (ako v časti \ref{sec:stat
         \includegraphics[width=\textwidth]{figures/screenshots/static_size_5.pdf}}
     \subtop[]{%
         \includegraphics[width=\textwidth]{figures/screenshots/static_size_5_bfs.pdf}}
-    \caption{Rozdiel medzi klasickým a \vEB usporiadaním na strome výšky 5.}
+    \caption{Rozdiel medzi \emph{BFS} a \vEB usporiadaním na strome výšky~$5$. Kľúče zostávajú rovnaké, líšia sa však ich pozície v pamäti reprezentované malými číslami nad vrcholmi a poľom nad koreňom.}
     \label{fig:ss_static_order}
 \end{figure}
 
 \subsection{Simulácia \cache}
-Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Užívateľ si môže zvoliť parametre cache - počet vrcholov $B$, ktoré sa zmestia do jedného bloku a počet blokov $\frac{M}{B}$ v \cache. Táto simulácia zároveň počíta počet prístupov k vrcholom pri vyhľadávaní a počet presunutých blokov do \cache. V najhoršom prípade by tieto dve čísla boli rovnaké (ak treba každý vrchol načítať osobitne) avšak pri \cache s blokmi veľkosti $B > 1$ a s \vEB usporiadaním dochádza k podstatnému zlepšeniu - ušetreniu počtu presunutých blokov.
+Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Užívateľ si môže zvoliť parametre cache - počet vrcholov $B$, ktoré sa zmestia do jedného bloku a počet blokov $\frac{M}{B}$ v \cache. Tiež je možné \cache kedykoľvek vyprázdniť -- odstrániť z nej všetky načítané bloky.
 
-\todo[inline]{screenshot}
+Táto simulácia zároveň počíta počet prístupov k vrcholom pri vyhľadávaní a počet presunutých blokov do \cache. V najhoršom prípade by tieto dve čísla boli rovnaké (ak treba každý vrchol načítať osobitne) avšak pri \cache s blokmi veľkosti $B > 1$ a s \vEB usporiadaním dochádza k podstatnému zlepšeniu - ušetreniu počtu presunutých blokov.
+
+To môžeme vidieť na jednoduchom príklade, kedy v strome výšky $5$ postupne vyhľadáme všetkých $16$ kľúčov, ktoré sa nachádzajú v listoch tohto stromu. V oboch usporiadaniach bude počet prístupov rovnaký, avšak počet načítaní blokov z disku do \cache je v tomto príklade pri \emph{BFS} usporiadaní takmer dvakrát väčší ako pri \vEB usporiadaní. Obrázok \ref{fig:ss_cachesim_compare} ukazuje stav týchto štatistík po nájdení posledného listu.
+
+\begin{figure}[h]
+    \centering
+    \subbottom[Strom v \emph{BFS} usporiadaní] {
+        \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_bfs}
+    }
+    \hspace{1cm}
+    \subbottom[Strom vo \vEB usporiadaní] {
+        \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_veb}
+    }
+    \caption{Porovnanie štatistík simulovanej \cache po prechode listov $1,3,\dotsc,31$ stromu výšky $5$. Parametre cache sú v oboch prípadoch rovnaké ($B=4$, $M=2B=8$), rozdiel je však v usporiadaní v pamäti.}
+    \label{fig:ss_cachesim_compare}
+\end{figure}
+
+\todo[inline]{screenshot pola - farbicky}
 
 Ako vizualizácia \cache slúži farba - vrcholy a položky poľa obsahujúce kľúče majú svetlejšiu farbu pozadia v prípade, že je daný blok v \cache a tmavšiu ak je mimo. V strome je vďaka tomu ľahko vidieť, ktorá časť je načítaná a je možné ňou prechádzať bez ďalších presunov. V prípade \vEB usporiadanie pôjde prevažne o časť podstromu aktuálne porovnávaného vrcholu, avšak pri klasickom usporiadaní to budú práve vrcholy mimo tohto podstromu, o ktorých už vieme, že nie sú pri vyhľadávaní potrebné.
 
