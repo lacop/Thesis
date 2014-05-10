@@ -21,7 +21,7 @@ Celý program je taktiež dvojjazyčný - je možné prepnúť medzi angličtino
     \resizebox{0.9\textwidth}{!}{%
         \input{figures/screenshots/cobtree_menu}    
     }
-    \caption{Užívateľské rozhranie počas operácie vkladania kľúča $10$ do dynamického \obliv B-stromu (sekcia \ref{sec:dynamic-obliv}).}
+    \caption[Užívateľské rozhranie]{Užívateľské rozhranie počas operácie vkladania kľúča $10$ do dynamického \obliv B-stromu (sekcia \ref{sec:dynamic-obliv}).}
     \label{fig:ss_overview}
 \end{figure}
 
@@ -46,7 +46,7 @@ Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implem
     \hspace{0.5cm}
     \subtop[]{%
         \includegraphics[scale=0.25]{figures/screenshots/static_size_4.pdf}}
-    \caption{Statické stromy rôznych veľkostí (výšok) vo \vEB usporiadaní.}
+    \caption[Statické stromy rôznych veľkostí]{Statické stromy rôznych veľkostí (výšok) vo \vEB usporiadaní.}
     \label{fig:ss_static_sizes}
 \end{figure}
 
@@ -58,7 +58,7 @@ Medzi uložením vo \vEB usporiadaní a klasickom \emph{BFS} usporiadaní (ako v
         \includegraphics[width=\textwidth]{figures/screenshots/static_size_5.pdf}}
     \subtop[]{%
         \includegraphics[width=\textwidth]{figures/screenshots/static_size_5_bfs.pdf}}
-    \caption{Rozdiel medzi \emph{BFS} a \vEB usporiadaním na strome výšky~$5$. Kľúče zostávajú rovnaké, líšia sa však ich pozície v pamäti reprezentované malými číslami nad vrcholmi a poľom nad koreňom.}
+    \caption[Rozdiel medzi \emph{BFS} a \vEB usporiadaním]{Rozdiel medzi \emph{BFS} a \vEB usporiadaním na strome výšky~$5$. Kľúče zostávajú rovnaké, líšia sa však ich pozície v pamäti reprezentované malými číslami nad vrcholmi a poľom nad koreňom.}
     \label{fig:ss_static_order}
 \end{figure}
 
@@ -78,7 +78,7 @@ To môžeme vidieť na jednoduchom príklade, kedy v strome výšky $5$ postupne
     \subbottom[Strom vo \vEB usporiadaní] {
         \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_veb}
     }
-    \caption{Porovnanie štatistík simulovanej \cache po prechode listov $1,3,\dotsc,31$ stromu výšky $5$. Parametre cache sú v oboch prípadoch rovnaké ($B=4$, $M=2B=8$), rozdiel je však v usporiadaní v pamäti.}
+    \caption[Porovnanie štatistík simulovanej \cache]{Porovnanie štatistík simulovanej \cache po prechode listov $1,3,\dotsc,31$ stromu výšky $5$. Parametre cache sú v oboch prípadoch rovnaké ($B=4$, $M=2B=8$), rozdiel je však v usporiadaní v pamäti.}
     \label{fig:ss_cachesim_compare}
 \end{figure}
 
@@ -94,7 +94,7 @@ Ako vizualizácia prítomnosti v \cache slúži farba - vrcholy a položky poľa
     \hspace{1cm}
     \subtop[Druhý krok]{%
         \includegraphics[width=0.25\textwidth]{figures/screenshots/cachesim_step3.pdf}}
-    \caption{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvok kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré su označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
+    \caption[Simulácia \cache počas vyhľadávania kľúča]{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvok kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré su označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
     \label{fig:ss_cachesim_colors}
 \end{figure}
 
@@ -106,7 +106,7 @@ Pri krokovaní vyhľadávania je pri prístupe k vrcholu tiež použitá zelená
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{figures/screenshots/of_overview_3.pdf}
-    \caption{Usporiadané pole obsahujúce hodnoty $1$ až $10$. Všetky vrcholu majú hustotu v hraniach hustoty. Hodnoty $0$ reprezentujú prázdne pozície.}
+    \caption[Usporiadané pole]{Usporiadané pole obsahujúce hodnoty $1$ až $10$. Všetky vrcholu majú hustotu v hraniach hustoty. Hodnoty $0$ reprezentujú prázdne pozície.}
     \label{fig:ss_of_overview}
 \end{figure}
 
@@ -118,7 +118,7 @@ Vizualizácia dynamického stromu (časť \ref{sec:dynamic-obliv}) vznikla spoje
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{figures/screenshots/cobtree_overview.pdf}
-    \caption{Vizualizácia dynamického \obliv B-stromu.}
+    \caption[Vizualizácia dynamického \obliv B-stromu]{Vizualizácia dynamického \obliv B-stromu.}
     \label{fig:ss_cobtree}
 \end{figure}
 

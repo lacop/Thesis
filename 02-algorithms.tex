@@ -180,7 +180,7 @@ Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najvä�
     \resizebox{0.9\textwidth}{!}{
         \input{figures/vEB_tree/vEBlayout_scheme}
     }
-    \caption{Schematické znázornenie rekurzívneho delenia pri \vEB usporiadaní. Podstromy $\tau_0,\dotsc,\tau_k$ sa uložia do súvislého úseku pamäte.}
+    \caption[Schematické znázornenie rekurzívneho delenia]{Schematické znázornenie rekurzívneho delenia pri \vEB usporiadaní. Podstromy $\tau_0,\dotsc,\tau_k$ sa uložia do súvislého úseku pamäte.}
     \label{fig:veblayout_scheme}
 \end{figure}
 
@@ -198,7 +198,7 @@ Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najvä�
         }
         \label{fig:node_order_veb}
     }
-    \caption{Porovnanie klasického a \vEB usporiadania na úplnom binárnom strome výšky $5$. Čísla vo vrcholoch určujú poradie v pamäti.}
+    \caption[Porovnanie klasického a \vEB usporiadania]{Porovnanie klasického a \vEB usporiadania na úplnom binárnom strome výšky $5$. Čísla vo vrcholoch určujú poradie v pamäti.}
     \label{fig:node_order_comparison}
 \end{figure}
 
@@ -237,7 +237,7 @@ Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami
             \input{figures/search_comparison/small_vebtree}
         }
     }
-    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $17$ medzi $31$ prvkami}
+    \caption[Porovnávanie prístupov ku pamäti pri vyhľadávaní hodnoty $17$]{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $17$ medzi $31$ prvkami}
     \label{fig:search_comparison_small}
 \end{figure}
 
@@ -281,7 +281,7 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
             \input{figures/search_comparison/height9_find243_vebtree}
         }
     }
-    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $243$ medzi $511$ prvkami}
+    \caption[Porovnávanie prístupov ku pamäti pri vyhľadávaní hodnoty $243$]{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $243$ medzi $511$ prvkami}
     \label{fig:search_comparison1}
 
     \vspace*{2cm} % TODO autofill?
@@ -301,7 +301,7 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
             \input{figures/search_comparison/height9_find427_vebtree}
         }
     }
-    \caption{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $427$ medzi $511$ prvkami}
+    \caption[Porovnávanie prístupov ku pamäti pri vyhľadávaní hodnoty $427$]{Porovnávanie prístupov ku pamäti v rôznych štruktúrach pri vyhľadávaní hodnoty $427$ medzi $511$ prvkami}
     \label{fig:search_comparison2}
 \end{sidewaysfigure}
 
@@ -319,7 +319,7 @@ Popíšeme dátovú štruktúru z \citep{btreeshort} s malými úpravami. Celá 
     \resizebox{0.8\textwidth}{!}{
         \input{figures/ordered_file/of_groups}
     }
-    \caption{Usporiadané pole veľkosti $N$. Strom nad blokmi je len imaginárny a nezostrojuje sa v pamäti.}
+    \caption[Usporiadané pole]{Usporiadané pole veľkosti $N$. Strom nad blokmi je len imaginárny a nezostrojuje sa v pamäti.}
     \label{fig:of_overview}
 \end{figure}
 
@@ -404,7 +404,7 @@ Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statick
     \resizebox{\textwidth}{!}{
         \input{figures/dynamic_tree/overview}
     }
-    \caption{Dynamický strom, ktorý vznikne spojením statického stromu vo \vEB usporiadaní a usporiadaného pola. Šipky znázorňujú spárovanie listov a položiek pola.}
+    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením statického stromu vo \vEB usporiadaní a usporiadaného pola. Šipky znázorňujú spárovanie listov a položiek pola.}
     \label{fig:cobtree_overview}
 \end{figure}
 
@@ -452,7 +452,7 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
     \resizebox{\textwidth}{!}{
         \input{figures/dynamic_tree/three_parts}
     }
-    \caption{Rozdelenie statického stromu na tri časti pri analýze počtu pamäťových presunov.}
+    \caption[Rozdelenie statického stromu]{Rozdelenie statického stromu na tri časti pri analýze počtu pamäťových presunov.}
     \label{fig:cobtree_analysis_parts}
 \end{figure}
 
