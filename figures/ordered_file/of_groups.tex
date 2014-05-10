@@ -1,0 +1,22 @@
+\begin{tikzpicture}[sibling distance = 2pt, level distance = 30pt]
+\tikzset{every node/.style={circle, thick, dashed, draw, minimum size=2em}, edge from parent/.append style={thick, dashed}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
+% node_order.py, van Emde Boas, height 5
+\Tree [.\node (T) {}; 
+  [.\node (TL) {}; 
+    [.\node (TLL) {}; 
+      [.\node [rectangle, solid] (TLLL) {$\Theta(\log N)$}; ]
+      [.\node [rectangle, solid] (TLLR) {$\Theta(\log N)$}; ]]
+    [.\node (TLR) {}; 
+      [.\node [rectangle, solid] (TLRL) {$\Theta(\log N)$}; ]
+      [.\node [rectangle, solid] (TLRR) {$\Theta(\log N)$}; ]]]
+  [.\node (TR) {}; 
+    [.\node (TRL) {}; 
+      [.\node [rectangle, solid] (TRLR) {$\Theta(\log N)$}; ]
+      [.\node [rectangle, solid] (TRLR) {$\Theta(\log N)$}; ]]
+    [.\node (TRR) {}; 
+      [.\node [rectangle, solid] (TRRL) {$\Theta(\log N)$}; ]
+      [.\node [rectangle, solid] (TRRR) {$\Theta(\log N)$}; ]]]]
+      
+\draw [decorate, decoration={brace, amplitude=10pt, raise=1pt, mirror}] (TLLL.south west) -- (TRRR.south east) node [draw=none, midway, anchor=north] {$\bigO{N}$};
+      
+\end{tikzpicture}

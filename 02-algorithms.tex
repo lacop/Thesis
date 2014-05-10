@@ -189,7 +189,7 @@ Tieto podstromy majú veľkosť $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupné
     \label{fig:veblayout_scheme}
 \end{figure}
 
-\begin{figure}    
+\begin{figure}
     \centering
     \subbottom[Klasické usporiadanie] {
         \resizebox{\textwidth}{!}{
@@ -313,14 +313,22 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
 
 \section{Usporiadané pole} \label{sec:orderedfile}
 
-\todo[inline]{obrazky}
 Problémom \emph{údržby usporiadaného poľa} (z anglického \emph{ordered-file maintenance}) budeme volať problém spočívajúci v udržiavaní zoradenej postupnosti prvkov, do ktorej možno pridávať nové prvky medzi ľubovolné dva existujúce a tiež prvky odstraňovať. Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štruktúra zhustenej pamäte} (\emph{packed-memory structure}). Táto štruktúra udržiava prvky v súvislom poli veľkosti $\bigO{N}$ s \emph{medzerami} medzi prvkami veľkosti $\bigO{1}$. Vďaka tomu bude načítanie $K$ po sebe idúcich prvkov vyžadovať $\bigO{\frac{K}{B}}$ pamäťových presunov.
 
 \subsection{Popis štruktúry} \label{sec:of-desc}
 
 Popíšeme dátovú štruktúru z \citep{btreeshort} s malými úpravami. Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^k$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S = 2^l$ tak, že $S=\Theta(\log{N})$. Počet blokov tak bude tiež mocnina dvoch.
 
-Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom, ktorého listy sú bloky udržiavaného poľa. \emph{Hĺbkou} vrchola označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = k-l$.
+\begin{figure}
+    \centering
+    \resizebox{0.8\textwidth}{!}{
+        \input{figures/ordered_file/of_groups}
+    }
+    \caption{Usporiadané pole veľkosti $N$. Strom nad blokmi je len imaginárny a nezostrojuje sa v pamäti.}
+    \label{fig:of_overview}
+\end{figure}
+
+Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \ref{fig:of_overview}), ktorého listy sú bloky udržiavaného poľa. \emph{Hĺbkou} vrchola označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = k-l$.
 
 \subsection{Definície}
 
@@ -339,12 +347,9 @@ a definujme pre vrchol s hĺbkou $k$ \emph{dolnú} a \emph{hornú hranicu hustot
 0 < \rho_d < \rho_{d-1} < \cdots < \rho_0 < \tau_0 < \tau_1 < \cdots < \tau_d < 1
 \]
 
-Napokon, vrchol $v$ hĺbky $k$ je \emph{v hraniciach} hustoty ak platí $\rho_k \le d(v) \le \tau_k$.
+Hovoríme, že vrchol $v$ hĺbky $k$ je \emph{v hraniciach} hustoty ak platí $\rho_k \le d(v) \le \tau_k$.
 
 \subsection{Operácie}
-
-\todo[inline]{pseudocode?}
-
 \subsubsection{Vkladanie}
 
 Implementácia operácie vkladania sa skladá z niekoľkých krokov. Najskôr zistíme, do ktorého bloku $v$ spadá pozícia, na ktorú vkladáme. Pozrieme sa, či je tento blok v hraniciach hustoty. Ak áno tak platí $d(v) < 1$ a teda $o(v) < c(v)$, čiže v tomto bloku je voľné miesto. Môžeme teda zapísať novú hodnotu do tohto bloku, pričom môže byť potrebné hodnoty v bloku popresúvať, avšak zmení sa najviac $S$ pozícii.
@@ -391,15 +396,22 @@ Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov - tie
 Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľkosti $\bigO{N}$ a podporuje operácie vkladania a odstraňovania, ktoré upravujú súvislý interval priemernej veľkosti $\bigO{\log^2{N}}$ a je ich teda možné realizovať pomocou $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov.
 
 \section{Dynamický B-strom} \label{sec:dynamic-obliv}
-\todo[inline]{nazov? nie moc bstrom ked b=2... lepsie dictionary/tree?}
-
 V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry pochádza z \citep{btreeshort,btreefull}, bola avšak značne komplikovaná. Preto použijeme zjednodušenú verziu z \citep{bender2002}, ktorá dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
 
 \subsection{\Aware riešenie}
 V prípade \aware modelu použijeme opäť B-strom s vetvením $\Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov. \todo{odvodenie?}
 
 \subsection{Popis \obliv štruktúry}
-Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) - jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať statický vyhľadávací strom uložený vo \vEB usporiadaní. Listy tohto stromu budú bijektívne spárované s položkami v usporiadanom poli.
+Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) - jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať statický vyhľadávací strom uložený vo \vEB usporiadaní. Listy tohto stromu budú bijektívne spárované s položkami v usporiadanom poli (obrázok \ref{fig:cobtree_overview}).
+
+\begin{figure}
+    \centering
+    \resizebox{\textwidth}{!}{
+        \input{figures/dynamic_tree/overview}
+    }
+    \caption{Dynamický strom, ktorý vznikne spojením statického stromu vo \vEB usporiadaní a usporiadaného pola. Šipky znázorňujú spárovanie listov a položiek pola.}
+    \label{fig:cobtree_overview}
+\end{figure}
 
 Kľúče, ktoré táto štruktúra obsahuje, sú uložené v usporiadanom poli (s medzerami). Listy statického stromu obsahujú v svojich kľúčoch rovnakú hodnotu ako k ním prislúchajúce položky usporiadaného pola. Medzeru reprezentujeme hodnotou, ktorá je pri použitom usporiadaní najmenšia. Ostatné vrcholy stromu obsahujú ako kľúč maximum z kľúčov svojich synov.
 
