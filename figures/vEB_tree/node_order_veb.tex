@@ -1,5 +1,5 @@
-\begin{tikzpicture}[sibling distance = 15pt, level distance = 35pt]
-\tikzset{every node/.style={circle, draw, minimum size=2.1em}, edge from parent/.append style={thick}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
+\begin{tikzpicture}[sibling distance = 15pt, level distance = 40pt]
+\tikzset{every node/.style={circle, thick, draw, minimum size=2.1em}, edge from parent/.append style={thick}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
 % node_order.py, van Emde Boas, height 5
 \Tree [.\node (T) {1}; 
   [.\node (TL) {2}; 
@@ -35,7 +35,7 @@
 
 % Normalize bounding box
 \node [draw=none,rectangle, fit=(T) (TLLLL) (TRRRR)] (C) {};
-\clip ($(C.south west) - (1,0.5)$) rectangle ($(C.north east) + (1, 0.5)$);
+\clip ($(C.south west) + (-1,-0.5)$) rectangle ($(C.north east) + (1, 0.5)$);
 
 \node[draw, rectangle, thick, fit = (T)(TLLLL)(TRRRR), inner sep = 10] {};
 \node[draw, rectangle, fit = (T), inner sep = 6] {};
