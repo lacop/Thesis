@@ -1,5 +1,5 @@
 \begin{tikzpicture}[sibling distance = 15pt, level distance = 40pt]
-\tikzset{every node/.style={circle, thick, draw, minimum size=2.1em}, edge from parent/.append style={thick}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
+\tikzset{every node/.style={circle, ultra thick, draw, minimum size=2.1em}, edge from parent/.append style={ultra thick}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
 % node_order.py, van Emde Boas, height 5
 \Tree [.\node (T) {1}; 
   [.\node (TL) {2}; 
@@ -38,18 +38,18 @@
 \clip ($(C.south west) + (-1,-0.5)$) rectangle ($(C.north east) + (1, 0.5)$);
 
 \node[draw, rectangle, thick, fit = (T)(TLLLL)(TRRRR), inner sep = 10] {};
-\node[draw, rectangle, fit = (T), inner sep = 6] {};
+\node[draw, rectangle, thin, fit = (T), inner sep = 6] {};
 \node[draw, rectangle, thick, fit = (TL)(TLLLL)(TLRRR), inner sep = 6] {};
-\node[draw, rectangle, fit = (TL)(TLL)(TLR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TLLL)(TLLLL)(TLLLR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TLLR)(TLLRL)(TLLRR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TLRL)(TLRLL)(TLRLR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TLRR)(TLRRL)(TLRRR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TL)(TLL)(TLR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TLLL)(TLLLL)(TLLLR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TLLR)(TLLRL)(TLLRR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TLRL)(TLRLL)(TLRLR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TLRR)(TLRRL)(TLRRR), inner sep = 2] {};
 \node[draw, rectangle, thick, fit = (TR)(TRLLL)(TRRRR), inner sep = 6] {};
-\node[draw, rectangle, fit = (TR)(TRL)(TRR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TRLL)(TRLLL)(TRLLR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TRLR)(TRLRL)(TRLRR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TRRL)(TRRLL)(TRRLR), inner sep = 2] {};
-\node[draw, rectangle, fit = (TRRR)(TRRRL)(TRRRR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TR)(TRL)(TRR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TRLL)(TRLLL)(TRLLR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TRLR)(TRLRL)(TRLRR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TRRL)(TRRLL)(TRRLR), inner sep = 2] {};
+\node[draw, rectangle, thin, fit = (TRRR)(TRRRL)(TRRRR), inner sep = 2] {};
 
 \end{tikzpicture}

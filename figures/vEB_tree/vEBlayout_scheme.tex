@@ -49,10 +49,10 @@
 \node at (RC) {\Huge $\tau_k$};
 
 % Layout in memory
-\coordinate (M0LT) at ($ (BL) - (0, \memoff) $);
+\coordinate (M0LT) at ($ (BC) + (\width, \memh) $);
 \coordinate (M0RB) at ($ (M0LT) + (\memw, -\memh) $);
 \coordinate (M1RT) at ($ (M0RB) + (\memw, \memh) $);
-\coordinate (M3RT) at ($ (BR) - (0, \memoff) $);
+\coordinate (M3RT) at ($ (M0LT) + (\width, 0) $);
 \coordinate (M3LB) at ($ (M3RT) - (\memw, \memh) $);
 
 \draw (M0LT) rectangle (M0RB);
@@ -65,5 +65,7 @@
 \node at ($ (M1RT)!0.5!(M3LB) $) {\huge $\dots$};
 \node at ($ (M3LB)!0.5!(M3RT) $) {\huge $\tau_k$};
 
+\newcommand{\arrspace}{1}
+\draw [thick, ->] ($(BC) + (0.25*\width+\arrspace, 0.5\memh)$) -- ++(0.75*\width-2*\arrspace, 0);
 
 \end{tikzpicture}

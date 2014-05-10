@@ -1,15 +1,15 @@
 
 \begin{tikzpicture}
 
-\newcommand{\width}{8}
-\newcommand{\height}{2}
+\newcommand{\width}{4}
+\newcommand{\height}{1}
 \newcommand{\cacheheight}{8}
 \newcommand{\cachebox}{\height}
 \newcommand{\cachewidth}{4} % TODO divide?
 \newcommand{\off}{1}
 \newcommand{\diskoff}{3*\width}
 
-\newcommand{\jaggedsep}{0.5}
+\newcommand{\jaggedsep}{0.25}
 
 \newcommand{\arrangle}{20}
 \newcommand{\arroff}{1}
@@ -35,8 +35,8 @@
 \draw [thick] (\diskoff, 0) -- (\diskoff, \height);
 \draw [thick] (\diskoff+\width, 0) -- (\diskoff+\width, \height);
 %\raggedline{(\diskoff, 0) -- (\diskoff+\width, 0)}
-\draw [thick] ($(\diskoff-1, -1)$) -- ++(2, 2) -- ++(2, -2) -- ++(2, 2) -- ++(2, -2) -- ($(\diskoff+\width+1, 1)$);
-\draw [thick] ($(\diskoff-1, -1-\jaggedsep)$) -- ++(2, 2) -- ++(2, -2) -- ++(2, 2) -- ++(2, -2) -- ($(\diskoff+\width+1, 1-\jaggedsep)$);
+\draw [thick] ($(\diskoff-0.5, -0.5)$) -- ++(1, 1) -- ++(1, -1) -- ++(1, 1) -- ++(1, -1) -- ($(\diskoff+\width+0.5, 0.5)$);
+\draw [thick] ($(\diskoff-0.5, -0.5-\jaggedsep)$) -- ++(1, 1) -- ++(1, -1) -- ++(1, 1) -- ++(1, -1) -- ($(\diskoff+\width+0.5, 0.5-\jaggedsep)$);
 
 \draw [thick, |-] (\diskoff+\width+\off,\cacheheight*\height) -- ++ ($(0, -\cacheheight*\height+\height) $) node [midway, fill=white, minimum height=1cm] {\Huge $\infty$} node [pos=1, fill=white] {\Huge $\vdots$};
 
@@ -48,7 +48,7 @@
 \node at (0.5*\width, \height*\cacheheight+\off) {\Huge Cache};
 \node at (0.5*\width+\diskoff, \height*\cacheheight+\off) {\Huge Disk};
 %\node at ($ (BC) + (0, 0.5*\height+\off) $) {\Huge Presúvaný blok};
-\node at (BC) {\Huge Presúvaný blok};
+\node at (BC) {\Large Presúvaný blok};
 
 \coordinate (LB) at (\width, 0.5*\height*\cacheheight);
 \coordinate (RB) at ($ (LB) + (\diskoff-\width, 0) $);

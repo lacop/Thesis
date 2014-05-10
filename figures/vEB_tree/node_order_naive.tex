@@ -1,5 +1,5 @@
 \begin{tikzpicture}[sibling distance = 15pt, level distance = 40pt]
-\tikzset{every node/.style={circle, thick, draw, minimum size=2.1em}, edge from parent/.append style={thick}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
+\tikzset{every node/.style={circle, ultra thick, draw, minimum size=2.1em}, edge from parent/.append style={ultra thick}, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}
 
 % node_order.py, naive, height 5
 \Tree [.\node (T) {1}; 
@@ -38,35 +38,35 @@
 \node [draw=none,rectangle, fit=(T) (TLLLL) (TRRRR)] (C) {};
 \clip ($(C.south west) - (1,0)$) rectangle ($(C.north east) + (1, 0)$);
         
-\draw [->, shorten >= 3pt, shorten <= 3pt] (T.east) .. controls ($(T) + (5, -1)$) and ($(TL) - (5, -1)$) .. (TL.west);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TL) to (TR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TR.east) .. controls ($(TR) + (5, -1.5)$) and ($(TLL) - (5, -1.5)$) .. (TLL.west);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLL) to (TLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLR) to (TRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRL) to (TRR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRR.east) .. controls ($(TRR) + (5, -2)$) and ($(TLLL) - (5, -2)$) .. (TLLL.west);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLLL) to (TLLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLLR) to (TLRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLRL) to (TLRR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLRR) to (TRLL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRLL) to (TRLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRLR) to (TRRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRRL) to (TRRR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRRR.east) .. controls ($(TRRR) + (5, -2)$) and ($(TLLLL) - (5, -2)$) .. (TLLLL.west);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLLLL) to (TLLLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLLLR) to (TLLRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLLRL) to (TLLRR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLLRR) to (TLRLL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLRLL) to (TLRLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLRLR) to (TLRRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLRRL) to (TLRRR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TLRRR) to (TRLLL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRLLL) to (TRLLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRLLR) to (TRLRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRLRL) to (TRLRR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRLRR) to (TRRLL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRRLL) to (TRRLR);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRRLR) to (TRRRL);
-\draw [->, shorten >= 3pt, shorten <= 3pt] (TRRRL) to (TRRRR);
+\draw [darkgray, thick,darkgray, thick, ->, shorten >= 3pt, shorten <= 3pt] (T.east) .. controls ($(T) + (5, -1)$) and ($(TL) - (5, -1)$) .. (TL.west);
+\draw [darkgray, thick,darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TL) to (TR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TR.east) .. controls ($(TR) + (5, -1.5)$) and ($(TLL) - (5, -1.5)$) .. (TLL.west);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLL) to (TLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLR) to (TRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRL) to (TRR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRR.east) .. controls ($(TRR) + (5, -2)$) and ($(TLLL) - (5, -2)$) .. (TLLL.west);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLLL) to (TLLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLLR) to (TLRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLRL) to (TLRR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLRR) to (TRLL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRLL) to (TRLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRLR) to (TRRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRRL) to (TRRR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRRR.east) .. controls ($(TRRR) + (5, -2)$) and ($(TLLLL) - (5, -2)$) .. (TLLLL.west);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLLLL) to (TLLLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLLLR) to (TLLRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLLRL) to (TLLRR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLLRR) to (TLRLL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLRLL) to (TLRLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLRLR) to (TLRRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLRRL) to (TLRRR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TLRRR) to (TRLLL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRLLL) to (TRLLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRLLR) to (TRLRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRLRL) to (TRLRR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRLRR) to (TRRLL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRRLL) to (TRRLR);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRRLR) to (TRRRL);
+\draw [darkgray, thick,->, shorten >= 3pt, shorten <= 3pt] (TRRRL) to (TRRRR);
 
 \end{tikzpicture}
