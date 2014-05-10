@@ -87,17 +87,23 @@
 	\trianglecenter{#1RC}{#1RL}{#1TR}{#1RR}
 	\trianglecenter{#1TC}{#1TT}{#1TR}{#1TL}
 	\node at ($ (#1LC)!0.5!(#1RC) + (0, \voff*0.5) $) {$\cdots$};
-	
-	\node at (#1LC) {\small $\le B$};
-	\node at (#1RC) {\small $\le B$};
-	\node at (#1TC) {\small $\le B$};
 }
 
 \innertriangles{IL}{(TL)}{(LL)}{(LR)}
 \innertriangles{IR}{(TR)}{(RR)}{(RL)}
 
+\node at (ILLC) {\small $\le B$};
+\node at (ILRC) {\small $\le B$};
+\node at (ILTC) {\small $\le B$};
+
+\node at (IRLC) {\small $\tau_1$};
+\node at (IRRC) {\small $\tau_k$};
+\node at (IRTC) {\small $\tau_0$};
+
 \draw [thick, decorate, decoration={brace, amplitude=10pt, raise=1pt}] (LL) -- (TL) node [midway, anchor=south east, xshift=10pt, yshift=8pt] {$>B$};
 
+\draw [draw=none] (LR) -- (TL) node [pos=0.60, anchor=south west] {$T_1$};
+\draw [draw=none] (RR) -- (TR) node [pos=0.60, anchor=south east] {$T_l$};
 
 % Center (LCA)
 \coordinate (CT) at (\width*0.5+\choff, \height*0.5+\cvoff);
