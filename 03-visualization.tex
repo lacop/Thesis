@@ -50,7 +50,7 @@ Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implem
     \label{fig:ss_static_sizes}
 \end{figure}
 
-Medzi uložením vo \vEB usporiadaní a klasickom \emph{BFS} usporiadaní (ako v časti \ref{sec:static-naive}) je možné prepínať. Zmenia sa pritom čísla udávajúce pozície vrcholov v pamäti a ich poradie v poli nad stromom. Rozdiel medzi týmito dvoma usporiadaniami vidieť na obrázku \ref{fig:ss_static_order}. Pozície sa zhodujú s obrázkom \ref{fig:node_order_comparison}. \todo{ref to subfigure}
+Medzi uložením vo \vEB usporiadaní a klasickom \emph{BFS} usporiadaní (ako v časti \ref{sec:static-naive}) je možné prepínať. Zmenia sa pritom čísla udávajúce pozície vrcholov v pamäti a ich poradie v poli nad stromom. Rozdiel medzi týmito dvoma usporiadaniami vidieť na obrázku \ref{fig:ss_static_order}. Pozície sa zhodujú s obrázkom \ref{fig:node_order_veb}.
 
 \begin{figure}
     \centering
@@ -101,13 +101,29 @@ Ako vizualizácia prítomnosti v \cache slúži farba - vrcholy a položky poľa
 Pri krokovaní vyhľadávania je pri prístupe k vrcholu tiež použitá zelená alebo červená farba na jeho dočasné zafarbenie (podobne ako v časti \ref{sec:memaccess_patterns}) podľa toho, či sa v danom momente v \cache nachádzal (\hit) alebo nie (\miss). Ukážka tohto zafarbovania je na obrázku \ref{fig:ss_cachesim_colors}.
 
 \section{Usporiadané pole}
-\todo[inline]{Layout, intro}
-\subsection{Vkladanie}
+Ďalšou implementovanou vizualizáciou je usporiadané pole (obrázok \ref{fig:ss_of_overview}), ktoré bolo popísané v časti \ref{sec:orderedfile}. Bloky, na ktoré je toto pole imaginárne rozdelené sú znázornené tým, že sú od seba oddelené medzerou. Taktiež sa zobrazuje imaginárny strom nad týmito blokmi, ktorým sa pri vkladaní prechádza. Hodnoty vo vrcholoch reprezentujú hustotu (v percentách) intervalu v príslušnom podstrome. Farby (zelená alebo červená) vrcholov indikujú, či sa hustota daného vrcholu nachádza v hraniciach.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/screenshots/of_overview_3.pdf}
+    \caption{Usporiadané pole obsahujúce hodnoty $1$ až $10$. Všetky vrcholu majú hustotu v hraniach hustoty. Hodnoty $0$ reprezentujú prázdne pozície.}
+    \label{fig:ss_of_overview}
+\end{figure}
+
+Táto vizualizácia podporuje vkladanie hodnoty na ľubovolnú pozíciu v poli. V prípade, že sa pole preplní, automaticky sa vytvorí nové, dvojnásobne väčšie. Po vložení hodnoty je tiež vyznačený interval, ktorý sa zmenil.
 
 \section{Dynamický strom}
-\todo[inline]{Layout, intro}
-\subsection{Vyhľadávanie}
-\subsection{Vkladanie}
+Vizualizácia dynamického stromu (časť \ref{sec:dynamic-obliv}) vznikla spojením predchádzajúcich dvoch vizualizácií (obrázok \ref{fig:ss_cobtree}). Horná časť je statický strom vo \vEB usporiadaní (obrázok \ref{fig:ss_static_sizes}), dolná je usporiadané pole (obrázok \ref{fig:ss_of_overview}), pričom strom hustôt je tu preklopený nadol, aby sa neprekrýval so statickým stromom. Hrany medzi nimi spájajú listy stromu s prvkami usporiadaného pola. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/screenshots/cobtree_overview.pdf}
+    \caption{Vizualizácia dynamického \obliv B-stromu.}
+    \label{fig:ss_cobtree}
+\end{figure}
+
+V tomto strome je možné vyhľadávať a vkladať nové kľúče. Pri vkladaní prebehne najskôr vloženie do usporiadaného poľa rovnako, ako pri jeho samostatnej vizualizácii. Následne sa aktualizujú kľúče statického stromu. V prípade zdvojnásobenia veľkosti statického poľa sa vytvorí nový, väčší statický strom.
+
 
 \section{Implementácia}
 \todo[inline]{?}
