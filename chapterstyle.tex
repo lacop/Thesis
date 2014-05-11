@@ -19,33 +19,33 @@
     \setlength{\afterchapskip}{40pt}
     \renewcommand*{\chapterheadstart}{\vspace*{40pt}}
     \renewcommand*{\afterchapternum}{\par\nobreak\vskip 25pt}
-	\renewcommand*{\chapnamefont}{\normalfont\LARGE\flushright}
-	\renewcommand*{\chapnumfont}{\normalfont\HUGE}
-	\renewcommand*{\chaptitlefont}{\normalfont\HUGE\bfseries\flushright}
-	\renewcommand*{\chapternamenum}{}
-	
-	\setlength{\midchapskip}{\paperwidth}
-	\addtolength{\midchapskip}{-\textwidth}
-	\addtolength{\midchapskip}{-\spinemargin}
-	
+    \renewcommand*{\chapnamefont}{\normalfont\LARGE\flushright}
+    \renewcommand*{\chapnumfont}{\normalfont\HUGE}
+    \renewcommand*{\chaptitlefont}{\normalfont\HUGE\bfseries\flushright}
+    \renewcommand*{\chapternamenum}{}
+    
+    \setlength{\midchapskip}{\paperwidth}
+    \addtolength{\midchapskip}{-\textwidth}
+    \addtolength{\midchapskip}{-\spinemargin}
+    
     \setlength{\barlength}{\midchapskip}
     \addtolength{\barlength}{-\numbarsep}
         
-	\renewcommand*{\printchaptername}{%
-      	\settowidth{\chnumwidth}{\resizebox{!}{\numberheight}{\chapnumfont \thechapter}}%
-	    \chapnamefont\MakeUppercase{\@chapapp}%
-	    \hspace*{\chnumwidth}%
-	    \hspace*{\namenumsep}%
-	}
+    \renewcommand*{\printchaptername}{%
+        \settowidth{\chnumwidth}{\resizebox{!}{\numberheight}{\chapnumfont \thechapter}}%
+        \chapnamefont\MakeUppercase{\@chapapp}%
+        \hspace*{\chnumwidth}%
+        \hspace*{\namenumsep}%
+    }
     
-	\renewcommand*{\printchapternum}{%
-    	\makebox[0pt][l]{
-        	\settowidth{\chnumwidth}{\resizebox{!}{\numberheight}{\chapnumfont \thechapter}}%
-        	\hspace*{-\chnumwidth}%
-        	\resizebox{!}{\numberheight}{\chapnumfont \thechapter}%
-        	\hspace*{\numbarsep}%
-        	\rule{\barlength}{\numberheight}%
-	}}%
+    \renewcommand*{\printchapternum}{%
+        \makebox[0pt][l]{
+            \settowidth{\chnumwidth}{\resizebox{!}{\numberheight}{\chapnumfont \thechapter}}%
+            \hspace*{-\chnumwidth}%
+            \resizebox{!}{\numberheight}{\chapnumfont \thechapter}%
+            \hspace*{\numbarsep}%
+            \rule{\barlength}{\numberheight}%
+    }}%
 }
 
 \makeatother
