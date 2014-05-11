@@ -97,6 +97,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setup document preferences
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter style
 \chapterstyle{veelo} % TODO pick - veelo, madsen, ?
 
 % Subsections and higher - numbered and in TOC
@@ -105,7 +106,15 @@
 
 % Headers / footers
 \pagestyle{ruled}
-\makeoddhead{ruled}{\sffamily\leftmark}{}{\sffamily\rightmark}
+% https://tex.stackexchange.com/questions/176472/identical-marks-in-header-with-onesided-memoir/176484?noredirect=1#176484
+% https://tex.stackexchange.com/questions/59565/on-testing-two-fully-expanded-character-strings-for-equality
+\usepackage{pdftexcmds} 
+\makeatletter
+\newcommand*{\test}[2]{%
+  \ifnum\pdf@strcmp{#1}{#2}=\z@ \relax \else #2 \fi
+}
+\makeatother
+\makeoddhead{ruled}{\sffamily\leftmark}{}{\sffamily\test{\leftmark}{\rightmark}}
 
 % Create custom plain page style with pagenumbers on right instead of centered
 \makepagestyle{plainright}
