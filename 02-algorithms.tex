@@ -497,6 +497,7 @@ Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli
 \todo[inline]{double/half}
 
 \section{Vylepšený dynamický B-strom}
+\epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
 Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Odstrániť ho môžeme jednoduchou modifikáciou.
 
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
@@ -507,7 +508,7 @@ Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\fr
 \subsection{Vkladanie a odstraňovanie}
 Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z neho kompletným prepísaním, čo vyžaduje $\bigO{\frac{\log{N}}{B}}$ presunov. Zároveň budeme udržiavať veľkosti blokov medzi $\frac{1}{4}\log{N}$ a $\log{N}$. Príliš malé skupiny môžeme spojiť do väčších a veľké rozdeliť na niekoľko menších. Skupina prekročí svoje hranice najskôr po $\Omega(\log{N})$ operáciách. V takom prípade po rozdelení alebo spojení bude potrebné vykonať vloženie alebo odstránenie z B-stromu. Vydelením dostávame amortizovanú zložitosť vkladania a odstraňovania:
 \[
-\bigO{\frac{\log_B{N} + \frac{\log^2{N}}{B}}{\log{N}}} = \bigO{\log{N}{B}}
+\bigO{\frac{\log_B{N} + \frac{\log^2{N}}{B}}{\log{N}}} = \bigO{\frac{\log{N}}{B}}
 \]
 
 Najskôr však musíme nájsť blok, ktorý budeme aktualizovať. Teda výsledná zložitosť bude $\bigO{\log_B{N}}$ rovnako ako pri \aware B-strome. Opäť sme teda dosiahli rovnaký počet operácií ako ekvivalentná \aware dátová štruktúra, avšak tentokrát nie v najhoršom ale  amortizovanom prípade.
