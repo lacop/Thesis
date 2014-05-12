@@ -1,0 +1,57 @@
+\documentclass[border=0pt]{standalone}
+%\documentclass{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{slovak}
+
+\usepackage{tikz}
+\usetikzlibrary{calc, shapes}
+
+\usepackage{scalefnt}
+\usepackage{tabularx}
+
+\input{../settings}
+
+%118, 18 - outer, inner
+%108, 38 - printable?
+\newcommand{\picsize}{118mm}
+\newcommand{\outdiam}{108mm}
+\newcommand{\indiam}{38mm}
+\newcommand{\tablewidth}{68mm}
+
+\begin{document}
+\begin{tikzpicture}
+
+\node[draw, thin, circle, minimum size=\picsize] at (0, 0) {};
+\node[draw, red, thick, circle, minimum size=\outdiam] (OUTER) at (0,0) {};
+\node[draw, red, thick, circle, minimum size=\indiam] (INNER) at (0,0) {};
+
+
+\node[inner sep=0] at ($(OUTER.west)!0.5!(INNER.west)$) {\includegraphics[width=2cm]{../figures/school_logo/bw_uniba}};
+\node[inner sep=0] at ($(OUTER.east)!0.5!(INNER.east)$) {\includegraphics[width=2cm]{../figures/school_logo/bw_fmph}};
+
+\draw[draw=none] (OUTER.north) -- (INNER.north) node (C) [anchor=north, pos=0.2, rectangle split] {
+    \textsc{\scalefont{0.75} \settingsSchool}
+    \nodepart{second}
+    \textsc{\scalefont{0.75} \settingsFaculty}
+};
+
+\draw[draw=none] (OUTER.north) -- (INNER.north) node (C) [anchor=north, pos=0.55, rectangle split] {
+   {\scalefont{1} \textbf \settingsTitle}
+   \nodepart{second}
+   \emph{\scalefont{0.75} bakalárska práca,~\settingsYear}
+   \nodepart{third}
+   {\scalefont{0.75} \textbf \settingsAuthor}
+};
+
+\node[anchor=north] at (INNER.south) {
+    \scalefont{0.75}
+    \begin{tabularx}{\tablewidth}{|c|X|}
+        \multicolumn{2}{c}{Príloha} \\ \hline
+        Obsah & TODO \\ \hline
+        Revizia & TODO \\ \hline
+        Link & TODO \\ \hline
+    \end{tabularx}};
+
+\end{tikzpicture}
+\end{document}
