@@ -1,13 +1,13 @@
 \chapter{Cache-oblivius algoritmy a~dátové~štruktúry}
 
-V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modely. Miestami tiež uvedieme ekvivalentnú \aware dátovú štruktúru pre vzájomné porovnanie efektívnosti.
+V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modeli. Miestami tiež uvedieme ekvivalentnú \aware dátovú štruktúru pre vzájomné porovnanie efektívnosti.
 
 \section{Základné algoritmy}
 
 Na demonštráciu \obliv algoritmov a ich analýzy v \extmem modeli použijeme jednoduchý algoritmus, ktorý počíta agregačnú funkciu nad hodnotami uloženými v poli.
 
 \subsection{Popis algoritmu}
-Majme pole $A$ veľkosti $|A|=N$ a označme jeho prvky $A = \{a_1,\dotsc,a_N\} \in X^N$. Chceme vypočítať hodnotu $f_g(A)$, kde $g: X \times Y \rightarrow Y$ je agregačná funkcia, $g_0 \in Y$ je počiatočná hodnota a $f_g: 2^X \rightarrow Y$ je\footnote{$2^X$ označuje potenčnú množinu množiny $X$} rozšírenie agregačnej funkcie definované následovne:
+Majme pole $A$ veľkosti $|A|=N$ a označme jeho prvky $A = \{a_1,\dotsc,a_N\} \in X^N$. Chceme vypočítať hodnotu $f_g(A)$, kde $g: X \times Y \rightarrow Y$ je agregačná funkcia, $g_0 \in Y$ je počiatočná hodnota a $f_g$ je rozšírenie agregačnej funkcie definované následovne:
 \[
 \begin{aligned}
 f_g(\{a_1,\dotsc,a_k\}) &= g(a_k, f(\{a_1,\dotsc,a_{k-1}\})) \\
