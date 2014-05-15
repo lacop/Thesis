@@ -327,17 +327,20 @@ Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \r
 
 \subsection{Definície}
 
-\emph{Kapacitou} vrchola $v$, $c(v)$, označíme počet položiek (aj prázdnych, teda aj s medzerami) poľa patriacich do blokov v podstrome začínajúcom v tomto vrchole. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. 
+\emph{Kapacitou} vrchola $v$, $c(v)$, označíme počet položiek (aj prázdnych, teda aj s medzerami) poľa patriacich do blokov v podstrome začínajúcom v tomto vrchole. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. Ďalej \emph{hustotou}, $0 \le d(v) \le 1$, označíme $d(v) = \frac{o(v)}{c(v)}$. 
 
-Ďalej \emph{hustotou}, $0 \le d(v) \le 1$, označíme $d(v) = \frac{o(v)}{c(v)}$. Zvoľme ľubovolné konštanty $\rho_d, \tau_d, \rho_0, \tau_0$ spĺňajúce
+Zvoľme ľubovolné konštanty $\rho_d, \tau_d, \rho_0, \tau_0$ spĺňajúce
 \[
 0 < \rho_d < \rho_0 < \tau_0 < \tau_d < 1
 \]
-a definujme pre vrchol s hĺbkou $k$ \emph{dolnú} a \emph{hornú hranicu hustoty} $\rho_k$ a $\tau_k$ tak, že dostaneme postupnosť hraníc pre všetky hĺbky, pričom platí $(\rho_i,\tau_i) \subset (\rho_{i+1},\tau_{i+1})$ a teda sa tieto intervaly smerom od listov ku koreňu zmenšujú:
+
+Z týchto konštánt definujeme pre vrchol s hĺbkou $k$ \emph{dolnú} a \emph{hornú hranicu hustoty} ($\rho_k$ a $\tau_k$) následovne:
 \[
 \rho_k = \rho_0 + \frac{k}{d}(\rho_d-\rho_0) ~~
 \tau_k = \tau_0 - \frac{k}{d}(\tau_0-\tau_d)
 \]
+
+Dostaneme tak postupnosť hraníc pre všetky hĺbky, pričom platí $(\rho_i,\tau_i) \subset (\rho_{i+1},\tau_{i+1})$ a teda sa tieto intervaly smerom od listov ku koreňu zmenšujú:
 \[
 0 < \rho_d < \rho_{d-1} < \cdots < \rho_0 < \tau_0 < \tau_1 < \cdots < \tau_d < 1
 \]
