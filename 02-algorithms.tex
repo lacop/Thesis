@@ -501,7 +501,7 @@ Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli
 
 \section{Vylepšený dynamický B-strom}
 \epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
-Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Odstrániť ho môžeme jednoduchou modifikáciou.
+Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Tento člen môžeme odstrániť jednoduchou modifikáciou.
 
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
