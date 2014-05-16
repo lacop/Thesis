@@ -1,15 +1,19 @@
 \chapter{Vizualizácie}
-\epigraph{An algorithm must be seen to be believed.}{\textit{Art of Computer Programming}\\ \textsc{Donald E. Knuth}}
+\epigraph{An algorithm must be seen to~be believed.}{\textit{Art of Computer Programming}\\ \textsc{Donald E. Knuth}}
 
 Cieľom tejto práce je nielen popísať \obliv pamäťový model a rôzne dátové štruktúry v ňom, ale aj vytvoriť ich vizualizácie. Tie majú slúžiť na edukačné účely pre študentov (a učiteľov) a pomáhať pri pochopení ich fungovania.
 
 Výsledkom práce sú vizualizácie demonštrujúce dátové štruktúry popísané v predchádzajúcich sekciách: \vEB usporiadanie (sekcia \ref{sec:static-obliv}) v statickom binárnom vyhľadávacom strome, usporiadané pole (\ref{sec:orderedfile}) a dynamický b-strom (\ref{sec:dynamic-obliv}). Súčasťou je tiež simulácia \cache (sekcia \ref{sec:extmem}) s možnosťou voľby parametrov $B$ a $M$ - veľkosť bloku a celková veľkosť.
 
-\todo[inline]{cd priloha/web, spustenie, requirements, ...}
 \todo[inline]{Existujuce? nic nie je...}
 
 \section{Gnarley trees}
 Tieto vizualizácie sú implementované ako rozšírenie programu \emph{Gnarley trees}, ktorý vznikol ako súčasť bakalárskej práca Jakuba Kováča \citep{algviskuko}. Tento nástroj na vizualizáciu (prevažne stromových) dátových štruktúr bol následne v bakalárskych prácach \citep{algviskotrlova, algvistomkovic, algvislukca} a ročníkových projektoch rozšírený o mnohé ďalšie dátové štruktúry a v súčastnosti podporuje desiatky štruktúr, ako napríklad červeno-čierne, sufixové a intervalové stromy, \emph{union-find}, haldy a mnohé ďalšie.
+
+\subsection{Spustenie}
+Súčasťou práce je priložené CD obsahujúce zdrojový kód tohto programu a tiež skompilovanú verziu. Aplikácia na spustenie požaduje \emph{JVM}\footnote{\emph{Java Virtual Machine}, dostupné na \url{https://www.java.com/en/download/}}. Spustenie je možné vykonať spustením súborov \inlcode{start.sh} prípadne \inlcode{start.bat}, podla operačného systému. Dostupné sú tiež individuálne vizualizácie vo forme \emph{Java appletov}, ktoré je možné spustiť otvorením súboru \inlcode{index.html} v preferovanom internetovom prehliadači.
+
+Obsah tejto CD prílohy je tiež dostupný na \todo{url}.
 
 \subsection{Funkcionalita}
 Program umožňuje užívateľom zobrazovať tieto štruktúry a manipulovať s nimi. Všetky operácie sú rozložené na malé, jednoduché kroky a každý je vysvetlený keď sa vykonáva. Je možné posúvať sa po krokoch dopredu, ale aj vracať sa dozadu, a teda sa dá kedykoľvek vrátiť až k počiatočnému stavu. Toto je dôležité pri experimentovaní s danou štruktúrou, kedy dve rôzne operácie (alebo jedna operácia s dvoma rôznymi parametrami) spôsobia rôzne správanie a výsledky. Užívateľ má takto možnosť jednoducho sa po vykonaní prvej operácie vrátiť do predošlého stavu a preskúmať správanie druhej z nich.
