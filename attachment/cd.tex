@@ -6,6 +6,7 @@
 
 \usepackage{tikz}
 \usetikzlibrary{calc, shapes}
+\usetikzlibrary{decorations.text}
 
 \usepackage{scalefnt}
 \usepackage{tabularx}
@@ -17,18 +18,20 @@
 \newcommand{\picsize}{118mm}
 \newcommand{\outdiam}{108mm}
 \newcommand{\indiam}{38mm}
-\newcommand{\tablewidth}{68mm}
+\newcommand{\tablewidth}{75mm}
 
 \begin{document}
 \begin{tikzpicture}
 
-\node[draw, thin, circle, minimum size=\picsize] at (0, 0) {};
-\node[draw, red, thick, circle, minimum size=\outdiam] (OUTER) at (0,0) {};
-\node[draw, red, thick, circle, minimum size=\indiam] (INNER) at (0,0) {};
+% KEEP - for scaling
+\node[draw, red, circle, minimum size=\picsize] at (0, 0) {};
+% REMOVE - guides only
+\node[draw, circle, minimum size=\outdiam] (OUTER) at (0,0) {};
+\node[draw, circle, minimum size=\indiam] (INNER) at (0,0) {};
 
 
-\node[inner sep=0] at ($(OUTER.west)!0.5!(INNER.west)$) {\includegraphics[width=2cm]{../figures/school_logo/bw_uniba}};
-\node[inner sep=0] at ($(OUTER.east)!0.5!(INNER.east)$) {\includegraphics[width=2cm]{../figures/school_logo/bw_fmph}};
+%\node[inner sep=0] at ($(OUTER.west)!0.5!(INNER.west)$) {\includegraphics[width=2cm]{../figures/school_logo/bw_uniba}};
+%\node[inner sep=0] at ($(OUTER.east)!0.5!(INNER.east)$) {\includegraphics[width=2cm]{../figures/school_logo/bw_fmph}};
 
 \draw[draw=none] (OUTER.north) -- (INNER.north) node (C) [anchor=north, pos=0.2, rectangle split] {
     \textsc{\scalefont{0.75} \settingsSchool}
@@ -44,14 +47,39 @@
    {\scalefont{0.75} \textbf \settingsAuthor}
 };
 
-\node[anchor=north] at (INNER.south) {
-    \scalefont{0.75}
-    \begin{tabularx}{\tablewidth}{|c|X|}
-        \multicolumn{2}{c}{Príloha} \\ \hline
-        Obsah & TODO \\ \hline
-        Revizia & TODO \\ \hline
-        Link & TODO \\ \hline
-    \end{tabularx}};
+%\newlength{\lindent}
+%\newcommand{\circletext}[3]{
+%    \pgfmathsetlength{\lindent}{pi*#2}
+%    \draw [decorate, decoration={
+%        text along path,
+%        reverse path,
+%        text align/align=center,
+%        text align/left indent = {\lindent},
+%        text align/right indent = {0cm},
+%        text={#3}
+%    }] #1 circle (#2);
+%}
+%
+%{\scalefont{1.5}\circletext{(0,0)}{45mm}{\settingsTitle}}
+%
+%{\scalefont{1}\circletext{(0,0)}{40mm}{bakalárska práca}}
+
+\node[anchor=north, rectangle split] at (INNER.south) {
+    Zdrojový kód a spustiteľná verzia programu \emph{Gnarley Trees}.
+    \nodepart{second}
+    {\scalefont{0.75} Inštrukcie k používaniu sa nachádzajú v texte práce. }
+    \nodepart{third}
+    {\scalefont{0.75} Dostupné tiež na \texttt{http://TODO}.}
+    \nodepart{fourth}
+    {\scalefont{0.75} Odovzdaná verzia: TODO: gitsha+DOI}
+};
+%\node[anchor=north, font=\small] at (INNER.south) {
+%    \begin{tabularx}{\tablewidth}{|r|X|}
+%        \hline
+%        Obsah: & zdrojový kód a spustiteľná aplikácia \\ \hline
+%        Revizia: & TODO \\ \hline
+%        Link: & TODO \\ \hline
+%    \end{tabularx}};
 
 \end{tikzpicture}
 \end{document}
