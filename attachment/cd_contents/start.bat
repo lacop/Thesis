@@ -1,1 +1,1 @@
-java -jar alg-vis.jar algvis.ui.AlgVisStandalone
+java -jar alg-vis.jar
