@@ -30,3 +30,5 @@
 *.pyc
 *.preview.*
 *.preview_BB.*
+attachment/cd_contents/applet*.html
+figures/scripts/*.tex
