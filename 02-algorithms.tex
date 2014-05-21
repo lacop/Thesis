@@ -116,7 +116,7 @@ Toto je lepší výsledok ako dosahuje binárne vyhľadávanie. Stále však zos
 %To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku - $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
+Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
 \[
 \frac{\lg(2N+1)}{\lg(2B+1)} = \frac{\lg N + \bigO{1}}{\lg B + \bigO{1}} = \log_B{N} + \bigO{1} = \bigO{\log_B{N}}
 \]
@@ -203,7 +203,7 @@ Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najvä�
 \end{figure}
 
 \subsubsection{Prechod stromom v pamäti}
-Na rozdiel od klasického \emph{BFS} usporiadania nie je pri takomto usporiadaní v pamäti triviálne zistiť, na akej pozícii sa nachádzajú potomkovia alebo rodič aktuálneho vrcholu. Jedným možným riešením je spolu s každým vrcholom ukladať aj \emph{pointer} (ukazovateľ, adresa v pamäti) na tieto relevantné vrcholy. Tým znížime počet vrcholov, ktoré sa zmestia do jedného bloku o konštantný násobok -- v prípade, že je kľúč rovnako veľký ako \emph{pointer}, bude počet vrcholov v jednom bloku štvrtina pôvodného počtu.
+Na rozdiel od klasického \emph{BFS} usporiadania nie je pri takomto usporiadaní v pamäti triviálne zistiť, na akej pozícii sa nachádzajú potomkovia alebo rodič aktuálneho vrcholu. Jedným možným riešením je spolu s každým vrcholom ukladať aj ukazovateľ na tieto relevantné vrcholy. Tým znížime počet vrcholov, ktoré sa zmestia do jedného bloku o konštantný násobok -- v prípade, že je kľúč rovnako veľký ako ukazovateľ, bude počet vrcholov v jednom bloku štvrtina pôvodného počtu.
 
 Iným riešením je vnútorne pracovať s \emph{BFS} usporiadaním a prechádzať medzi pozíciami funkciami uvedenými v algoritme \ref{alg:naive_indexing}. Pri prístupe k vrcholu túto \emph{BFS} pozíciu prevedieme na ekvivalentnú pozíciu vo \vEB usporiadaní. Pri strome s $N$ vrcholmi je možné túto konverziu realizovať v čase $\bigO{\log\log N}$ \citep{kasheff2004cache}.
 
@@ -211,7 +211,7 @@ Iným riešením je vnútorne pracovať s \emph{BFS} usporiadaním a prechádza�
 
 Pri analýze vyhľadávania sa pozrime na také podstromy predošlého delenia, že ich veľkosť je $\Theta(B)$. Ďalšie delenie a preusporiadanie je už zbytočné, no to \obliv algoritmus nemá ako vedieť. Keďže ale po rekurzívnom volaní získame len iné usporiadanie, ktoré uložíme v súvislom úseku pamäte, bude stále možné tento podstrom načítať v $\bigO{1}$ blokoch.
 
-Majme teda vyhľadávací strom zložený z takýchto podstromov, ktorých veľkosť je medzi $\Omega(\sqrt{B})$ a $\bigO{B}$. Ich výška je teda $\Omega(\log{B})$. Pri strome výšky $\bigO{\log N}$ teda prejdeme cez $\bigO{\frac{\log{N}}{\log{B}}}$ takých podstromov a každý vyžaduje konštantný počet pamäťových presunov a spolu sa ich teda vykoná $\bigO{\log_B{N}}$, čo zodpovedá spodnej hranici tohto problému.
+Majme teda vyhľadávací strom zložený z takýchto podstromov, ktorých veľkosť je medzi $\Omega(\sqrt{B})$ a $\bigO{B}$. Ich výška je teda $\Theta(\log{B})$. Pri strome výšky $\bigO{\log N}$ teda prejdeme cez $\bigO{\frac{\log{N}}{\log{B}}}$ takých podstromov a každý vyžaduje konštantný počet pamäťových presunov. Spolu sa ich teda vykoná $\bigO{\log_B{N}}$, čo zodpovedá spodnej hranici tohto problému.
 
 Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimálne. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky - pri každej zmene by bolo potrebné strom preusporiadať. Dostávame tak \obliv ekvivalent statických \aware B-stromov. 
 
@@ -329,14 +329,14 @@ Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \r
 
 \emph{Kapacitou} vrchola $v$, $c(v)$, označíme počet položiek (aj prázdnych, teda aj s medzerami) poľa patriacich do blokov v podstrome začínajúcom v tomto vrchole. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. Ďalej \emph{hustotou}, $0 \le d(v) \le 1$, označíme $d(v) = \frac{o(v)}{c(v)}$. 
 
-Zvoľme ľubovolné konštanty $\rho_d, \tau_d, \rho_0, \tau_0$ spĺňajúce
+Zvoľme ľubovolné konštanty $\rho_0, \tau_0, \rho_d, \tau_d$ spĺňajúce
 \[
 0 < \rho_d < \rho_0 < \tau_0 < \tau_d < 1
 \]
 
 Z týchto konštánt definujeme pre vrchol s hĺbkou $k$ \emph{dolnú} a \emph{hornú hranicu hustoty} ($\rho_k$ a $\tau_k$) následovne:
 \[
-\rho_k = \rho_0 + \frac{k}{d}(\rho_d-\rho_0) ~~
+\rho_k = \rho_0 + \frac{k}{d}(\rho_d-\rho_0) \qquad
 \tau_k = \tau_0 - \frac{k}{d}(\tau_0-\tau_d)
 \]
 
@@ -350,7 +350,7 @@ Hovoríme, že vrchol $v$ hĺbky $k$ je \emph{v hraniciach} hustoty ak platí $\
 \subsection{Operácie}
 \subsubsection{Vkladanie}
 
-Implementácia operácie vkladania sa skladá z niekoľkých krokov. Najskôr zistíme, do ktorého bloku $v$ spadá pozícia, na ktorú vkladáme. Pozrieme sa, či je tento blok v hraniciach hustoty. Ak áno tak platí $d(v) < 1$ a teda $o(v) < c(v)$, čiže v tomto bloku je voľné miesto. Môžeme teda zapísať novú hodnotu do tohto bloku, pričom môže byť potrebné hodnoty v bloku popresúvať, avšak zmení sa najviac $S$ pozícii.
+Implementácia operácie vkladania sa skladá z niekoľkých krokov. Najskôr zistíme, do ktorého bloku $v$ spadá pozícia, na ktorú vkladáme. Pozrieme sa, či je tento blok v hraniciach hustoty. Ak áno tak platí $d(v) < 1$ a teda $o(v) < c(v)$, čiže v tomto bloku je voľné miesto. Môžeme teda zapísať novú hodnotu do tohto bloku, pričom môže byť potrebné hodnoty v bloku popresúvať, avšak zmení sa najviac $S = \Theta(\log{N})$ pozícii.
 
 V opačnom prípade je tento blok mimo hraníc hustoty. Budeme postupovať hore v strome dovtedy, kým nenájdeme vrchol v hraniciach. Keďže strom je iba pomyselný, budeme túto operáciu realizovať pomocou dvoch súčasných prechodov k okrajom poľa. Počas tohto prechodu si udržiavame počítadlá neprázdnych a všetkých pozícii a zastavíme v momente, keď hustota dosiahne požadované hranice.
 
@@ -506,7 +506,7 @@ Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v pr
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
 \subsection{Vyhľadávanie}
-Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}-\log_B{\log{N}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$. \todo{popis najdenia bloku - min/max, left child, ...}
+Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$. \todo{popis najdenia bloku - min/max, left child, ...}
 
 \subsection{Vkladanie a odstraňovanie}
 Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z neho kompletným prepísaním, čo vyžaduje $\bigO{\frac{\log{N}}{B}}$ presunov. Zároveň budeme udržiavať veľkosti blokov medzi $\frac{1}{4}\log{N}$ a $\log{N}$. Príliš malé skupiny môžeme spojiť do väčších a veľké rozdeliť na niekoľko menších. Skupina prekročí svoje hranice najskôr po $\Omega(\log{N})$ operáciách. V takom prípade po rozdelení alebo spojení bude potrebné vykonať vloženie alebo odstránenie z B-stromu. Vydelením dostávame amortizovanú zložitosť vkladania a odstraňovania:
