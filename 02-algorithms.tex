@@ -1,6 +1,6 @@
 \chapter{Cache-oblivius algoritmy a~dátové~štruktúry}
 
-V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modeli. Miestami tiež uvedieme ekvivalentnú \aware dátovú štruktúru pre vzájomné porovnanie efektívnosti.
+V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modeli. Zároveň uvedieme ekvivalentnú \aware dátovú štruktúru a vzájomne ich porovnáme.
 
 \section{Základné algoritmy}
 
@@ -116,9 +116,9 @@ Toto je lepší výsledok ako dosahuje binárne vyhľadávanie. Stále však zos
 %To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie. V najlepšom prípade je teda potrebných aspoň
+Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie -- hľadaný prvok je jeden z týchto $B$ prvkov alebo patrí v usporiadaní niekam medzi ne. V najlepšom prípade je teda potrebných aspoň
 \[
-\frac{\lg(2N+1)}{\lg(2B+1)} = \frac{\lg N + \bigO{1}}{\lg B + \bigO{1}} = \log_B{N} + \bigO{1} = \bigO{\log_B{N}}
+\frac{\lg(2N+1)}{\lg(2B+1)} \ge \frac{\lg N}{\lg B} = \Omega(\log_B{N})
 \]
 pamäťových presunov. 
 
@@ -159,7 +159,7 @@ Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. V�
 \[
 x-k,\dotsc,x-1,x,x+1,\dotsc,x+l
 \]
-kde $k+l=B-1$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ alebo $2x+1$ a teda nás pozície menšie ako $x$ nezaujímajú. V najlepšom prípade teda bude $k=0$ a $l=B-1$. Aby sa v tomto intervale nachádzali požadované vrcholy musí platiť
+kde $k+l=B-1$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ alebo $2x+1$ a teda nás pozície menšie ako $x$ nezaujímajú. V najlepšom prípade teda bude $k=0$ a $l=B-1$. Aby sa v tomto intervale nachádzali požadované vrcholy, musí platiť
 \[
 \begin{aligned}
 2x+1 &\le x+l = x+B-1 \\
@@ -168,19 +168,19 @@ x &\le B-2
 \]
 To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je rovnako ako binárne vyhľadávanie horšie v porovnaní s \aware B-stromom.
 
-\subsection{Statický \obliv vyhľadávací strom} \label{sec:static-obliv}
+\subsection{Vyhľadávací strom vo \vEB{ovom} usporiadaní} \label{sec:static-obliv}
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
 
-Riešením je takzvané \vEB \emph{usporiadanie} (\vEB \emph{layout}, nazvané podla \vEB stromov s podobnou myšlienkou), popísané v \citep{prokop1999cache,btreeshort,demaineoverview} ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude poradie $(v)$.
+Riešením je takzvané \vEB{ovo} \emph{usporiadanie} (\vEB{} \emph{layout}, nazvané podla \vEB{ových} stromov s podobnou myšlienkou), popísané v \citep{prokop1999cache,btreeshort,demaineoverview} ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude poradie $(v)$.
 
-Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najväčšiu mocninu dvoch menšiu ako $h$. Rozdelíme vstupný strom na podstrom $\tau_0$ výšky $h-m$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$ výšky $m$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Všetky tieto podstromy majú približne polovičnú výšku a teda ich veľkosť je $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$. Rekurzívne ich uložíme do \vEB usporiadania a následne uložíme za seba, výstupom teda bude poradie $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
+Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najväčšiu mocninu dvoch menšiu ako $h$. Rozdelíme vstupný strom na podstrom $\tau_0$ výšky $h-m$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$ výšky $m$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Všetky tieto podstromy majú približne polovičnú výšku a teda ich veľkosť je $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$. Rekurzívne ich uložíme do \vEB{ovho} usporiadania a následne uložíme za seba, výstupom teda bude poradie $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
 
 \begin{figure}
     \centering
     \resizebox{0.9\textwidth}{!}{
         \input{figures/vEB_tree/vEBlayout_scheme}
     }
-    \caption[Schematické znázornenie rekurzívneho delenia]{Schematické znázornenie rekurzívneho delenia pri \vEB usporiadaní. Podstromy $\tau_0,\dotsc,\tau_k$ sa uložia do súvislého úseku pamäte.}
+    \caption[Schematické znázornenie rekurzívneho delenia]{Schematické znázornenie rekurzívneho delenia pri \vEB{ovom} usporiadaní. Podstromy $\tau_0,\dotsc,\tau_k$ sa uložia do súvislého úseku pamäte.}
     \label{fig:veblayout_scheme}
 \end{figure}
 
@@ -192,20 +192,20 @@ Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najvä�
         }
         \label{fig:node_order_naive}
     }
-    \subbottom[\vEB usporiadanie] {
+    \subbottom[\vEB{ovo} usporiadanie] {
         \resizebox{\textwidth}{!}{
             \input{figures/vEB_tree/node_order_veb}
         }
         \label{fig:node_order_veb}
     }
-    \caption[Porovnanie klasického a \vEB usporiadania]{Porovnanie klasického a \vEB usporiadania na úplnom binárnom strome výšky $5$. Čísla vo vrcholoch určujú poradie v pamäti.}
+    \caption[Porovnanie klasického a \vEB{ovho} usporiadania]{Porovnanie klasického a \vEB{ovho} usporiadania na úplnom binárnom strome výšky $5$. Čísla vo vrcholoch určujú poradie v pamäti.}
     \label{fig:node_order_comparison}
 \end{figure}
 
 \subsubsection{Prechod stromom v pamäti}
 Na rozdiel od klasického \emph{BFS} usporiadania nie je pri takomto usporiadaní v pamäti triviálne zistiť, na akej pozícii sa nachádzajú potomkovia alebo rodič aktuálneho vrcholu. Jedným možným riešením je spolu s každým vrcholom ukladať aj ukazovateľ na tieto relevantné vrcholy. Tým znížime počet vrcholov, ktoré sa zmestia do jedného bloku o konštantný násobok -- v prípade, že je kľúč rovnako veľký ako ukazovateľ, bude počet vrcholov v jednom bloku štvrtina pôvodného počtu.
 
-Iným riešením je vnútorne pracovať s \emph{BFS} usporiadaním a prechádzať medzi pozíciami funkciami uvedenými v algoritme \ref{alg:naive_indexing}. Pri prístupe k vrcholu túto \emph{BFS} pozíciu prevedieme na ekvivalentnú pozíciu vo \vEB usporiadaní. Pri strome s $N$ vrcholmi je možné túto konverziu realizovať v čase $\bigO{\log\log N}$ \citep{kasheff2004cache}.
+Iným riešením je vnútorne pracovať s \emph{BFS} usporiadaním a prechádzať medzi pozíciami funkciami uvedenými v algoritme \ref{alg:naive_indexing}. Pri prístupe k vrcholu túto \emph{BFS} pozíciu prevedieme na ekvivalentnú pozíciu vo \vEB{ovom} usporiadaní. Pri strome s $N$ vrcholmi je možné túto konverziu realizovať v čase $\bigO{\log\log N}$ \citep{kasheff2004cache}.
 
 \subsubsection{Vyhľadávanie} \label{sec:static-search}
 
@@ -218,7 +218,7 @@ Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimáln
 Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v sekcii \ref{sec:orderedfile}.
 
 \subsection{Rozdiely v prístupe ku pamäti} \label{sec:memaccess_patterns}
-Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami v \emph{BFS} a \vEB usporiadaniach sú vizuálne znázornené na obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} na strane \pageref{fig:search_comparison1}. Pozrime sa však najskôr na menší obrázok \ref{fig:search_comparison_small}, na ktorom vysvetlíme princíp tejto vizualizácie.
+Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami v \emph{BFS} a \vEB{} usporiadaniach sú vizuálne znázornené na obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} na strane \pageref{fig:search_comparison1}. Pozrime sa však najskôr na menší obrázok \ref{fig:search_comparison_small}, na ktorom vysvetlíme princíp tejto vizualizácie.
 
 \begin{figure}[h]
     \centering
@@ -232,7 +232,7 @@ Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami
             \input{figures/search_comparison/small_bfstree}
         }
     }
-    \subtop[\vEB strom] {
+    \subtop[\vEB{ov} strom] {
         \resizebox{0.3\textwidth}{!} {
             \input{figures/search_comparison/small_vebtree}
         }
@@ -253,7 +253,7 @@ Ako ľahko vidieť, binárne vyhľadávanie začne v strede a presúva sa medzi 
 
 Naopak strom v \emph{BFS} usporiadaní robí stále väčšie a väčšie \emph{skoky} a porovnávané prvky sa do jedného bloku zmestia iba na začiatku.
 
-Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalších krokoch pristupuje k prvkom, ktoré sú v pamäti blízko a veľký \emph{skok}, ktorý pristúpi mimo \cache, vykonáva menej často. Vďaka tomu dosahuje v oboch príkladoch najlepší počet zásahov do \cache, teda najviac zelených políčok.
+Avšak strom vo \vEB{ovom} usporiadaní potom čo pristúpi k nejakému prvku v ďalších krokoch pristupuje k prvkom, ktoré sú v pamäti blízko a veľký \emph{skok}, ktorý pristúpi mimo \cache, vykonáva menej často. Vďaka tomu dosahuje v oboch príkladoch najlepší počet zásahov do \cache, teda najviac zelených políčok.
 
 % 243 binsearch   G:2 R:7
 % 243 bfs         G:1 R:8
@@ -276,7 +276,7 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
             \input{figures/search_comparison/height9_find243_bfstree}
         }
     }
-    \subbottom[Strom vo \vEB usporiadaní] {
+    \subbottom[Strom vo \vEB{ovom} usporiadaní] {
         \resizebox{\textwidth}{!}{
             \input{figures/search_comparison/height9_find243_vebtree}
         }
@@ -296,7 +296,7 @@ Avšak strom vo \vEB usporiadaní potom čo pristúpi k nejakému prvku v ďalš
             \input{figures/search_comparison/height9_find427_bfstree}
         }
     }
-    \subbottom[Strom vo \vEB usporiadaní] {
+    \subbottom[Strom vo \vEB{ovom} usporiadaní] {
         \resizebox{\textwidth}{!}{
             \input{figures/search_comparison/height9_find427_vebtree}
         }
@@ -400,14 +400,14 @@ V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prv
 V prípade \aware modelu použijeme opäť B-strom s vetvením $\Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Popis \obliv štruktúry}
-Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) - jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať úplný binárny statický vyhľadávací strom uložený vo \vEB usporiadaní. Listy tohto stromu budú bijektívne spárované s položkami v usporiadanom poli (obrázok \ref{fig:cobtree_overview}).
+Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) - jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať úplný binárny statický vyhľadávací strom uložený vo \vEB{ovom} usporiadaní. Listy tohto stromu budú bijektívne spárované s položkami v usporiadanom poli (obrázok \ref{fig:cobtree_overview}).
 
 \begin{figure}
     \centering
     \resizebox{\textwidth}{!}{
         \input{figures/dynamic_tree/overview}
     }
-    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením statického stromu vo \vEB usporiadaní a usporiadaného pola. Šipky znázorňujú spárovanie listov a položiek pola.}
+    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením statického stromu vo \vEB{ovom} usporiadaní a usporiadaného pola. Šipky znázorňujú spárovanie listov a položiek pola.}
     \label{fig:cobtree_overview}
 \end{figure}
 
@@ -418,7 +418,7 @@ Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa,
 
 \subsubsection{Analýza}
 
-Toto prehľadávanie prechádza cestu od koreňa k listu v strome hĺbky $\bigO{\log{N}}$ uloženom vo \vEB usporiadaní a teda rovnako ako v časti \ref{sec:static-search} vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
+Toto prehľadávanie prechádza cestu od koreňa k listu v strome hĺbky $\bigO{\log{N}}$ uloženom vo \vEB{ovom} usporiadaní a teda rovnako ako v časti \ref{sec:static-search} vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Vkladanie}
 Zaujímavejšou operáciou je vkladanie, ktoré v pôvodnom statickom strome nebolo možné. Prvým krokom je nájdenie pozície, na ktorú tento kľúč patrí. To dosiahneme podobne ako v predošlej sekcii. Budeme ale hľadať predchádzajúci a nasledujúci kľúč. Tým nájdeme v usporiadanom poli dvojicu pozícii, medzi ktoré chceme vložiť novú hodnotu.
@@ -462,9 +462,9 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
 Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať.
 
 \subsubsection{Spodné dve úrovne}
-Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB delenia, ktoré sa ako prvé zmestia do bloku \cache a teda ich veľkosť je medzi $\sqrt{B}$ a $B$. Pozrime sa na spodné dve úrovne takýchto podstromov. Listy spodnej teda budú listy celého statického strom a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
+Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktoré sa ako prvé zmestia do bloku \cache a teda ich veľkosť je medzi $\sqrt{B}$ a $B$. Pozrime sa na spodné dve úrovne takýchto podstromov. Listy spodnej teda budú listy celého statického strom a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
 
-Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Označme podstromy, ktoré vznikly rekurzívnym \vEB delením z podstromu $T$ veľkosti viac než $B$, rovnako, ako v časti \ref{sec:static-obliv}: $\tau_0, \tau_1, \dotsc, \tau_k$. Tu $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
+Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Označme podstromy, ktoré vznikly rekurzívnym \vEB{ovým} delením z podstromu $T$ veľkosti viac než $B$, rovnako, ako v časti \ref{sec:static-obliv}: $\tau_0, \tau_1, \dotsc, \tau_k$. Tu $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
 
 Pri \emph{post-order} prechode cez podstrom $T$ budeme prejdeme najskôr cez ľavých synov od koreňa $\tau_0$ cez $\tau_1$ až do listu. Následne bude \emph{post-order} prechod prebiehať v podstrome $\tau_1$, až kým nebudú všetky jeho vrcholy a napokon aj koreň aktualizované. Potom sa vrátime do $\tau_0$ a k $\tau_1$ už pristupovať nebudeme ale prejdeme nasledovný podstrom, $\tau_2$. Takto postupne aktualizujeme všetky podstromy, pričom postupnosť navštívených podstromov bude
 \[
