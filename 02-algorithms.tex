@@ -397,33 +397,33 @@ Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľk
 V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry pochádza z \citep{btreeshort,btreefull}, bola avšak značne komplikovaná. Preto použijeme zjednodušenú verziu z \citep{bender2002}, ktorá dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
 
 \subsection{\Aware riešenie}
-V prípade \aware modelu použijeme opäť B-strom s vetvením $\Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
+V prípade \aware modelu môžeme na riešenie tohto problému opäť použiť B-strom s vetvením $\Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Popis \obliv štruktúry}
-Táto dátová štruktúra vznikne zložením predchádzajúcich dvoch - statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) - jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať úplný binárny statický vyhľadávací strom uložený vo \vEB{ovom} usporiadaní. Listy tohto stromu budú bijektívne spárované s položkami v usporiadanom poli (obrázok \ref{fig:cobtree_overview}).
+Túto dátovú štruktúru vytvoríme zložením predchádzajúcich dvoch -- statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) -- jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať úplný binárny statický vyhľadávací strom uložený vo \vEB{ovom} usporiadaní. Listy tohto stromu budú prvky usporiadaného poľa (pozri obrázok \ref{fig:cobtree_overview}).
 
 \begin{figure}
     \centering
     \resizebox{\textwidth}{!}{
         \input{figures/dynamic_tree/overview}
     }
-    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením statického stromu vo \vEB{ovom} usporiadaní a usporiadaného pola. Šipky znázorňujú spárovanie listov a položiek pola.}
+    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením usporiadaného poľa a statického stromu vo \vEB{ovom} usporiadaní. Šipky znázorňujú spárovanie listov a položiek pola.}
     \label{fig:cobtree_overview}
 \end{figure}
 
-Kľúče, ktoré táto štruktúra obsahuje, sú uložené v usporiadanom poli (s medzerami). Listy statického stromu obsahujú v svojich kľúčoch rovnakú hodnotu ako k ním prislúchajúce položky usporiadaného pola. Medzeru reprezentujeme hodnotou, ktorá je pri použitom usporiadaní najmenšia. Ostatné vrcholy stromu obsahujú ako kľúč maximum z kľúčov svojich synov.
+Kľúče, ktoré táto štruktúra obsahuje, sú uložené v usporiadanom poli (s medzerami). Listy statického stromu obsahujú v svojich kľúčoch rovnakú hodnotu ako k ním prislúchajúce položky usporiadaného poľa. Medzeru reprezentujeme hodnotou, ktorá je pri použitom usporiadaní najmenšia (v prípade číselných kľúčov $-\infty$). Ostatné vrcholy stromu obsahujú ako kľúč maximum z kľúčov svojich synov.
 
 \subsection{Vyhľadávanie} \label{sec:dynamic-obliv-search}
-Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa, porovnáme hľadaný kľúč s kľúčom v ľavom synovi. Pokiaľ je hľadaný väčší, bude v pravom podstrome (keďže maximum z celého ľavého podstromu je práve kľúč ľavého syna), ktorý rekurzívne prehľadáme. V opačnom prípade prehľadáme ľavý podstrom. Keď dosiahneme list, porovnáme jeho kľúč s hľadaným. Ak sa zhodujú tak sme požadovanú položku našli, inak sa v štruktúre nenachádza.
+Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa, porovnáme hľadaný kľúč s kľúčom v ľavom synovi. Pokiaľ je hľadaný prvok väčší, bude v pravom podstrome (keďže maximum z celého ľavého podstromu je práve kľúč ľavého syna), ktorý rekurzívne prehľadáme. V opačnom prípade prehľadáme ľavý podstrom. Keď dosiahneme list, porovnáme jeho kľúč s hľadaným. Ak sa zhodujú, našli sme požadovanú položku a v opačnom prípade sa v štruktúre nenachádza.
 
 \subsubsection{Analýza}
 
-Toto prehľadávanie prechádza cestu od koreňa k listu v strome hĺbky $\bigO{\log{N}}$ uloženom vo \vEB{ovom} usporiadaní a teda rovnako ako v časti \ref{sec:static-search} vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
+Toto prehľadávanie prechádza cestu od koreňa k listu v strome hĺbky $\bigO{\log{N}}$ uloženom vo \vEB{ovom} usporiadaní a teda, rovnako ako v časti \ref{sec:static-search}, vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Vkladanie}
 Zaujímavejšou operáciou je vkladanie, ktoré v pôvodnom statickom strome nebolo možné. Prvým krokom je nájdenie pozície, na ktorú tento kľúč patrí. To dosiahneme podobne ako v predošlej sekcii. Budeme ale hľadať predchádzajúci a nasledujúci kľúč. Tým nájdeme v usporiadanom poli dvojicu pozícii, medzi ktoré chceme vložiť novú hodnotu.
 
-Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Následne bude potrebné aktualizovať kľúče v statickom strome, aby opäť obsahovali maximum zo svojich synov. Túto aktualizáciu dosiahneme takzvaným \emph{post-order} prechodom, kedy sa vrchol aktualizuje až po tom, čo boli aktualizovaný jeho synovia. Tým máme zaručené, že po aktualizácii vrchol obsahuje výslednú, korektnú hodnotu. Implementácia takéhoto prechodu je naznačená v algoritme \ref{alg:postorder}.
+Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Následne bude potrebné aktualizovať kľúče v statickom strome, aby opäť obsahovali maximum zo svojich synov. Túto aktualizáciu dosiahneme takzvaným \emph{post-order} prechodom, kedy sa vrchol aktualizuje až po tom, čo boli aktualizovaní jeho synovia. Tým máme zaručené, že po aktualizácii vrchol obsahuje výslednú, korektnú hodnotu. Implementácia takéhoto prechodu je naznačená v algoritme \ref{alg:postorder}.
 
 \begin{algorithm}
     \caption{Implementácia \emph{post-order} prechodu na aktualizáciu statického stromu}
@@ -459,27 +459,27 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
     \label{fig:cobtree_analysis_parts}
 \end{figure}
 
-Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať.
+Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať. Budeme predpokladať, že veľkosť zmeneného intervalu v usporiadanom poli je $K$.
 
 \subsubsection{Spodné dve úrovne}
-Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktoré sa ako prvé zmestia do bloku \cache a teda ich veľkosť je medzi $\sqrt{B}$ a $B$. Pozrime sa na spodné dve úrovne takýchto podstromov. Listy spodnej teda budú listy celého statického strom a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
+Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktoré sa ako prvé zmestia do bloku \cache a teda ich veľkosť je medzi $\sqrt{B}$ a $B$. Pozrime sa na spodné dve úrovne takýchto podstromov. Listy spodnej úrovne budú listy celého statického stromu a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
 
-Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Označme podstromy, ktoré vznikly rekurzívnym \vEB{ovým} delením z podstromu $T$ veľkosti viac než $B$, rovnako, ako v časti \ref{sec:static-obliv}: $\tau_0, \tau_1, \dotsc, \tau_k$. Tu $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
+Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Označme podstromy, ktoré vznikli rekurzívnym \vEB{ovým} delením z podstromu $T$ veľkosti viac než $B$, rovnako, ako v časti \ref{sec:static-obliv}: $\tau_0, \tau_1, \dotsc, \tau_k$. Tu $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
 
-Pri \emph{post-order} prechode cez podstrom $T$ budeme prejdeme najskôr cez ľavých synov od koreňa $\tau_0$ cez $\tau_1$ až do listu. Následne bude \emph{post-order} prechod prebiehať v podstrome $\tau_1$, až kým nebudú všetky jeho vrcholy a napokon aj koreň aktualizované. Potom sa vrátime do $\tau_0$ a k $\tau_1$ už pristupovať nebudeme ale prejdeme nasledovný podstrom, $\tau_2$. Takto postupne aktualizujeme všetky podstromy, pričom postupnosť navštívených podstromov bude
+Pri \emph{post-order} prechode cez podstrom $T$ prejdeme najskôr cez ľavých synov od koreňa $\tau_0$ cez $\tau_1$ až do listu. Následne bude \emph{post-order} prechod prebiehať v podstrome $\tau_1$, až kým nebudú všetky jeho vrcholy a napokon aj koreň aktualizované. Potom sa vrátime do $\tau_0$ a k $\tau_1$ už pristupovať nebudeme ale prejdeme nasledovný podstrom, $\tau_2$. Takto postupne aktualizujeme všetky podstromy, pričom postupnosť navštívených podstromov bude
 \[
 \tau_0, \tau_1, \tau_0, \tau_2, \dotsc, \tau_0, \tau_i, \tau_0, \dotsc, \tau_k, \tau_0
 \]
 
 Vidíme, že pokiaľ dokážeme udržať v \cache aspoň dva také podstromy, teda za predpokladu $M \ge 4B$, sme schopný takýto \emph{post-order} prechod zrealizovať pomocou $\bigO{1}$ pamäťových operácii pre každý podstrom veľkosti $\le B$. Takéto podstromy majú $\bigO{B}$ listov, pričom  nimi potrebujeme pokryť interval veľkosti $K$ (podstromy, ktorých žiaden list neleží v upravenom intervale nie je potrebné aktualizovať) a teda celkový počet podstromov na spodných dvoch úrovniach, ktoré potrebujeme načítať a upraviť je $\bigO{\frac{K}{B}}$ a stačí nám na to $\bigO{\frac{K}{B}}$ pamäťových presunov.
 
-\subsubsection{Stredná časť - najbližší spoločný predok}
-Označme ako $T_1,\dotsc,T_l$ tie stromy veľkosti $>B$ obsahujúce postromy veľkosti $\le B$ na spodných dvoch úrovniach, ktoré boli v predošlej časti aktualizované. Platí teda $l = \bigO{\frac{K}{B}}$. Označme $U$ taký podstrom statického stromu, ktorého koreň je najbližší spoločný predok koreňov $T_1,\dotsc,T_l$. Ak je tento koreň v hĺbke $h$ tak $U$ obsahuje všetky vrcholy hĺbky $\ge h$, ktoré treba aktualizovať - tie mimo $U$ nie sú predkovia upravených vrcholov a teda hodnoty kľúčov ich potomkov neboli v prvej časti zmenené, alebo už boli aktualizované ako súčasť nejakého podstromu $T_i$ na spodnej úrovni.
+\subsubsection{Stredná časť -- najbližší spoločný predok}
+Označme ako $T_1,\dotsc,T_\ell$ tie stromy, ktoré obsahujú aktualizované podstromy veľkosti najviac $B$ na spodných dvoch úrovniach. Platí teda $\ell = \bigO{\frac{K}{B}}$. Označme $U$ taký podstrom statického stromu, ktorého koreň je najbližší spoločný predok koreňov $T_1,\dotsc,T_\ell$. Ak je tento koreň v hĺbke $h$ tak $U$ obsahuje všetky vrcholy hĺbky aspoň $h$, ktoré treba aktualizovať - tie mimo $U$ nie sú predkovia upravených vrcholov a teda hodnoty kľúčov ich potomkov neboli v prvej časti zmenené, alebo už boli aktualizované ako súčasť nejakého podstromu $T_i$ na spodnej úrovni.
 
 Počet vrcholov $U$ je najviac dvojnásobok počtu listov a teda $|U| = \bigO{l} = \bigO{\frac{K}{B}}$. Keďže pri \emph{post-order} prechode navštívime každý vrchol $\bigO{1}$ krát (najprv pri prechode z koreňa ku listom, pričom následne rekurzívne prejdeme ľavého a pravého syna, a potom pri návrate z rekurzie) a teda celkovo budeme potrebovať $\bigO{\frac{K}{B}}$ pamäťových presunov na aktualizáciu $U$.
 
-\subsubsection{Horná časť - cesta z najbližšieho spoločného predka do koreňa}
-Posledná množina vrcholov, ktoré je potrebné aktualizovať je cesta z koreňa $U$ do koreňa statického stromu. Dĺžka tejto cesty je obmedzená výškou stromu $\bigO{\log{N}}$ a pri aktualizovaní prechádzame cez jej vrcholy postupne. Podobne ako pri vyhľadávaní (časť \ref{sec:dynamic-obliv-search}) bude potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
+\subsubsection{Horná časť -- cesta z najbližšieho spoločného predka do koreňa}
+Posledná množina vrcholov, ktoré je potrebné aktualizovať,     je cesta z koreňa $U$ do koreňa statického stromu. Dĺžka tejto cesty je obmedzená výškou stromu $\bigO{\log{N}}$ a pri aktualizovaní prechádzame cez jej vrcholy postupne. Podobne ako pri vyhľadávaní (časť \ref{sec:dynamic-obliv-search}) bude potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsubsection{Výsledná zložitosť}
 Sčítaním nasledovných zložitostí počtu pamäťových operácii
@@ -501,7 +501,7 @@ Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli
 
 \section{Vylepšený dynamický B-strom}
 \epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
-Oproti \aware B-stromom ma pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Tento člen môžeme odstrániť jednoduchou modifikáciou.
+Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Tento člen môžeme odstrániť jednoduchou modifikáciou.
 
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
