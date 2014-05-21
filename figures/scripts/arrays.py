@@ -1,14 +1,18 @@
 import node_order
 
 # SMALL
-#height=5
-#find=17
+height=5
+find=17
 
 # LARGE
-height = 9
-find = 243
+#height = 9
+#find = 243
 #find = 427
+
+
 blocksize = 4
+# memory-aligned blocks
+aligned = True
 
 nodewidth = 0.25
 nodeheight = 0.25
@@ -40,41 +44,45 @@ def setkey(v, q, off):
 setkey(bfs, 2**height, 0)
 setkey(veb, 2**height, 0)
 
+def access(pos, stats, meh=False):
+    accessed, loaded, miss = stats
+    accessed.append(pos)
+    #print("access"+str(pos))
+    if pos not in loaded:
+        miss.append(pos)
+        startpos = pos
+        if aligned:
+            if meh:
+                startpos -= (pos-1)%blocksize
+            else:
+                startpos -= pos%blocksize
+        for i in range(blocksize):
+            #print("\tload"+str(startpos+i))
+            loaded.append(startpos + i)
+
 def treesearch(v, key):
-    loaded = []
-    accessed = []
-    miss = []
+    stats = ([], [], [])
 
     while v is not None:
-        accessed.append(v.order)
-        if v.order not in loaded:
-            miss.append(v.order)
-            for i in range(blocksize):
-                loaded.append(v.order + i)
+        access(v.order, stats, True)
         if v.key == key:
             break
         if v.key < key:
             v = v.right
         else:
             v = v.left
-    return (accessed, loaded, miss)
+    return stats
 
 array = range(1, 2**height)
 
 def binsearch(arr, key):
-    loaded = []
-    accessed = []
-    miss = []
+    stats = ([], [], [])
 
     left = 0
     right = len(arr)
     while True:
         mid = (left+right) // 2
-        accessed.append(mid)
-        if mid not in loaded:
-            miss.append(mid)
-            for i in range(blocksize):
-                loaded.append(mid + i)
+        access(mid, stats)
 
         #print(mid, left, right)
         if left == right:
@@ -87,7 +95,7 @@ def binsearch(arr, key):
         else:
             right = mid
     #print(accessed, loaded, miss)
-    return (accessed, loaded, miss)
+    return stats
 
 def drawnode(order, key, info, y, meh=False):
     accessed, loaded, miss = info
@@ -189,14 +197,14 @@ def printall():
     printtree(veb, -2*sep)
     print()
 
-from os import open, close, dup, O_WRONLY, O_CREAT
+from os import open, close, dup, O_WRONLY, O_CREAT, O_TRUNC, O_BINARY
 
 def printfiles():
     print('Writing to files...')
     old = dup(1)
     close(1)
 
-    open('height{}_find{}_binsearch.tex'.format(height, find), O_WRONLY|O_CREAT)
+    open('height{}_find{}_binsearch.tex'.format(height, find), O_WRONLY|O_CREAT|O_TRUNC|O_BINARY)
     print('\\begin{tikzpicture}')
     print('% height={}, finding={}, blocksize={}'.format(height, find, blocksize))
     print()
@@ -205,7 +213,7 @@ def printfiles():
     print('\\end{tikzpicture}')
     close(1)
 
-    open('height{}_find{}_bfstree.tex'.format(height, find), O_WRONLY|O_CREAT)
+    open('height{}_find{}_bfstree.tex'.format(height, find), O_WRONLY|O_CREAT|O_TRUNC|O_BINARY)
     print('\\begin{tikzpicture}')
     print('% height={}, finding={}, blocksize={}'.format(height, find, blocksize))
     print()
@@ -214,7 +222,7 @@ def printfiles():
     print('\\end{tikzpicture}')
     close(1)
 
-    open('height{}_find{}_vebtree.tex'.format(height, find), O_WRONLY|O_CREAT)
+    open('height{}_find{}_vebtree.tex'.format(height, find), O_WRONLY|O_CREAT|O_TRUNC|O_BINARY)
     print('\\begin{tikzpicture}')
     print('% height={}, finding={}, blocksize={}'.format(height, find, blocksize))
     print()

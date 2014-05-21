@@ -241,13 +241,13 @@ Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami
     \label{fig:search_comparison_small}
 \end{figure}
 
-Jednotlivé políčka sú položky poľa, pričom v pamäti sú usporiadané v poradí zhora nadol a zľava doprava. Samotné kľúče (vo vrcholoch stromov) sú však usporiadané inak a preto sú tieto prístupy inak efektívne. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 2^h-1\}$ čo je počet vrcholov úplného binárneho stromu výšky $h$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. 
+Jednotlivé políčka sú položky poľa, pričom v pamäti sú usporiadané v poradí zhora nadol a zľava doprava. Samotné kľúče (vo vrcholoch stromov) sú však usporiadané inak a preto sú tieto prístupy inak efektívne. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 2^h-1\}$, čo je počet vrcholov úplného binárneho stromu výšky $h$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. Bloky sú v zarovnané tak, že jeden stĺpec predstavuje jeden blok a teda sa pri načítaní ľubovolného políčka spolu s ním načíta celý príslušný stĺpec.
 
 Červená farba reprezentuje prvky, ktoré sa v momente prístupu nenachádzali v \cache a bolo potrebné ich načítať (\miss). Zelená naopak označuje prvky, ktoré už v \cache boli (\hit) -- načítali sa spolu s nejakým červeným prvkom v rovnakom bloku. Ostatné prvky, ktoré sa načítali ako súčasť bloku ale neboli použité, sú označené žltou farbou. V tejto simulácii je počet blokov v \cache ($\frac{M}{B}$) pre jednoduchosť neobmedzený.
 
 V malom obrázku \ref{fig:search_comparison_small} (výška stromu $h=5$) šípky určujú poradie, v akom vyhľadávanie pristupovalo k jednotlivým prvkom. Vo veľkých obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} (výška stromu $h=9$) sú šípky pre prehľadnosť vynechané a políčko s bodkou označuje pozíciu, na ktorej bol napokon požadovaný prvok nájdený. Rozdiely medzi týmito troma prístupmi k vyhľadávaniu je lepšie vidieť práve na väčších obrázkoch.
 
-Keďže všetky hľadané hodnoty ($17$, $243$ a $427$) boli zvolené ako listy týchto vyhľadávacích stromov, pristúpili operácie vyhľadávania vo všetkých troch prípadoch práve k $h$ prvkom. Rozdiel je však v pomere počtu červených (ktoré v \cache neboli a bolo ich potrebné načítať) a zelených (na ktoré nebol potrebný pamäťový presun) prvkov.
+Keďže všetky hľadané hodnoty boli zvolené ako listy týchto vyhľadávacích stromov, pristúpili operácie vyhľadávania vo všetkých troch prípadoch práve k $h$ prvkom. Rozdiel je však v pomere počtu červených (ktoré v \cache neboli a bolo ich potrebné načítať) a zelených (na ktoré nebol potrebný pamäťový presun) prvkov.
 
 Ako ľahko vidieť, binárne vyhľadávanie začne v strede a presúva sa medzi prvkami, ktoré sú od seba  čoraz menej vzdialené až do momentu, kedy už je prehľadávaný interval dostatočne malý na to, aby sa zmestil do bloku.
 
