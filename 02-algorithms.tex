@@ -54,10 +54,12 @@ Pokiaľ $\lfloor \frac{N}{B} \rfloor < \lceil \frac{N}{B} \rceil$ máme spolu na
 Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bigO{\frac{N}{B}}$ ako optimálny \aware algoritmus, ktorého implementácia je však jednoduchšia, keďže nemusí explicitne spravovať presun blokov do cache. Parameter $B$ sme použili len počas analýzy, v samotnom návrhu algoritmu nie.
 
 \section{Vyhľadávanie v statickej množine}
-Častým problémom v informatike je nutnosť rýchlo a efektívne vyhľadávať prvok v nejakej statickej množine prvkov. V tejto sekcii popíšeme niekoľko algoritmov a dátových štruktúr, ktoré tento problém riešia. Všetky majú v \emph{RAM} modeli časovú zložitosť $\bigO{\log N}$, kde $N$ je počet prvkov v prehľadávanej množine, no v \aware a \obliv modeloch sa budú líšiť počtom pamäťových presunov, ktoré vykonajú.
+Častým problémom v informatike je nutnosť rýchlo a efektívne vyhľadávať prvok v nejakej statickej množine prvkov. Tento problém by šiel riešiť hašovaním, budeme však uvažovať usporiadanú množinu, v ktorej chceme vedieť efektívne pristúpiť k predchádzajúcemu a nesledujúcemu prvku. V tejto sekcii popíšeme niekoľko algoritmov a dátových štruktúr, ktoré tento problém riešia. Všetky majú v \emph{RAM} modeli časovú zložitosť $\bigO{\log N}$, kde $N$ je počet prvkov v prehľadávanej množine, no v \aware a \obliv modeloch sa budú líšiť počtom pamäťových presunov, ktoré vykonajú.
+
+Tento rozdiel je spôsobený iným usporiadaním prvkov v pamäti. Keďže majú všetky uvedené prístupy logaritmickú časovú zložitosť bude počet presunutých blokov najviac $\bigO{\log{N}}$. V tomto odhade však nevystupujú žiadne parametre \cache a teda ich zväčšenie tento algoritmus nemusí urýchliť. Ukážeme ale dátovú štruktúru, ktorá dosahuje podstatne lepší výsledok $\bigO{\log_B{N}}$ a bude nám tiež slúžiť ako základ pri riešení dynamickej verzie tohto problému.
 
 \subsection{Binárne vyhľadávanie}
-Pozrime sa najskôr na binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde prvok $K$ v usporiadanom poli \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
+Ako prvé popíšeme binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde prvok $K$ v usporiadanom poli \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
 
 \begin{algorithm}
     \caption{Implementácia binárneho vyhľadávania}
@@ -107,7 +109,9 @@ Toto je lepší výsledok ako dosahuje binárne vyhľadávanie. Stále však zos
 %To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-Ukážeme odvodenie minimálneho počtu pamäťových presunov rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie -- hľadaný prvok je jeden z týchto $B$ prvkov alebo patrí v usporiadaní niekam medzi ne. V najlepšom prípade je teda potrebných aspoň
+Pri vyhľadávaní potrebujeme pristúpiť k aspoň $\Omega(\log{N})$ prvkom. Tie by v ideálnom prípade boli uložené v $\Omega(\frac{\log{N}}{B})$ blokoch, čo je spodná hranica počtu pamäťových presunov. Tento odhad je ale príliš optimistický -- ako ukážeme odvodením väčšej spodnej hranice, nie je možné ho dosiahnuť.
+
+Toto odvodenie spravíme rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie -- hľadaný prvok je jeden z týchto $B$ prvkov alebo patrí v usporiadaní niekam medzi ne. V najlepšom prípade je teda potrebných aspoň
 \[
 \frac{\lg(2N+1)}{\lg(2B+1)} \ge \frac{\lg N}{\lg B} = \Omega(\log_B{N})
 \]
@@ -116,7 +120,7 @@ pamäťových presunov.
 Vidíme teda, že na rozdiel od \obliv binárneho vyhľadávania, \aware B-strom je asymptoticky optimálnym riešením tohto problému. Chceli by sme teraz nájsť \obliv dátovú štruktúru, ktorá tiež dosahuje túto hranicu.
 
 \subsection{Naivné \obliv riešenie} \label{sec:static-naive}
-Predtým ako popíšeme efektívne \obliv riešenie, pozrime sa na klasický binárny vyhľadávací strom. Asi najjednoduchší spôsob, ako usporiadať uzly (statického) binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude teda na pozícii $\lfloor\frac{x}{2}\rfloor$. Toto usporiadanie voláme \emph{BFS usporiadanie} (z anglického \emph{breadth-first search} -- prehľadávanie do šírky), keďže pozície vrcholov sa zvyšujú v rovnakom poradí ako by prebiehalo prehľadávanie tohto stromu do šírky. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
+Predtým ako popíšeme efektívne \obliv riešenie, sa pozrime na klasický binárny vyhľadávací strom. Asi najjednoduchší spôsob, ako usporiadať uzly (statického) binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude teda na pozícii $\lfloor\frac{x}{2}\rfloor$. Toto usporiadanie voláme \emph{BFS usporiadanie} (z anglického \emph{breadth-first search} -- prehľadávanie do šírky), keďže pozície vrcholov sa zvyšujú v rovnakom poradí ako by prebiehalo prehľadávanie tohto stromu do šírky. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
 
 Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiavanie stromu stačí jednorozmerné pole kľúčov. Na prechod medzi nimi môžeme použiť triviálne funkcie uvedene v algoritme \ref{alg:naive_indexing}.
 
