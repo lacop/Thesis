@@ -166,9 +166,11 @@ To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun 
 \subsection{Vyhľadávací strom vo \vEB{ovom} usporiadaní} \label{sec:static-obliv}
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
 
-Riešením je takzvané \vEB{ovo} \emph{usporiadanie} (\vEB{} \emph{layout}, nazvané podla \vEB{ových} stromov s podobnou myšlienkou), popísané v \citep{prokop1999cache,btreeshort,demaineoverview} ktoré funguje následovne. Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude poradie $(v)$.
+Možným riešením je takzvané \vEB{ovo} \emph{usporiadanie} (\vEB{} \emph{layout}, nazvané podla \vEB{ových} stromov s podobnou myšlienkou), ktoré popísali Bender \etal\citep{btreeshort, btreefull}. Toto usporiadanie vznikne rekurzívnym delením, ktoré schéma je na obrázku \ref{fig:veblayout_scheme} a príklad takto uloženého stromu na obrázku \ref{fig:node_order_veb}.
 
-Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najväčšiu mocninu dvoch menšiu ako $h$. Rozdelíme vstupný strom na podstrom $\tau_0$ výšky $h-m$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$ výšky $m$, ktorých korene sú potomkovia listov $\tau_0$ a listy sú listy vstupného stromu. Všetky tieto podstromy majú približne polovičnú výšku a teda ich veľkosť je $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$. Rekurzívne ich uložíme do \vEB{ovho} usporiadania a následne uložíme za seba, výstupom teda bude poradie $(\tau_0,\tau_1,\dotsc,\tau_k)$. Schéma tohto delenia je na obrázku \ref{fig:veblayout_scheme} a príklad takto usporiadaného stromu na obrázku \ref{fig:node_order_veb}.
+Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude poradie $(v)$.
+
+Pre $h>1$ označme $m = \max_{i\in\mathbb{N}}\{2^i \mid 2^i < h\}$, teda najväčšiu mocninu dvoch menšiu ako $h$. Rozdelíme vstupný strom na podstrom $\tau_0$ výšky $h-m$, ktorého koreňom je koreň pôvodného stromu. Zostanú nám podstromy $\tau_1,\dotsc,\tau_k$ výšky $m$ (obrázok \ref{fig:veblayout_scheme}). Korene týchto podstromov sú potomkovia listov $\tau_0$ a ich z listy sú listy vstupného stromu. Všetky tieto podstromy majú približne polovičnú výšku a teda ich veľkosť je $\Theta(\sqrt{N})$ kde $N$ je veľkosť vstupného stromu, keďže $\frac{h}{2} = \frac{1}{2}\lg{N} = \lg{\sqrt{N}}$. Rekurzívne ich uložíme do \vEB{ovho} usporiadania a následne uložíme za seba, výstupom teda bude poradie $(\tau_0,\tau_1,\dotsc,\tau_k)$.
 
 \begin{figure}
     \centering
@@ -208,12 +210,8 @@ Pri analýze vyhľadávania sa pozrime na také podstromy predošlého delenia, 
 
 Majme teda vyhľadávací strom zložený z takýchto podstromov, ktorých veľkosť je medzi $\Omega(\sqrt{B})$ a $\bigO{B}$. Ich výška je teda $\Theta(\log{B})$. Pri strome výšky $\bigO{\log N}$ teda prejdeme cez $\bigO{\frac{\log{N}}{\log{B}}}$ takých podstromov a každý vyžaduje konštantný počet pamäťových presunov. Spolu sa ich teda vykoná $\bigO{\log_B{N}}$, čo zodpovedá spodnej hranici tohto problému.
 
-Máme teda vyhľadávanie, ktoré je rovnako ako pri \aware B-stromoch optimálne. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky - pri každej zmene by bolo potrebné strom preusporiadať. Dostávame tak \obliv ekvivalent statických \aware B-stromov. 
-
-Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odoberania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v sekcii \ref{sec:orderedfile}.
-
 \subsection{Rozdiely v prístupe ku pamäti} \label{sec:memaccess_patterns}
-Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami v \emph{BFS} a \vEB{} usporiadaniach sú vizuálne znázornené na obrázkoch \ref{fig:search_comparison1} a \ref{fig:search_comparison2} na strane \pageref{fig:search_comparison1}. Pozrime sa však najskôr na menší obrázok \ref{fig:search_comparison_small}, na ktorom vysvetlíme princíp tejto vizualizácie.
+Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami v \emph{BFS} a \vEB{} usporiadaniach vizuálne znázorňujú obrázky \ref{fig:search_comparison1} a \ref{fig:search_comparison2} na strane \pageref{fig:search_comparison1}. Pozrime sa však najskôr na menší obrázok \ref{fig:search_comparison_small}, na ktorom vysvetlíme princíp tejto vizualizácie.
 
 \begin{figure}[h]
     \centering
@@ -300,14 +298,20 @@ Avšak strom vo \vEB{ovom} usporiadaní potom čo pristúpi k nejakému prvku v 
     \label{fig:search_comparison2}
 \end{sidewaysfigure}
 
+\subsection{Dynamická verzia vyhľadávacieho stromu} 
+V časti \ref{sec:static-obliv} sme popísali štruktúru, ktorá dokáže vyhľadávať v usporiadanej statickej množine optimálne, rovnako ako \aware B-stromy. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky - pri každej zmene by bolo potrebné strom preusporiadať. Dostávame tak \obliv ekvivalent statických \aware B-stromov. 
+
+Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odstraňovania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v následovnej sekcii.
 
 \section{Usporiadané pole} \label{sec:orderedfile}
 
-Problémom \emph{údržby usporiadaného poľa} (z anglického \emph{ordered-file maintenance}) budeme volať problém spočívajúci v udržiavaní zoradenej postupnosti prvkov, do ktorej možno pridávať nové prvky medzi ľubovolné dva existujúce a tiež prvky odstraňovať. Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štruktúra zhustenej pamäte} (\emph{packed-memory structure}). Táto štruktúra udržiava prvky v súvislom poli veľkosti $\bigO{N}$ s \emph{medzerami} medzi prvkami veľkosti $\bigO{1}$. Vďaka tomu bude načítanie $K$ po sebe idúcich prvkov vyžadovať $\bigO{\frac{K}{B}}$ pamäťových presunov.
+Problémom \emph{údržby usporiadaného poľa} (z anglického \emph{ordered-file maintenance}) budeme volať problém spočívajúci v udržiavaní zoradenej postupnosti $N$ prvkov vo forme súvislého poľa veľkosti $\bigO{N}$. V tomto poli teda môžu byť \emph{medzery} veľkosti najviac $\bigO{1}$, vďaka čomu bude načítanie $K$ po sebe idúcich prvkov vyžadovať $\bigO{\frac{K}{B}}$ pamäťových presunov. Do tejto postupnosti musí byť možné efektívne vkladať prvky na ľubovoľnú danú pozíciu a tiež odstraňovať existujúce prvky.
+
+Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štruktúra zhustenej pamäte} (\emph{packed-memory structure}). Myšlienka tejto štruktúry spočíva v zostrojení binárneho stromu nad prvkami tohto poľa a  udržiavaní \emph{hustoty} -- podielu plných a všetkých pozícií -- pre každý vrchol v konštantných hraniciach. Tým zaručíme, že štruktúra nebude ani príliš plná, čo by spôsobovalo pri vkladaní nutnosť presúvať veľké množstvo existujúcich prvkov na uvoľnenie miesta, a ani príliš prázdna, čo by spôsobovalo pomalé prechádzanie kvôli veľkým medzerám.
 
 \subsection{Popis štruktúry} \label{sec:of-desc}
 
-Popíšeme dátovú štruktúru z \citep{btreeshort} s malými úpravami. Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^k$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S = 2^l$ tak, že $S=\Theta(\log{N})$. Počet blokov tak bude tiež mocnina dvoch.
+Budeme používať verziu z \citep{btreeshort} s malými úpravami. Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^h$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S=\Theta(\log{N})$, tak aby $S = 2^l$. Počet blokov tak bude tiež mocnina dvoch.
 
 \begin{figure}
     \centering
@@ -318,13 +322,13 @@ Popíšeme dátovú štruktúru z \citep{btreeshort} s malými úpravami. Celá 
     \label{fig:of_overview}
 \end{figure}
 
-Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \ref{fig:of_overview}), ktorého listy sú bloky udržiavaného poľa. \emph{Hĺbkou} vrchola označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = k-l$.
+Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \ref{fig:of_overview}). \emph{Hĺbkou} vrcholu označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = h-l$. Na popis operácií budeme potrebovať definície \emph{hustoty} a \emph{hraníc hustoty}, ktoré uvedieme v nasledovnej časti.
 
-\subsection{Definície}
+\subsection{Definícia hustoty}
 
-\emph{Kapacitou} vrchola $v$, $c(v)$, označíme počet položiek (aj prázdnych, teda aj s medzerami) poľa patriacich do blokov v podstrome začínajúcom v tomto vrchole. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. Ďalej \emph{hustotou}, $0 \le d(v) \le 1$, označíme $d(v) = \frac{o(v)}{c(v)}$. 
+\emph{Kapacitou} vrcholu $v$, $c(v)$, označíme počet položiek (aj prázdnych) poľa patriacich do blokov v podstrome začínajúcom v tomto vrchole. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. 
 
-Zvoľme ľubovolné konštanty $\rho_0, \tau_0, \rho_d, \tau_d$ spĺňajúce
+\emph{Hustotou}, $0 \le d(v) \le 1$, označíme $d(v) = \frac{o(v)}{c(v)}$. Zvoľme ľubovoľné konštanty $\rho_0, \tau_0, \rho_d, \tau_d$ spĺňajúce
 \[
 0 < \rho_d < \rho_0 < \tau_0 < \tau_d < 1
 \]
@@ -347,11 +351,13 @@ Hovoríme, že vrchol $v$ hĺbky $k$ je \emph{v hraniciach} hustoty ak platí $\
 
 Implementácia operácie vkladania sa skladá z niekoľkých krokov. Najskôr zistíme, do ktorého bloku $v$ spadá pozícia, na ktorú vkladáme. Pozrieme sa, či je tento blok v hraniciach hustoty. Ak áno tak platí $d(v) < 1$ a teda $o(v) < c(v)$, čiže v tomto bloku je voľné miesto. Môžeme teda zapísať novú hodnotu do tohto bloku, pričom môže byť potrebné hodnoty v bloku popresúvať, avšak zmení sa najviac $S = \Theta(\log{N})$ pozícii.
 
-V opačnom prípade je tento blok mimo hraníc hustoty. Budeme postupovať hore v strome dovtedy, kým nenájdeme vrchol v hraniciach. Keďže strom je iba pomyselný, budeme túto operáciu realizovať pomocou dvoch súčasných prechodov k okrajom poľa. Počas tohto prechodu si udržiavame počítadlá neprázdnych a všetkých pozícii a zastavíme v momente, keď hustota dosiahne požadované hranice.
+V opačnom prípade je tento blok mimo hraníc hustoty. Budeme postupovať hore v strome dovtedy, kým nenájdeme vrchol v hraniciach. Keďže strom je iba pomyselný, budeme túto operáciu realizovať pomocou dvoch súčasných lineárnych prechodov k okrajom poľa. Počas tohto prechodu si udržiavame počítadlá neprázdnych a všetkých pozícii, ktoré inicializujeme podľa tohto bloku. Ďalej postupujeme následovne.
 
-Po nájdení takéhoto vrchola v hraniciach rovnomerne rozdelíme všetky hodnoty v blokoch prislúchajúcich danému podstromu. Keďže intervaly pre hranice sa smerom ku listom iba rozširujú budú po tomto popresúvaní všetky vrcholy tohto podstromu v hraniciach hustoty a teda aj požadovaný blok bude obsahovať aspoň jednu prázdnu pozíciu. Môžeme teda novú hodnotu vložiť ako v prvom kroku.
+V prípade, že je hustota (podiel počítadiel) podstromu reprezentujúceho práve prejdený interval  mimo hraníc hustoty, posunieme sa v pomyselnom strome nahor. To dosiahneme prechodom doľava alebo doprava o práve toľko pozícií ako je veľkosť už prejdeného intervalu. Tento postup ukončíme v momente, keď hustota dosiahne požadované hranice.
 
-Ak nenájdeme taký vrchol, ktorého hustota by bola v hraniciach, a teda aj koreň je mimo hraníc, je táto štruktúra príliš plná. V takom prípade zostrojíme nové pole dvojnásobnej veľkosti a všetky existujúce položky, s pridanou novou, rovnomerne rozmiestnime do nového poľa.
+Po nájdení takéhoto vrcholu v hraniciach rovnomerne rozdelíme všetky hodnoty v blokoch prislúchajúcich danému podstromu. Keďže intervaly pre hranice sa smerom k listom iba rozširujú budú po tomto popresúvaní všetky vrcholy tohto podstromu v hraniciach hustoty a teda aj požadovaný blok bude obsahovať aspoň jednu prázdnu pozíciu. Môžeme teda novú hodnotu vložiť ako v prvom kroku.
+
+Ak nenájdeme taký vrchol, ktorého hustota by bola v hraniciach, a teda aj koreň je mimo hraníc, je táto štruktúra príliš plná. V takom prípade zostrojíme nové pole dvojnásobnej veľkosti a všetky prvky rovnomerne rozmiestnime do nového poľa.
 
 \subsubsection{Odstraňovanie}
 
@@ -361,13 +367,14 @@ Pokiaľ taký vrchol nenájdeme, je pole príliš prázdne a zostrojíme nové p
 
 \subsection{Analýza}
 
-Pri vkladaní aj odstraňovaní sa upraví súvislý interval $I$, ktorý sa skladá z niekoľkých blokov. Nech pri nejakej operácii došlo k prerozdeleniu prvkov v blokoch prislúchajúcich podstromu vrchola $u$ v hĺbke $k$. Teda pred týmto prerozdelením bol vrchol $u$ v hraniciach hustoty ($\rho_k \le d(u) \le \tau_k$) ale nejaký jeho potomok $v$ nebol.
+Pri vkladaní aj odstraňovaní sa upraví súvislý interval $I$, ktorý sa skladá z niekoľkých blokov. Nech pri nejakej operácii došlo k prerozdeleniu prvkov v blokoch prislúchajúcich podstromu vrcholu $u$ v hĺbke $k$. Teda pred týmto prerozdelením bol vrchol $u$ v hraniciach hustoty ($\rho_k \le d(u) \le \tau_k$) ale nejaký jeho potomok $v$ nebol.
 
-Po prerozdelení budú všetky vrcholy v danom podstrome v hraniciach hustoty, avšak nie len v svojich ale aj v hraniciach pre hĺbku $k$, ktoré sú tesnejšie. Bude teda platiť $\rho_k \le d(v) \le \tau_k$. Najmenší počet operácii vloženia, $q$, potrebný na to, aby bol vrchol $v$ opäť mimo hraníc je
+Po prerozdelení budú všetky vrcholy v danom podstrome v hraniciach hustoty, avšak nie len v svojich, ale keďže sme prerozdelili podstrom vrcholu $u$, tak aj v hraniciach pre hĺbku $k$, ktoré sú tesnejšie. Bude teda platiť $\rho_k \le d(v) \le \tau_k$. Najmenší počet operácii vloženia, $q$, potrebný na to, aby bol vrchol $v$ opäť mimo hraníc je
+
 \[
 \begin{aligned}
 \frac{o(v)}{c(v)} = d(v) &\le \tau_k \hspace{3cm} & \frac{o(v)+q}{c(v)} &> \tau_{k+1} \\
-o(v) &\le \tau_k c(v) & o(v)+q &> \tau_{k+1}c(v)
+o(v) &\le \tau_k c(v) & o(v)+q &> \tau_{k+1}c(v) \\
 \end{aligned}
 \]\[
 q > (\tau_{k+1}-\tau_k)c(v)
@@ -381,15 +388,15 @@ Pri úprave intervalu blokov v podstrome vrcholu $u$ je potrebné upraviť najvi
 \]
 keďže $\tau_d$ a $\tau_0$ sú konštanty a výška úplného binárneho stromu $d$ s $T$ listami je $d = \Theta(\log{T})$. Podobným spôsobom dostaneme rovnaký odhad pre odstraňovanie.
 
-Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov - tie, ktoré prislúchajú vrcholom na ceste z daného listu (bloku) do koreňa. Spolu teda bude veľkosť upraveného intervalu v priemernom prípade $\bigO{\log^2{T}}$.
+Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov -- tie, ktoré prislúchajú vrcholom na ceste z daného listu (bloku) do koreňa. Spolu teda bude veľkosť upraveného intervalu v priemernom prípade $\bigO{\log^2{T}}$.
 
 \todo[inline]{worstcase bounds? conjenctured lowerbound?}
 \todo[inline]{amortizacia double/half rebuildu}
 
-Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľkosti $\bigO{N}$ a podporuje operácie vkladania a odstraňovania, ktoré upravujú súvislý interval priemernej veľkosti $\bigO{\log^2{N}}$ a je ich teda možné realizovať pomocou $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov.
+Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľkosti $\bigO{N}$ a podporuje operácie vkladania a odstraňovania, ktoré upravujú súvislý interval amortizovanej veľkosti $\bigO{\log^2{N}}$ a je ich teda možné realizovať pomocou $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov.
 
 \section{Dynamický B-strom} \label{sec:dynamic-obliv}
-V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry pochádza z \citep{btreeshort,btreefull}, bola avšak značne komplikovaná. Preto použijeme zjednodušenú verziu z \citep{bender2002}, ktorá dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
+V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry, ktorú navrhli Bender, Demaine \etal v \citep{btreeshort} a neskôr podrobne popísali v \citep{btreefull}, bola však značne komplikovaná a preto uvedieme zjednodušenú verziu. Tú navrhli Bender, Duan \etal v \citep{bender2002} a dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
 
 \subsection{\Aware riešenie}
 V prípade \aware modelu môžeme na riešenie tohto problému opäť použiť B-strom s vetvením $\Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
@@ -454,14 +461,14 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
     \label{fig:cobtree_analysis_parts}
 \end{figure}
 
-Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať. Budeme predpokladať, že veľkosť zmeneného intervalu v usporiadanom poli je $K$.
+Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať. Budeme predpokladať, že veľkosť zmeneného intervalu v usporiadanom poli je $K$. Pre jednotlivé úrovne spočítame počet potrebných pamäťových presunov a nakoniec ich sčítaním získame výslednú zložitosť operácie vkladania.
 
 \subsubsection{Spodné dve úrovne}
-Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktoré sa ako prvé zmestia do bloku \cache a teda ich veľkosť je medzi $\sqrt{B}$ a $B$. Pozrime sa na spodné dve úrovne takýchto podstromov. Listy spodnej úrovne budú listy celého statického stromu a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
+Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktorých veľkost je medzi $\sqrt{B}$ a $B$, a teda sa zmestia do najviac dvoch blokov v \cache. Pozrime sa na spodné dve úrovne takýchto podstromov (na obrázku \ref{fig:cobtree_analysis_parts} reprezentovan0 najmenšími trojuholníkmi). Listy spodnej úrovne budú listy celého statického stromu a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
 
-Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Označme podstromy, ktoré vznikli rekurzívnym \vEB{ovým} delením z podstromu $T$ veľkosti viac než $B$, rovnako, ako v časti \ref{sec:static-obliv}: $\tau_0, \tau_1, \dotsc, \tau_k$. Tu $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
+Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Tieto podstromy vznikli rekurzívnym \vEB{ovým} delením z podstromu $T$ veľkosti viac než $B$. Označme ich, rovnako, ako v časti \ref{sec:static-obliv}, $\tau_0, \tau_1, \dotsc, \tau_k$, pričom $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
 
-Pri \emph{post-order} prechode cez podstrom $T$ prejdeme najskôr cez ľavých synov od koreňa $\tau_0$ cez $\tau_1$ až do listu. Následne bude \emph{post-order} prechod prebiehať v podstrome $\tau_1$, až kým nebudú všetky jeho vrcholy a napokon aj koreň aktualizované. Potom sa vrátime do $\tau_0$ a k $\tau_1$ už pristupovať nebudeme ale prejdeme nasledovný podstrom, $\tau_2$. Takto postupne aktualizujeme všetky podstromy, pričom postupnosť navštívených podstromov bude
+Pri \emph{post-order} prechode cez podstrom $T$ prejdeme najskôr cez ľavých synov od koreňa $\tau_0$ cez $\tau_1$ až do listu. Následne bude \emph{post-order} prechod prebiehať v podstrome $\tau_1$, až kým nebudú všetky jeho vrcholy a napokon aj koreň aktualizované. Až potom sa vrátime do $\tau_0$ a k $\tau_1$ už viac pristupovať nebudeme, ale prejdeme nasledovný podstrom, $\tau_2$. Takto postupne aktualizujeme všetky podstromy, pričom postupnosť navštívených podstromov bude
 \[
 \tau_0, \tau_1, \tau_0, \tau_2, \dotsc, \tau_0, \tau_i, \tau_0, \dotsc, \tau_k, \tau_0
 \]
@@ -496,7 +503,7 @@ Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli
 
 \section{Vylepšený dynamický B-strom}
 \epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
-Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. Tento člen môžeme odstrániť jednoduchou modifikáciou.
+Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. V prípade, že $B=\Theta(\log{N}\log\log{N})$, bude tento člen zanedbateľný a dosiahneme rovnaký výsledok ako \aware B-stromy. Jednoduchou modifikáciou však môžeme tento člen môžeme odstrániť bez nutnosti tohto predpokladu.
 
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
