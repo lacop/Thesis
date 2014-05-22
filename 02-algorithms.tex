@@ -1,13 +1,10 @@
 \chapter{Cache-oblivius algoritmy a~dátové~štruktúry}
 
-V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modeli. Zároveň uvedieme ekvivalentnú \aware dátovú štruktúru a vzájomne ich porovnáme.
+V tejto kapitole popíšeme niekoľko \obliv algoritmov a dátových štruktúr, spolu s ich pamäťovou analýzou v \obliv modeli. Zároveň uvedieme ekvivalentnú \aware dátovú štruktúru a vzájomne ich porovnáme. Najskôr sa však pozrieme na jeden jednoduchý príklad, ako túto analýzu riešime.
 
-\section{Základné algoritmy}
+\section{Základný algoritmus}
 
-Na demonštráciu \obliv algoritmov a ich analýzy v \extmem modeli použijeme jednoduchý algoritmus, ktorý počíta agregačnú funkciu nad hodnotami uloženými v poli.
-
-\subsection{Popis algoritmu}
-Majme pole $A$ veľkosti $|A|=N$ a označme jeho prvky $A = \{a_1,\dotsc,a_N\} \in X^N$. Chceme vypočítať hodnotu $f_g(A)$, kde $g: X \times Y \rightarrow Y$ je agregačná funkcia, $g_0 \in Y$ je počiatočná hodnota a $f_g$ je rozšírenie agregačnej funkcie definované následovne:
+Na demonštráciu \obliv algoritmov a ich analýzy v \extmem modeli použijeme jednoduchý algoritmus, ktorý počíta agregačnú funkciu nad hodnotami uloženými v poli. Uvažujeme pole $A = \{a_1,\dotsc,a_n\}$ a danú funkciu $g$ s počiatočnou hodnotou $g_0$. Chceme vypočítať hodnotu $f_g(A)$, kde $f_g$ je rozšírenie agregačnej funkcie definované následovne:
 \[
 \begin{aligned}
 f_g(\{a_1,\dotsc,a_k\}) &= g(a_k, f(\{a_1,\dotsc,a_{k-1}\})) \\
@@ -16,7 +13,14 @@ f_g(\emptyset) &= g_0
 \]
 % f(1, 2, 3) = g(3, f(1, 2)) = g(3, g(2, f(1))) = g(3, g(2, g(1, g0)))
 
-Túto funkciu je možné implementovať jednoducho ako jeden cyklus. Schematickú verziu implementácie uvádzame v algoritme \ref{alg:aggregate}.
+Túto funkciu je možné implementovať jednoducho ako jeden cyklus. Schematickú verziu implementácie uvádzame v algoritme \ref{alg:aggregate}. Tento algoritmus s použitím vhodnej funkcie $g$ a hodnoty $g_0$ je možné použiť na rôzne, často užitočné výpočty, ako napríklad maximum, minimum, suma a podobne:
+
+\[
+\begin{aligned}
+g^{\textrm{max}}(x, y) &= \max(x, y) ~~ &g^{\textrm{max}}_0 &= -\infty \\
+g^{\textrm{sum}}(x,y) &= x+y &g^{\textrm{sum}}_0 &= 0
+\end{aligned}
+\]
 
 \begin{algorithm}
     \caption{Implementácia agregačnej funkcie $f_g$}
@@ -32,27 +36,14 @@ Túto funkciu je možné implementovať jednoducho ako jeden cyklus. Schematick�
     \end{algorithmic}
 \end{algorithm}
 
-Tento algoritmus s použitím vhodnej funkcie $g$ a hodnoty $g_0$ je možné použiť na rôzne, často užitočné výpočty, ako napríklad maximum, minimum, suma a podobne:
-
-\[
-\begin{aligned}
-g^{\textrm{max}}(x, y) &= \max(x, y) ~~ &g^{\textrm{max}}_0 &= -\infty \\
-g^{\textrm{sum}}(x,y) &= x+y &g^{\textrm{sum}}_0 &= 0
-\end{aligned}
-\]
-
 
 \subsection{Analýza zložitosti}
 \subsubsection{Časová analýza}
-Klasická časová analýza tohto algoritmu je triviálna ak uvažujeme \RAM. Keďže prístup ku každému prvku \inlcode{A[i]} zaberie konštantný čas a za predpokladu, že čas $T_g$ na výpočet funkcie $g$ je nezávislý na vstupe, bude výsledný čas na výpočet tejto funkcie
+Klasická časová analýza tohto algoritmu je triviálna ak uvažujeme \emph{RAM} model. Keďže prístup ku každému prvku \inlcode{A[i]} zaberie konštantný čas a za predpokladu, že čas na výpočet funkcie $g$ je nezávislý na vstupe, bude výsledný čas na výpočet tejto funkcie lineárny od veľkosti poľa $N$, teda $T(N) = \bigO{N}$.
 
-\[
-T(N) = \bigO{1} + N[T_g + \bigO{1}] = T_g\cdot\bigO{N}
-\]
+\subsubsection{Analýza počtu pamäťových presunov}
 
-\subsubsection{Pamäťová analýza}
-
-V prípade \aware algoritmu by sme pole $A$ mali uložené v $\lceil \frac{N}{B} \rceil$ blokoch veľkosti $B$. Pri výpočte by sme postupne tieto bloky načítali do cache a pracovali s nimi. V rámci jedného bloku počas výpočtu nedochádza k pamäťovým presunom. Zároveň stačí každý prvok spracovať raz a teda celkový počet pamäťových operácií bude presne rovný počtu blokov, $\lceil \frac{N}{B} \rceil$. Tento algoritmus však požaduje znalosť parametra $B$ a explicitný presun blokov.
+V prípade \aware algoritmu by sme pole $A$ mali uložené v $\lceil \frac{N}{B} \rceil$ blokoch veľkosti $B$. Pri výpočte by sme postupne tieto bloky načítali do cache a pracovali s nimi. V rámci jedného bloku počas výpočtu nedochádza k pamäťovým presunom. Zároveň stačí každý prvok spracovať raz a teda celkový počet pamäťových operácií bude presne rovný počtu blokov, $\lceil \frac{N}{B} \rceil$. Tento algoritmus však požaduje znalosť parametra $B$ a zarovnať pole v pamäti tak, aby zabralo najmenší potrebný počet blokov.
 
 Jednoducho však vieme dosiahnuť (takmer) rovnakú zložitosť aj v prípade \obliv algoritmu \ref{alg:aggregate}, ktorý žiadne parametre pamäte zjavne nevyužíva a nepozná. Budeme predpokladať, že pole $A$ je uložené v súvislom úseku pamäte - to je možné dosiahnuť aj bez znalosti parametrov pamäte. Zvyšok algoritmu prebieha rovnako ako v predchádzajúcom prípade. Každý blok obsahujúci nejaký prvok poľa $A$ bude teda presunutý do cache práve raz, a žiadne iné presuny nenastanú. Ostáva zistiť, koľko takých blokov môže byť.
 
