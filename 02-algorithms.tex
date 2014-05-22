@@ -109,15 +109,15 @@ Toto je lepší výsledok ako dosahuje binárne vyhľadávanie. Stále však zos
 %To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-Pri vyhľadávaní potrebujeme pristúpiť k aspoň $\Omega(\log{N})$ prvkom. Tie by v ideálnom prípade boli uložené v $\Omega(\frac{\log{N}}{B})$ blokoch, čo je spodná hranica počtu pamäťových presunov. Tento odhad je ale príliš optimistický -- ako ukážeme odvodením väčšej spodnej hranice, nie je možné ho dosiahnuť.
+Pri vyhľadávaní potrebujeme pristúpiť k aspoň $\Omega(\log{N})$ prvkom. Tie by v ideálnom prípade boli uložené v $\Omega(\frac{\log{N}}{B})$ blokoch, čo tvorí spodnú hranica počtu pamäťových presunov. Tento odhad je ale príliš optimistický -- ako ukážeme odvodením väčšej spodnej hranice, nie je možné ho dosiahnuť.
 
 Toto odvodenie spravíme rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie -- hľadaný prvok je jeden z týchto $B$ prvkov alebo patrí v usporiadaní niekam medzi ne. V najlepšom prípade je teda potrebných aspoň
 \[
 \frac{\lg(2N+1)}{\lg(2B+1)} \ge \frac{\lg N}{\lg B} = \Omega(\log_B{N})
 \]
-pamäťových presunov. 
+pamäťových presunov. Tento odhad je na rozdiel od predchádzajúceho dosiahnuteľný práve \aware B-stromami.
 
-Vidíme teda, že na rozdiel od \obliv binárneho vyhľadávania, \aware B-strom je asymptoticky optimálnym riešením tohto problému. Chceli by sme teraz nájsť \obliv dátovú štruktúru, ktorá tiež dosahuje túto hranicu.
+Vidíme teda, že na rozdiel od \obliv binárneho vyhľadávania, je \aware B-strom asymptoticky optimálnym riešením tohto problému. Chceli by sme teraz nájsť \obliv dátovú štruktúru, ktorá tiež dosahuje túto hranicu.
 
 \subsection{Naivné \obliv riešenie} \label{sec:static-naive}
 Predtým ako popíšeme efektívne \obliv riešenie, sa pozrime na klasický binárny vyhľadávací strom. Asi najjednoduchší spôsob, ako usporiadať uzly (statického) binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude teda na pozícii $\lfloor\frac{x}{2}\rfloor$. Toto usporiadanie voláme \emph{BFS usporiadanie} (z anglického \emph{breadth-first search} -- prehľadávanie do šírky), keďže pozície vrcholov sa zvyšujú v rovnakom poradí ako by prebiehalo prehľadávanie tohto stromu do šírky. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
