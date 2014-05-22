@@ -74,20 +74,20 @@ Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Uží
 
 Táto simulácia zároveň počíta počet pamäťových prístupov k vrcholom pri vyhľadávaní. Prvé počítadlo udáva počet všetkých prístupov a správa sa rovnako pri \vEB{ovom} aj \emph{BFS} usporiadaní a tiež pre ľubovolné parametre \cache. Druhé udáva počet prístupov, pri ktorých bolo potrebné načítanie z disku (\miss) a pri zmene parametrov či usporiadania sa bude správať inak. Cieľom \obliv algoritmov je minimalizovať práve počet takých presunov, ktoré počíta toto druhé počítadlo.
 
-To môžeme vidieť na jednoduchom príklade, kedy v strome výšky $5$ postupne vyhľadáme všetkých $16$ kľúčov, ktoré sa nachádzajú v listoch tohto stromu. V oboch usporiadaniach bude počet prístupov rovnaký, avšak počet načítaní blokov z disku do \cache je v tomto príklade pri \emph{BFS} usporiadaní takmer dvakrát väčší ako pri \vEB{ovom} usporiadaní. Obrázok \ref{fig:ss_cachesim_compare} ukazuje stav týchto štatistík po nájdení posledného listu.
+%To môžeme vidieť na jednoduchom príklade, kedy v strome výšky $5$ postupne vyhľadáme všetkých $16$ kľúčov, ktoré sa nachádzajú v listoch tohto stromu. V oboch usporiadaniach bude počet prístupov rovnaký, avšak počet načítaní blokov z disku do \cache je v tomto príklade pri \emph{BFS} usporiadaní takmer dvakrát väčší ako pri \vEB{ovom} usporiadaní. Obrázok \ref{fig:ss_cachesim_compare} ukazuje stav týchto štatistík po nájdení posledného listu.
 
-\begin{figure}[h]
-    \centering
-    \subbottom[Strom v \emph{BFS} usporiadaní] {
-        \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_bfs}
-    }
-    \hspace{1cm}
-    \subbottom[Strom vo \vEB{ovom} usporiadaní] {
-        \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_veb}
-    }
-    \caption[Porovnanie štatistík simulovanej \cache]{Porovnanie štatistík simulovanej \cache po prechode listov $1,3,\dotsc,31$ stromu výšky $5$. Parametre cache sú v oboch prípadoch rovnaké ($B=4$, $M=2B=8$), rozdiel je však v usporiadaní v pamäti.}
-    \label{fig:ss_cachesim_compare}
-\end{figure}
+%\begin{figure}[h]
+%    \centering
+%    \subbottom[Strom v \emph{BFS} usporiadaní] {
+%        \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_bfs}
+%    }
+%    \hspace{1cm}
+%    \subbottom[Strom vo \vEB{ovom} usporiadaní] {
+%        \includegraphics[width=6cm]{figures/screenshots/bmp_cache_panel_leaves_veb}
+%    }
+%    \caption[Porovnanie štatistík simulovanej \cache]{Porovnanie štatistík simulovanej \cache po prechode listov $1,3,\dotsc,31$ stromu výšky $5$. Parametre cache sú v oboch prípadoch rovnaké ($B=4$, $M=2B=8$), rozdiel je však v usporiadaní v pamäti.}
+%    \label{fig:ss_cachesim_compare}
+%\end{figure}
 
 Na vizualizáciu prítomnosti v \cache slúži farba - vrcholy a položky poľa obsahujúce kľúče majú svetlejšiu farbu pozadia v prípade, že je daný blok v \cache a tmavšiu, ak je mimo. V strome je vďaka tomu ľahko vidieť, ktorá časť je načítaná a je možné ňou prechádzať bez ďalších presunov. V prípade \vEB{ovho} usporiadania pôjde prevažne o časť podstromu aktuálne porovnávaného vrcholu, avšak pri klasickom usporiadaní to budú práve vrcholy mimo tohto podstromu, o ktorých už vieme, že nie sú pri vyhľadávaní potrebné.
 
@@ -101,11 +101,25 @@ Na vizualizáciu prítomnosti v \cache slúži farba - vrcholy a položky poľa 
     \hspace{1cm}
     \subtop[Druhý krok]{%
         \includegraphics[width=0.25\textwidth]{figures/screenshots/cachesim_step3.pdf}}
-    \caption[Simulácia \cache počas vyhľadávania kľúča]{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvok kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré sú označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
+    \caption[Simulácia \cache počas vyhľadávania kľúča $3$]{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvok kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré sú označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
     \label{fig:ss_cachesim_colors}
 \end{figure}
 
-Pri krokovaní vyhľadávania je pri prístupe k vrcholu tiež použitá zelená alebo červená farba na jeho dočasné zafarbenie (podobne ako v časti \ref{sec:memaccess_patterns}) podľa toho, či sa v danom momente v \cache nachádzal (\hit) alebo nie (\miss). Ukážka tohto zafarbovania je na obrázku \ref{fig:ss_cachesim_colors}.
+Pri krokovaní vyhľadávania je pri prístupe k vrcholu tiež použitá zelená alebo červená farba na jeho dočasné zafarbenie (podobne ako v časti \ref{sec:memaccess_patterns}) podľa toho, či sa v danom momente v \cache nachádzal (\hit) alebo nie (\miss). Ukážky tohto zafarbovania sú na obrázkoch \ref{fig:ss_cachesim_colors} a \ref{fig:ss_cachesim_colors_big}.
+
+\begin{figure}
+    \centering
+    \subtop[Prvý krok]{%
+        \includegraphics[width=0.9\textwidth]{figures/screenshots/cachesim_big_step1.pdf}}
+    \subtop[Druhý krok]{%
+        \includegraphics[width=0.9\textwidth]{figures/screenshots/cachesim_big_step2.pdf}}
+    \subtop[Tretí krok]{%
+        \includegraphics[width=0.9\textwidth]{figures/screenshots/cachesim_big_step3.pdf}}
+    \subtop[Štvrtý krok]{%
+        \includegraphics[width=0.9\textwidth]{figures/screenshots/cachesim_big_step4.pdf}}
+    \caption[Simulácia \cache počas vyhľadávania kľúča $15$]{Simulácia \cache počas vyhľadávania kľúča $15$. Pred prvým prístupom je cache prázdna. Po načítaní bloku, ktorý obsahuje kľúče $\{16,8,4,12\}$ v prvom kroku, nedochádza v druhom a treťom kroku k pamäťovým presunom. Najbližší kľúč mimo \cache (\miss) je až v štvrtom kroku.}
+    \label{fig:ss_cachesim_colors_big}
+\end{figure}
 
 \section{Usporiadané pole}
 Ďalšou implementovanou vizualizáciou je usporiadané pole (obrázok \ref{fig:ss_of_overview}), ktoré bolo popísané v časti \ref{sec:orderedfile}. Bloky, na ktoré je toto pole imaginárne rozdelené sú znázornené tým, že sú od seba oddelené medzerou. Taktiež sa zobrazuje imaginárny strom nad týmito blokmi, ktorým sa pri vkladaní prechádza. Hodnoty vo vrcholoch reprezentujú hustotu (v percentách) intervalu v príslušnom podstrome. Farby (zelená alebo červená) vrcholov indikujú, či sa hustota daného vrcholu nachádza v hraniciach.
