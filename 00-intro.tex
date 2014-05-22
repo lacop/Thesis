@@ -1,9 +1,11 @@
 \unnumberedchapter{Úvod}
 % TODO epigraph?
 
-Pri tvorbe efektívnych algoritmov sa najčastejšie zaujímame o časovú zložitosť a prípadne aj pamäťovú zložitosť. Dôležitým faktorom však môže byť aj množstvo pamäťových operácií. Tie majú priamy vplyv na výslednú časovú zložitosť, avšak pri asymptotickej analýze sa často považujú za operáciu vykonateľnú v konštantnom čase. V prípadoch keď pracujeme s veľkým objemom dát, ktoré sú uložené na médiu s veľkou kapacitou ale nízkou prístupovou rýchlosťou, však tento predpoklad prestáva byť platný a preto môže byť výhodné minimalizovať množstvo zápisov a čítaní z tohto média. 
+Pri tvorbe efektívnych algoritmov sa najčastejšie zaujímame o časovú zložitosť a prípadne aj pamäťovú zložitosť. To dosahujeme analýzou v takzvanom \emph{RAM} modeli, v ktorom je prístup k dátam v pamäti považovaný za operáciu vykonateľnú v konštantnom čase. V prípadoch, keď pracujeme s veľkým objemom dát, ktoré sú uložené na médiu s veľkou kapacitou ale nízkou prístupovou rýchlosťou, však tento model prestáva vystihovať realitu.
 
-V skutočnosti však nemusí ísť priamo o veľmi veľký objemy dát a pomalé médiá -- rozdiel v prístupových rýchlostiach medzi vyrovnávacou pamäťou na procesore a hlavnou operačnou pamäťou je dostatočne veľký na to, aby sa nám v praxi oplatilo minimalizovať počet presunov aj medzi nimi.
+V skutočnosti však nemusí ísť priamo o veľmi veľké objemy dát a pomalé médiá. Rozdiely v prístupových rýchlostiach medzi vyrovnávacou pamäťou na procesore a hlavnou operačnou pamäťou sú dostatočne veľké na to, aby sa nám v praxi oplatilo minimalizovať počet presunov aj medzi nimi. Ich veľkosť je pritom rádovo len niekoľko kilobajtov, čo je častokrát podstatne menej ako objem spracúvaných dát a nemôžeme teda predpokladať, že k týmto pomalým prístupom nedôjde.
+
+Dôležitým faktorom teda môže byť aj počet týchto pamäťových operácií. Tie majú priamy vplyv na výslednú časovú zložitosť, a preto je výhodné minimalizovať množstvo zápisov a čítaní z pomalého úložiska a snažiť sa využívať práve rýchlu vyrovnávaciu pamäť. 
 
 Klasickým prístupom v týchto prípadoch sú takzvané \aware algoritmy, ktoré poznajú presné parametre pamäťového systému pre dosiahnutie požadovanej efektivity. Následkom toho môže byť viazanosť na konkrétny systém či náročnosť a komplikovanosť implementácie. V tejto práci sa budeme venovať \obliv algoritmom a dátovým štruktúram, ktoré tieto parametre nepoznajú, no napriek tomu sú v istých prípadoch asymptoticky rovnako efektívne ako ich \aware ekvivalenty.
 
