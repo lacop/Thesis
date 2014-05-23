@@ -10,7 +10,7 @@ V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pam
     \caption[Približné parametre rôznych úrovní pamäte]{Približné parametre rôznych úrovní pamäte. Hodnoty troch úrovní \cache na procesore (L1, L2 a L3) uvádzame pre mikroarchitektúru Intel Haswell. \citep{inteloptimize,inteldeveloper}}
     \label{tbl:memory-levels}
     \begin{threeparttable}
-        \begin{tabular}{r r r r c r}
+        \begin{tabular}{r r r l c r}
             \toprule
             \multicolumn{1}{c}{\textbf{Úroveň}} & \multicolumn{1}{c}{\textbf{Veľkosť}} & \multicolumn{2}{c}{\textbf{Odozva}} & \multicolumn{1}{c}{\textbf{Asociativita}} & \multicolumn{1}{c}{\textbf{Veľkosť bloku}}\\ \toprule
 %            Registre & & 1clk\tnote{2} &$\approx$ \SI{0.3}{\nano\second} \\ \midrule
@@ -52,21 +52,21 @@ Prístup k dátam, ktoré sa práve nachádzajú v \cache voláme \hit (zásah \
 \end{figure}
 
 \subsection{Cache-aware algoritmy}
-Pokiaľ poznáme parametre $B$ a $M$, môžeme skonštruovať algoritmus, ktorý bude túto dvojicu pamätí využívať efektívne. Takýto algoritmus voláme \aware (uvedomujúci si \cache). Súčasťou tohto algoritmu by bolo explicitné spravovanie presunov pamäte - je potrebné riešiť čítanie blokov z disku a ich umiestňovanie do \cache, nahrádzanie blokov v \cache pri zaplnení a spätný zápis blokov na disk.
+Pokiaľ poznáme parametre $B$ a $M$, môžeme skonštruovať algoritmus, ktorý bude túto dvojicu pamätí využívať efektívne. Takýto algoritmus voláme \aware (uvedomujúci si \cache). Súčasťou tohto algoritmu by bolo spravovanie presunov pamäte -- je potrebné riešiť čítanie blokov z disku a ich umiestňovanie do \cache, nahrádzanie blokov v \cache pri zaplnení a spätný zápis blokov na disk. Toto nemusí byť explicitnou súčasťou algoritmu a môže byť riešené na inej úrovni.
 
 % TODO asociativita
 
-Tento model popisuje len dve úrovne pamäte a teda funguje efektívne len pre danú susednú dvojicu, pre ktorú ho na základe znalosti parametrov optimalizujeme. V~moderných systémoch ale máme takýchto dvojíc niekoľko. Keby sme poznali parametre pre všetky tieto dvojice, môžeme zovšeobecniť tento model pre viac úrovní a explicitne riešiť presun blokov medzi nimi. Takto sa však samotná správa pamäte potenciálne stáva komplikovanejším problémom ako pôvodný algoritmus.
+Tento model popisuje len dve úrovne pamäte a teda funguje efektívne len pre danú susednú dvojicu, pre ktorú ho na základe znalosti parametrov optimalizujeme. V~moderných systémoch ale máme takýchto dvojíc niekoľko. Keby sme poznali parametre pre všetky tieto dvojice, môžeme tieto algoritmy optimalizovať pre všetky susedné dvojice a ich parametre. Stále však zostáva problémom viazanosť algoritmu na tieto parametre a pri ich zmene prestáva byť optimálny.
 
 
 \section{Cache-oblivious model}
 Druhým spôsobom, ktorý zohľadňuje nekonštantný prístupový čas k údajom v pamäti, je takzvaný \emph{cache-oblivious model} (na \cache nedbajúci), v ktorom uvažujeme rovnakú dvoj-úrovňovú pamäť zloženú z disku a \cache \citep{frigo1999cache,prokop1999cache}. Na rozdiel od \aware modelu však algoritmus nepozná parametre $B$ a $M$. Pokiaľ sa nám napriek tomu podarí navrhnúť algoritmus, ktorý vykonáva (asymptoticky) rovnaký počet pamäťových presunov ako \aware algoritmus, bude bežať efektívne pre ľubovolné takéto parametre.
 
-Takéto algoritmy majú na rozdiel od \aware algoritmov v \extmem modeli mnohé výhody. Samotná implementácia algoritmu nemôže explicitne riešiť presun blokov pokiaľ nepozná veľkosť bloku ani koľko blokov môže do \cache uložiť. Táto úloha zostane ponechaná na nižšiu vrstvu (operačný systém respektíve hardvér v prípade \cache na procesore) - algoritmus bude pristupovať k pamäti priamo bez ohľadu na to, či sa nachádza v \cache alebo nie a v prípade potreby prebehnú nutné prenosy na nižšej úrovni (z pohľadu algoritmu) automaticky.
+%Takéto algoritmy majú na rozdiel od \aware algoritmov v \extmem modeli mnohé výhody. Samotná implementácia algoritmu nemôže explicitne riešiť presun blokov pokiaľ nepozná veľkosť bloku ani koľko blokov môže do \cache uložiť. Táto úloha zostane ponechaná na nižšiu vrstvu (operačný systém respektíve hardvér v prípade \cache na procesore) - algoritmus bude pristupovať k pamäti priamo bez ohľadu na to, či sa nachádza v \cache alebo nie a v prípade potreby prebehnú nutné prenosy na nižšej úrovni (z pohľadu algoritmu) automaticky.
 
-Ďalšou výhodou je automatická optimalizácia pre dané parametre. V prípade \aware algoritmov môže byť problémom získať presné hodnoty týchto parametrov a potrebné pri ich zmene upraviť algoritmus. Vývoj algoritmu, ktorý bude fungovať na rozličných architektúrach, môže byť značne problematický.
+Výhodou oproti \aware algoritmom je automatická optimalizácia pre dané parametre. V prípade \aware algoritmov môže byť problémom získať presné hodnoty týchto parametrov a potrebné pri ich zmene upraviť algoritmus. Vývoj algoritmu, ktorý bude fungovať na rozličných architektúrach, môže byť značne problematický.
 
-V neposlednom rade bude takýto \obliv algoritmus efektívny medzi každou dvojicou susedných úrovní. Vzhľadom na to, že hodnoty parametrov nepozná, musí pre ľubovolnú takú dvojicu pracovať rovnako efektívne ako pre každú inú.
+Ďalšou výhodou je, že takýto \obliv algoritmus bude (rovnako) efektívny medzi každou dvojicou susedných úrovní. Vzhľadom na to, že hodnoty parametrov nepozná, bude pre ľubovolnú takú dvojicu pracovať rovnako efektívne ako pre každú inú.
 
 % TODO assumptions (replacement + associativity)
 % TODO \cache vs cache (+ cache-obliv, ... ) - when to use \emph?
@@ -78,17 +78,21 @@ Stratégia \emph{LRU} (least recently used -- najdlhšie nepoužité) vyberá v�
 
 Stratégia \emph{FIFO} (first in, first out -- prvé dnu, prvé von) je ešte jednoduchšia - bloky udržiavame zoradené podľa poradia, v akom sme ich vložili do \cache. Keď vyberáme blok na odstránenie, vezmeme ten, ktorý bol pridaný najskôr.
 
-Ak by sa táto stratégia správala tak, že vždy odstráni blok, ktorý bude potrebný v ďalšom kroku algoritmu, tak by bolo zakaždým presúvať bloky medzi diskom a cache. To by znamenalo, že počet blokov, s ktorými v cache môžeme prakticky pracovať je $\frac{M}{B} = 1$. Ďalším problémom je \emph{asociatívnosť} cache - z praktických dôvodov je často možné daný blok z disku uložiť len na niekoľko pozícií v cache. Inak by bolo potrebné ukladať spolu s každým blokom jeho plnú adresu na disku, čo by redukovalo celkový počet blokov, ktoré sa do cache zmestia. Znížením asociativity je možné ukladať iba časť adresy, pričom zvyšok je implicitne určený pozíciou v cache. V prípade nízkej asociativity však môžu opäť nastať situácie, kedy je algoritmus schopný využiť iba malý počet blokov v cache.
+Ak by sa táto stratégia správala tak, že vždy odstráni blok, ktorý bude potrebný v ďalšom kroku algoritmu, tak by bolo možné efektívne pracovať len s jedným blokom v \cache, napriek tomu, že by sa ich do \cache zmestilo viac. Vzhľadom na to, že analýza množstva \obliv algoritmov predpokladá istý minimálny počet blokov, ktorý sa zmestí do \cache, bol by tento predpoklad nenaplnený. To by mohlo spôsobiť, že by algoritmus vykonal viac pamäťových presunov ako táto analýza predpovedala.
 
-Tieto problémy \obliv model obchádza predpokladom ideálnej cache - cache, ktorá je plne asociatívna (každý blok disku je možné uložiť v každom bloku cache) a používa optimálnu stratégiu výmeny stránok, ktorá vždy odstráni blok, ktorý bude potrebný najneskôr. Prvý predpoklad je síce v reálnych systémoch nepraktický, no z teoretického hľadiska je v poriadku. Druhý predpoklad je nerealizovateľný, keďže by stratégia výmeny stránok musela predpovedať budúce kroky algoritmu. Nasledovné lemy však ukazujú, že aj bez týchto predpokladov na reálnom systéme s nízkou asociativitou a jednoduchou stratégiou výmeny stránok sa algoritmus zhorší len o konštantný faktor.
+Ďalším problémom je takzvaná \emph{asociatívnosť} cache -- počet pozícií v \cache, na ktoré môžeme daný blok uložiť, ktorý je z praktických dôvodov často obmedzený. Inak by bolo potrebné ukladať spolu s každým blokom jeho plnú adresu na disku, čo by redukovalo celkový počet blokov, ktoré sa do \cache zmestia. Znížením asociativity je možné ukladať iba časť adresy, pričom zvyšok je implicitne určený pozíciou v \cache. V prípade nízkej asociativity však môžu opäť nastať situácie, kedy je algoritmus schopný využiť iba malý počet blokov v \cache. V moderných systémoch (tabuľka \ref{tbl:memory-levels}) sa asociativita pohybuje okolo $8$, čo znamená, že daný blok je v \cache možné umiestniť len na $8$ z $\frac{M}{B}$ pozícií.
+
+\subsubsection{Ideálna \cache}
+
+Tieto problémy \obliv model obchádza predpokladom ideálnej \cache, ktorá je plne asociatívna (každý blok disku je možné uložiť v každom bloku \cache) a používa optimálnu stratégiu výmeny stránok, ktorá vždy odstráni blok, ktorý bude potrebný najneskôr. Prvý predpoklad je síce v reálnych systémoch nepraktický, no z teoretického hľadiska je v poriadku. Druhý predpoklad je nerealizovateľný, keďže by stratégia výmeny stránok musela predpovedať budúce kroky algoritmu. Nasledovné lemy však ukazujú, že aj bez týchto predpokladov na reálnom systéme s nízkou asociativitou a jednoduchou stratégiou výmeny stránok sa algoritmus zhorší len o konštantný faktor.
 
 % TODO better translation - more exact + explicit corollaries?
 % TODO change from 'lema' to 'tvrdenie' or something?
 % TODO proof sketch?
 \begin{lema}
-Algoritmus, ktorý v ideálnej cache veľkosti $M$ s blokmi veľkosti $B$ vykoná $T$ pamäťových operácií, vykoná najviac $2T$ pamäťových operácií v cache veľkosti $2M$ s blokmi veľkosti $B$ pri použití stratégie \emph{LRU} alebo \emph{FIFO}. \citep[Lemma 12]{frigo1999cache}
+Algoritmus, ktorý v ideálnej \cache veľkosti $M$ s blokmi veľkosti $B$ vykoná $T$ pamäťových operácií, vykoná najviac $2T$ pamäťových operácií v \cache veľkosti $2M$ s blokmi veľkosti $B$ pri použití stratégie \emph{LRU} alebo \emph{FIFO}. \citep[Lemma 12]{frigo1999cache}
 \end{lema}
 
 \begin{lema}
-Plne asociatívna cache veľkosti $M$ sa dá simulovať s použitím $\bigO{M}$ pamäte tak, že prístup ku každému bloku v cache zaberie v priemernom prípade $\bigO{1}$ času. \citep[Lemma 16]{frigo1999cache}
+Plne asociatívna \cache veľkosti $M$ sa dá simulovať s použitím $\bigO{M}$ pamäte tak, že prístup ku každému bloku v \cache zaberie v priemernom prípade $\bigO{1}$ času. \citep[Lemma 16]{frigo1999cache}
 \end{lema}
