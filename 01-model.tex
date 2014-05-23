@@ -1,7 +1,7 @@
 \chapter{Pamäťový model}
 \epigraph{Memory is the thing you forget~with.}{Alexander Chase}
 
-Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti), v ktorom sa predpokladá možnosť pristupovať k ľubovoľnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
+Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti) \citep{aho1974design}, v ktorom sa predpokladá možnosť pristupovať k ľubovoľnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
 
 V skutočnosti však moderné počítače využívajú niekoľko úrovňovú pamäťovú hierarchiu \citep{drepper2007every}. Tá sa typicky skladá z registrov a troch úrovní \cache (vyrovnávacej pamäte) priamo na procesore, následne z hlavnej operačnej pamäte a disku. V tomto poradí sú tieto úrovne zoradené od najrýchlejšej a najmenšej (odozva rádovo \SI{1}{\nano\second}, kapacita \SI{64}{\kibi\byte}) až po najpomalšiu ale najväčšiu (odozva od \SI{100}{\micro\second} po \SI{10}{\milli\second} podľa typu\footnote{Klasické pevné disky (HDD) alebo disky bez pohyblivých častí (SSD)}, kapacita rádovo \SI{1}{\tebi\byte}). Približné hodnoty pre všetky úrovne sú v tabuľke \ref{tbl:memory-levels}. Ako vidieť, rozdiel v prístupovej dobe k rôznym dátam môže byť až $10\,000\,000$-násobný. Naskytuje sa teda otázka, či je užitočné a presné hovoriť o konštantnom čase.
 
