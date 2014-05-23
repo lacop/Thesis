@@ -96,3 +96,69 @@ Algoritmus, ktorý v ideálnej \cache veľkosti $M$ s blokmi veľkosti $B$ vykon
 \begin{lema}
 Plne asociatívna \cache veľkosti $M$ sa dá simulovať s použitím $\bigO{M}$ pamäte tak, že prístup ku každému bloku v \cache zaberie v priemernom prípade $\bigO{1}$ času. \citep[Lemma 16]{frigo1999cache}
 \end{lema}
+
+\section{Prehľad výsledkov v cache-oblivious modeli}
+
+V tejto práci sa budeme venovať prevažne problému vyhľadávacích stromov, konkrétne B-stromom. V nasledujúcej kapitole uvedieme ich fungovanie a analýzu počtu pamäťových presunov v \extmem modeli. V tretej kapitole popíšeme vizualizácie, ktoré sme pre tieto štruktúry vytvorili. Pre širší rozhľad v tejto problematike uvádzame v tabuľke \ref{tbl:alg-overview} na strane \pageref{tbl:alg-overview} zoznam niekoľkých bežných problémov. Ku každému uvádzame ako príklad najlepšie známe \aware a \obliv algoritmy a dátové štruktúry, ktoré ten problém riešia, spolu s ich asymptotickou analýzou.
+
+{\renewcommand{\arraystretch}{1.5}
+\begin{sidewaystable}[p]
+    \centering
+    \caption{Prehľad výsledkov \aware a \obliv algoritmov a dátových štruktúr pre rôzne problémy.}
+    \label{tbl:alg-overview}
+    \begin{threeparttable}
+        \begin{tabular}{r @{\hskip 1cm} lll @{\hskip 1cm} l}
+            \toprule
+%            \multicolumn{1}{c}{\textbf{Úroveň}} & \multicolumn{1}{c}{\textbf{Veľkosť}} & \multicolumn{2}{c}{\textbf{Odozva}} & \multicolumn{1}{c}{\textbf{Asociativita}} & \multicolumn{1}{c}{\textbf{Veľkosť bloku}}\\ \toprule
+%            \multicolumn{1}{c}{\textbf{Názov}} & \multicolumn{3}{c}{\textbf{Operácie}} & \\ \toprule
+            \textbf{Vyhľadávacie stromy} & \textbf{Vyhľadávanie} & \textbf{Vkľadanie} & \textbf{Prechod}\tnote{2} & \\ \toprule
+            \aware B-strom & $\bigO{\log_B{N}}$ & $\bigO{\log_B{N}}$ & $\bigO{\frac{K}{B}}$ & \citep{bayerbtree,vitteralgds} \\ 
+            \obliv B-strom & $\bigO{\log_B{N}}$ & $\bigO{\log_B{N}+\frac{\log^2{N}}{B}}$\tnote{1} & $\bigO{\frac{K}{B}}$ & \citep{btreeshort,btreefull,bender2002}, časť \ref{sec:dynamic-obliv} \\
+            \obliv B-strom & $\bigO{\log_B{N}}$ & $\bigO{\log_B{N}}$\tnote{1} & & \citep{btreeshort,btreefull,bender2002}, časť \ref{sec:dynamic-obliv-improved} \\ 
+            \toprule
+            \textbf{Usporiadaná postupnosť} & \textbf{Vkľadanie} & \textbf{Prechod}\tnote{2} & & \\ \toprule
+            \aware spájaný zoznam & $\bigO{1}$\tnote{1} & $\bigO{\frac{K}{B}}$ & & \citep{demaineoverview,pagh2003basic} \\ 
+            \obliv usporiadané pole & $\bigO{\frac{\log^2{N}}{B}}$\tnote{1} & $\bigO{\frac{K}{B}}$ & & \citep{btreeshort}, časť \ref{sec:orderedfile} \\
+            \toprule
+            \textbf{Triedenie} & & & & \\ \toprule    
+            \aware mergesort & $\bigO{\frac{N}{B}\log_{M/B}{\frac{N}{B}}}$ & & & \citep{demaineoverview,vitteralgds} \\
+            \obliv funnelsort & $\bigO{\frac{N}{B}\log_{M/B}{\frac{N}{B}}}$ & & & \citep{arge2005cache, demaineoverview} \\
+            \toprule
+            \textbf{Prioritné fronty} & \textbf{Vkľadanie} & \textbf{Výber minima} & & \\ \toprule
+            \aware buffer tree & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$\tnote{1} & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$\tnote{1} & & \citep{arge1995buffer} \\
+            \obliv prioritná fronta & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$\tnote{1} & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$\tnote{1} & & \cite{arge2005cache, demaineoverview} \\
+            \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+            \item[1] Amortizované
+            \item[2] Prechod $K$ po sebe idúcich prvkov
+        \end{tablenotes}
+    \end{threeparttable}
+\end{sidewaystable}
+}
+
+
+%\begin{sidewaystable}[p]
+%    \centering
+%    \caption{todo}
+%    \label{tbl:alg-overview}
+%    \begin{threeparttable}
+%        \begin{tabular}{r c*6 l}
+%            \toprule
+%%            \multicolumn{1}{c}{\textbf{Úroveň}} & \multicolumn{1}{c}{\textbf{Veľkosť}} & \multicolumn{2}{c}{\textbf{Odozva}} & \multicolumn{1}{c}{\textbf{Asociativita}} & \multicolumn{1}{c}{\textbf{Veľkosť bloku}}\\ \toprule
+%%            \multicolumn{1}{c}{\textbf{Názov}} & \multicolumn{3}{c}{\textbf{Operácie}} & \\ \toprule
+%            \textbf{Vyhľadávacie stromy} & \multicolumn{2}{c}{\textbf{Vyhľadávanie}} & \multicolumn{2}{c}{\textbf{Vkľadanie}} & \multicolumn{2}{c}{\textbf{Prechod}} & \\ \toprule
+%            \aware B-strom & \multicolumn{2}{l}{$\bigO{\log_B{N}}$} & \multicolumn{2}{l}{$\bigO{\log_B{N}}$} & \multicolumn{2}{l}{$\bigO{\frac{K}{B}}$} & ref \\ 
+%            \obliv B-strom & \multicolumn{2}{l}{$\bigO{\log_B{N}}$} & \multicolumn{2}{l}{$\bigO{\log_B{N}+\frac{\log^2{N}}{B}}$} & \multicolumn{2}{l}{$\bigO{\frac{K}{B}}$} & ref \\
+%            \obliv B-strom & \multicolumn{2}{l}{$\bigO{\log_B{N}}$} & \multicolumn{2}{l}{$\bigO{\log_B{N}}$} & & & ref \\ 
+%            \toprule
+%            \textbf{Spájaný zoznam} & \multicolumn{3}{c}{\textbf{Vkľadanie}} & \multicolumn{3}{c}{\textbf{Prechod}} & \\ \toprule
+%            \aware zoznam & \multicolumn{3}{c}{B} & \multicolumn{3}{c}{C} & ref \\ 
+%            \obliv usporiadané pole & \multicolumn{3}{c}{B} & \multicolumn{3}{c}{C} & ref \\
+%            \bottomrule
+%        \end{tabular}
+%        \begin{tablenotes}
+%            \item[1] todo Amort
+%        \end{tablenotes}
+%    \end{threeparttable}
+%\end{sidewaystable}

@@ -501,7 +501,7 @@ Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli
 
 \todo[inline]{double/half}
 
-\section{Vylepšený dynamický B-strom}
+\section{Vylepšený dynamický B-strom} \label{sec:dynamic-obliv-improved}
 \epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
 Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. V prípade, že $B=\Theta(\log{N}\log\log{N})$, bude tento člen zanedbateľný a dosiahneme rovnaký výsledok ako \aware B-stromy. Jednoduchou modifikáciou však môžeme tento člen môžeme odstrániť bez nutnosti tohto predpokladu.
 
