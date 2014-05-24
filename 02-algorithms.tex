@@ -152,12 +152,12 @@ Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiava
 
 Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je\footnote{Nejde o vyvažovaný binárny strom a teda by výška mohla byť až $\bigO{N}$. Keďže však pracujeme so statickými dátami, môžeme ich vopred usporiadať a vyrobiť vyvážený statický strom} $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícii $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
 \[
-x-k,\dotsc,x-1,x,x+1,\dotsc,x+l
+x-k,\dotsc,x-1,x,x+1,\dotsc,x+\ell
 \]
-kde $k+l=B-1$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ alebo $2x+1$ a teda nás pozície menšie ako $x$ nezaujímajú. V najlepšom prípade teda bude $k=0$ a $l=B-1$. Aby sa v tomto intervale nachádzali požadované vrcholy, musí platiť
+kde $k+\ell=B-1$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2x$ alebo $2x+1$ a teda nás pozície menšie ako $x$ nezaujímajú. V najlepšom prípade teda bude $k=0$ a $\ell=B-1$. Aby sa v tomto intervale nachádzali požadované vrcholy, musí platiť
 \[
 \begin{aligned}
-2x+1 &\le x+l = x+B-1 \\
+2x+1 &\le x+\ell = x+B-1 \\
 x &\le B-2
 \end{aligned}
 \]
@@ -311,7 +311,7 @@ Dátovou štruktúrou, ktorá tento problém rieši efektívne je \emph{štrukt�
 
 \subsection{Popis štruktúry} \label{sec:of-desc}
 
-Budeme používať verziu z \citep{btreeshort} s malými úpravami. Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^h$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S=\Theta(\log{N})$, tak aby $S = 2^l$. Počet blokov tak bude tiež mocnina dvoch.
+Budeme používať verziu z \citep{btreeshort} s malými úpravami. Celá dátová štruktúra pozostáva z jedného poľa veľkosti $T = 2^h$. To (pomyselne) rozdelíme na \emph{bloky} veľkosti $S=\Theta(\log{N})$, tak aby $S = 2^\ell$. Počet blokov tak bude tiež mocnina dvoch.
 
 \begin{figure}
     \centering
@@ -322,7 +322,7 @@ Budeme používať verziu z \citep{btreeshort} s malými úpravami. Celá dátov
     \label{fig:of_overview}
 \end{figure}
 
-Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \ref{fig:of_overview}). \emph{Hĺbkou} vrcholu označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = h-l$. Na popis operácií budeme potrebovať definície \emph{hustoty} a \emph{hraníc hustoty}, ktoré uvedieme v nasledovnej časti.
+Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \ref{fig:of_overview}). \emph{Hĺbkou} vrcholu označíme jeho vzdialenosť od koreňa, pričom koreň má hĺbku $0$ a listy majú hĺbku $d = h-\ell$. Na popis operácií budeme potrebovať definície \emph{hustoty} a \emph{hraníc hustoty}, ktoré uvedieme v nasledovnej časti.
 
 \subsection{Definícia hustoty}
 
