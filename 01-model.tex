@@ -104,10 +104,10 @@ V tejto práci sa budeme venovať prevažne problému vyhľadávacích stromov, 
 {\renewcommand{\arraystretch}{1.5}
 \begin{sidewaystable}[p]
     \centering
-    \caption{Prehľad výsledkov \aware a \obliv algoritmov a dátových štruktúr pre rôzne problémy.}
+    \caption{Prehľad výsledkov \aware a \obliv algoritmov a dátových štruktúr pre rôzne problémy. Odhady udávajú počet pamäťových operácií, pričom $M$ a $B$ sú parametre \cache.}
     \label{tbl:alg-overview}
     \begin{threeparttable}
-        \begin{tabular}{r @{\hskip 1cm} lll @{\hskip 1cm} l}
+        \begin{tabular}{r @{\hskip 1.5cm} l@{\hskip 1cm}l@{\hskip 1cm}l @{\hskip 1cm} l}
             \toprule
 %            \multicolumn{1}{c}{\textbf{Úroveň}} & \multicolumn{1}{c}{\textbf{Veľkosť}} & \multicolumn{2}{c}{\textbf{Odozva}} & \multicolumn{1}{c}{\textbf{Asociativita}} & \multicolumn{1}{c}{\textbf{Veľkosť bloku}}\\ \toprule
 %            \multicolumn{1}{c}{\textbf{Názov}} & \multicolumn{3}{c}{\textbf{Operácie}} & \\ \toprule
@@ -119,6 +119,7 @@ V tejto práci sa budeme venovať prevažne problému vyhľadávacích stromov, 
             \textbf{Usporiadaná postupnosť} & \textbf{Vkľadanie} & \textbf{Prechod}\tnote{2} & & \\ \toprule
             \aware spájaný zoznam & $\bigO{1}$\tnote{1} & $\bigO{\frac{K}{B}}$ & & \citep{demaineoverview,pagh2003basic} \\ 
             \obliv usporiadané pole & $\bigO{\frac{\log^2{N}}{B}}$\tnote{1} & $\bigO{\frac{K}{B}}$ & & \citep{btreeshort}, časť \ref{sec:orderedfile} \\
+            \obliv usporiadané pole & $\bigO{\frac{\log^2{N}}{B}}$ & $\bigO{\frac{K}{B}}$ & & \citep{bender2002ofworstcase} \\
             \toprule
             \textbf{Triedenie} & & & & \\ \toprule    
             \aware mergesort & $\bigO{\frac{N}{B}\log_{M/B}{\frac{N}{B}}}$ & & & \citep{demaineoverview,vitteralgds} \\
@@ -130,7 +131,7 @@ V tejto práci sa budeme venovať prevažne problému vyhľadávacích stromov, 
             \bottomrule
         \end{tabular}
         \begin{tablenotes}
-            \item[1] Amortizované
+            \item[1] Amortizovaná zložitosť
             \item[2] Prechod $K$ po sebe idúcich prvkov
         \end{tablenotes}
     \end{threeparttable}
