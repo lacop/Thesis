@@ -88,7 +88,7 @@
 \renewcommand*{\finalnamedelim}{\addcomma\addspace}
 \renewcommand*{\labelnamepunct}{\addcolon\addspace}
 \renewcommand*{\newunitpunct}{\addcomma\addspace}
-\DeclareFieldFormat[article,inbook,incollection,inproceedings,patent,thesis,unpublished]{title}{\textsc{#1}}
+\DeclareFieldFormat[article,inbook,incollection,inproceedings,patent,thesis,unpublished]{title}{\textit{#1}}
 % Add all bibliography uncited in text
 \nocite{*}
 
@@ -193,22 +193,22 @@
 % Start of document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-\frontmatter
-    \input{cover}
-
-    \includepdf[pages=1]{\settingsAISfile}
-    \newpage
-    
-    \thispagestyle{plainright}
-    \input{thanks}
-    \newpage
-    
-    \input{abstracts}
-    \newpage
-    
-    \tableofcontents*
-    \newpage
-    \listoffigures*
+%\frontmatter
+%    \input{cover}
+%
+%    \includepdf[pages=1]{\settingsAISfile}
+%    \newpage
+%    
+%    \thispagestyle{plainright}
+%    \input{thanks}
+%    \newpage
+%    
+%    \input{abstracts}
+%    \newpage
+%    
+%    \tableofcontents*
+%    \newpage
+%    \listoffigures*
     
 \mainmatter
     \input{contents}
