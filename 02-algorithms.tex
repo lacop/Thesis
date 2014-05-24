@@ -390,10 +390,11 @@ keďže $\tau_d$ a $\tau_0$ sú konštanty a výška úplného binárneho stromu
 
 Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov -- tie, ktoré prislúchajú vrcholom na ceste z daného listu (bloku) do koreňa. Spolu teda bude veľkosť upraveného intervalu v priemernom prípade $\bigO{\log^2{T}}$.
 
-\todo[inline]{worstcase bounds? conjenctured lowerbound?}
-\todo[inline]{amortizacia double/half rebuildu}
+V prípade, že je aj koreň mimo hraníc hustoty, je potrebné vytvoriť pole dvojnásobnej veľkosti. Do spôsobí zmenu intervalu veľkosti $\bigO{N}$, avšak najbližších $N$ operácií vkladania môže prebehnúť bez nutnosti zväčšovať pole. Preto je amortizovaná veľkosť týmto spôsobom upraveného intervalu iba $\bigO{1}$ a podobne aj pre odstraňovanie.
 
 Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľkosti $\bigO{N}$ a podporuje operácie vkladania a odstraňovania, ktoré upravujú súvislý interval amortizovanej veľkosti $\bigO{\log^2{N}}$ a je ich teda možné realizovať pomocou $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov.
+
+Existujú tiež verzie tejto štruktúry \citep{bender2002ofworstcase}, ktoré dosahujú rovnaký počet pamäťových operácií nie v amortizovanom, ale najhoršom prípade. V tejto práci sa im však nebudeme venovať.
 
 \section{Dynamický B-strom} \label{sec:dynamic-obliv}
 V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry, ktorú navrhli Bender, Demaine \etal v \citep{btreeshort} a neskôr podrobne popísali v \citep{btreefull}, bola však značne komplikovaná a preto uvedieme zjednodušenú verziu. Tú navrhli Bender, Duan \etal v \citep{bender2002} a dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
@@ -499,8 +500,6 @@ dostávame celkovú zložitosť $\bigO{\log_B{N} + \frac{K}{B}}$. Keďže amorti
 \subsection{Odstraňovanie}
 Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli ho odstránime, čím sa zmení súvislý interval amortizovanej veľkosti $\bigO{\log^2{N}}$. Následne aktualizujeme kľúče v statickom poli rovnako ako pri vkladaní. Výsledná zložitosť bude taktiež rovnaká.
 
-\todo[inline]{double/half}
-
 \section{Vylepšený dynamický B-strom} \label{sec:dynamic-obliv-improved}
 \epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
 Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. V prípade, že $B=\Theta(\log{N}\log\log{N})$, bude tento člen zanedbateľný a dosiahneme rovnaký výsledok ako \aware B-stromy. Jednoduchou modifikáciou však môžeme tento člen môžeme odstrániť bez nutnosti tohto predpokladu.
@@ -508,7 +507,7 @@ Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v p
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
 \subsection{Vyhľadávanie}
-Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$. \todo{popis najdenia bloku - min/max, left child, ...}
+Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$.
 
 \subsection{Vkladanie a odstraňovanie}
 Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z neho kompletným prepísaním, čo vyžaduje $\bigO{\frac{\log{N}}{B}}$ presunov. Zároveň budeme udržiavať veľkosti blokov medzi $\frac{1}{4}\log{N}$ a $\log{N}$. Príliš malé skupiny môžeme spojiť do väčších a veľké rozdeliť na niekoľko menších. Skupina prekročí svoje hranice najskôr po $\Omega(\log{N})$ operáciách. V takom prípade po rozdelení alebo spojení bude potrebné vykonať vloženie alebo odstránenie z B-stromu. Vydelením dostávame amortizovanú zložitosť vkladania a odstraňovania:
