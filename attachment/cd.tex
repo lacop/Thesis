@@ -64,14 +64,17 @@
 %
 %{\scalefont{1}\circletext{(0,0)}{40mm}{bakalárska práca}}
 
-\node[anchor=north, rectangle split] at (INNER.south) {
+\node[anchor=north, rectangle split, rectangle split parts=5] at (INNER.south) {
+    \nodepart{one}
     Zdrojový kód a spustiteľná verzia programu \emph{Gnarley Trees}.
-    \nodepart{second}
-    {\scalefont{0.75} Inštrukcie k používaniu sa nachádzajú v texte práce. }
-    \nodepart{third}
-    {\scalefont{0.75} Dostupné tiež na \texttt{http://TODO}.}
-    \nodepart{fourth}
-    {\scalefont{0.75} Odovzdaná verzia: TODO: gitsha+DOI}
+    \nodepart{two}
+    {\scalefont{0.75} Inštrukcie k používaniu sa nachádzajú v texte práce.}
+    \nodepart{three}
+    {\scalefont{0.75} \texttt{http://school.lacop.net/thesis/cd-contents.zip}}
+    \nodepart{four}
+    {\scalefont{0.75} \texttt{http://dx.doi.org/10.5281/zenodo.10080}}
+    \nodepart{five}
+    {\scalefont{0.75} \texttt{http://dx.doi.org/10.5281/zenodo.10082}}
 };
 %\node[anchor=north, font=\small] at (INNER.south) {
 %    \begin{tabularx}{\tablewidth}{|r|X|}
