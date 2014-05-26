@@ -113,7 +113,7 @@ Pri vyhľadávaní potrebujeme pristúpiť k aspoň $\Omega(\log{N})$ prvkom. Ti
 
 Toto odvodenie spravíme rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie -- hľadaný prvok je jeden z týchto $B$ prvkov alebo patrí v usporiadaní niekam medzi ne. V najlepšom prípade je teda potrebných aspoň
 \[
-\frac{\lg(2N+1)}{\lg(2B+1)} \ge \frac{\lg N}{\lg B} = \Omega(\log_B{N})
+\frac{\lg(2N+1)}{\lg(2B+1)} \ge \frac{\lg N}{\lg B+\bigO{1}} = \Omega(\log_B{N})
 \]
 pamäťových presunov. Tento odhad je na rozdiel od predchádzajúceho dosiahnuteľný, napríklad práve \aware B-stromami.
 
