@@ -518,6 +518,16 @@ Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z n
 Najskôr však musíme nájsť blok, ktorý budeme aktualizovať. Teda výsledná zložitosť bude $\bigO{\log_B{N}}$ rovnako ako pri \aware B-strome. Opäť sme teda dosiahli rovnaký počet operácií ako ekvivalentná \aware dátová štruktúra, avšak tentokrát nie v najhoršom ale  amortizovanom prípade.
 %Vydelením dostaneme amortizovanú zložitosť vkladania a odstraňovania v takto upravenej štruktúre: $\bigO{\log_B{N}}$.
 
+\subsection{Prechod}
+Nevýhodou tejto modifikácie je zhoršenie počtu pamäťových presunov potrebných na prechod po sebe idúcich kľúčov. V prípade pôvodného \obliv B-stromu sú kľúče uložené v súvislom úseku pamäte -- usporiadanom poli veľkosti $\bigO{N}$. Je teda možné načítať $K$ po sebe idúcich kľúčov s použitím $\bigO{\frac{K}{B}}$ pamäťových presunov.
+
+Po tejto zmene však v jednom bloku B-stromu načítame najviac $\bigO{\log N}$ kľúčov. Ďalšie sú uložené v nasledovnom bloku, ktorý však nemusí byť v pamäti na nasledovnej pozícii. Preto v prípade, keď $B =\Omega(\log N)$ a vieme jeden takýto blok načítať v $\bigO{1}$ pamäťových presunoch, môže byť potrebných až $\bigO{\frac{K}{\log N}}$ pamäťových presunov -- toľko, koľko je blokov. V prípade, keď $B = \bigO{\log N}$ načítame v jednom pamäťovom presune najviac $B$ kľúčov a bude teda potrebných $\bigO{\frac{K}{B}}$ pamäťových presunov ako v prípade pôvodného \obliv B-stromu.
+
+Spolu teda dostávame, že na prechod $K$ po sebe idúcich kľúčov potrebujeme
+\[
+\bigO{\frac{K}{\min\{B,\log N\}}}
+\]
+pamäťových presunov.
 
 
 % OUTLINE
