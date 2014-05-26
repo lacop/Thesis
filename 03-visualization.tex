@@ -3,7 +3,7 @@
 
 Cieľom tejto práce je nielen popísať \obliv pamäťový model a rôzne dátové štruktúry v ňom, ale aj vytvoriť ich vizualizácie. Tie majú slúžiť na edukačné účely pre študentov (a učiteľov) a pomáhať pri pochopení ich fungovania.
 
-Výsledkom práce sú vizualizácie demonštrujúce dátové štruktúry popísané v predchádzajúcich sekciách: \vEB{ovo} usporiadanie (sekcia \ref{sec:static-obliv}) v statickom binárnom vyhľadávacom strome, usporiadané pole (\ref{sec:orderedfile}) a dynamický B-strom (\ref{sec:dynamic-obliv}). Súčasťou je tiež simulácia \cache (sekcia \ref{sec:extmem}) s možnosťou voľby parametrov $B$ a $M$ - veľkosť bloku a celková veľkosť.
+Výsledkom práce sú vizualizácie demonštrujúce dátové štruktúry popísané v predchádzajúcich sekciách: \vEB{ovo} usporiadanie (sekcia \ref{sec:static-obliv}) v statickom binárnom vyhľadávacom strome, usporiadané pole (\ref{sec:orderedfile}) a dynamický B-strom (\ref{sec:dynamic-obliv}). Súčasťou je tiež simulácia \cache (sekcia \ref{sec:extmem}) s možnosťou voľby parametrov $B$ a $M$ -- veľkosť bloku a celková veľkosť.
 
 \section{Gnarley trees}
 Tieto vizualizácie sú implementované ako rozšírenie programu \emph{Gnarley trees}, ktorý vznikol ako súčasť bakalárskej práca Jakuba Kováča \citep{algviskuko}. Tento nástroj na vizualizáciu (prevažne stromových) dátových štruktúr bol následne v bakalárskych prácach \citep{algviskotrlova, algvistomkovic, algvislukca} a ročníkových projektoch rozšírený o mnohé ďalšie dátové štruktúry a v súčastnosti podporuje desiatky štruktúr, ako napríklad červeno-čierne, sufixové a intervalové stromy, \emph{union-find}, haldy a mnohé ďalšie.
@@ -16,7 +16,7 @@ Obsah tejto CD prílohy je tiež dostupný na \url{http://school.lacop.net/thesi
 \subsection{Funkcionalita}
 Program umožňuje užívateľom zobrazovať tieto štruktúry a manipulovať s nimi. Všetky operácie sú rozložené na malé, jednoduché kroky a každý je vysvetlený, keď sa vykonáva. Je možné posúvať sa po krokoch dopredu, ale aj vracať sa dozadu, a teda sa dá kedykoľvek vrátiť až k počiatočnému stavu. Toto je dôležité pri experimentovaní s danou štruktúrou, kedy dve rôzne operácie (alebo jedna operácia s dvoma rôznymi parametrami) spôsobia rôzne správanie a výsledky. Užívateľ má takto možnosť jednoducho sa po vykonaní prvej operácie vrátiť do predošlého stavu a preskúmať správanie druhej z nich.
 
-Celý program je taktiež dvojjazyčný - je možné prepnúť medzi angličtinou a slovenčinou, čo umožňuje širšie použitie týchto vizualizácií.
+Celý program je taktiež dvojjazyčný -- je možné prepnúť medzi angličtinou a slovenčinou, čo umožňuje širšie použitie týchto vizualizácií.
 
 \subsection{Prehľad programu}
 \begin{figure}
@@ -37,7 +37,7 @@ Najväčšia, prostredná časť okna zobrazuje vizualizáciu aktuálnej dátove
 Podrobnejší popis užívateľského rozhrania a návod na používanie sa nachádza v bakalárskej práci Jakuba Kováča \citep{algviskuko} v siedmej kapitole.
 
 \section{Statický strom}
-Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implementovali sme vytvorenie tohto stromu a jeho uloženie v pamäti. Je možné strom zväčšiť alebo zmenšiť podľa preferencii - ukážky stromov rôznych veľkostí sú na obrázku \ref{fig:ss_static_sizes}.
+Najjednoduchšou dátovou štruktúrou je statický vyhľadávací strom. Implementovali sme vytvorenie tohto stromu a jeho uloženie v pamäti. Je možné strom zväčšiť alebo zmenšiť podľa preferencii -- ukážky stromov rôznych veľkostí sú na obrázku \ref{fig:ss_static_sizes}.
 
 Čísla vo vnútorných vrcholoch sú kľúče, čísla nad vrcholom určujú jeho pozíciu v pamäti. Uloženie tohto stromu v pamäti, vo forme súvislého poľa, je zobrazené nad koreňom stromu. Vnútorné čísla poľa sú opäť kľúče, pričom sú zoradené podľa svojich pozícii zľava (pozícia $1$) doprava.
 
@@ -68,7 +68,7 @@ Medzi uložením vo \vEB{ovom} usporiadaní a klasickom \emph{BFS} usporiadaní 
 \end{figure}
 
 \subsection{Simulácia \cache}
-Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Užívateľ si môže zvoliť parametre cache - počet vrcholov $B$, ktoré sa zmestia do jedného bloku a počet blokov $\frac{M}{B}$ v \cache. Tiež je možné \cache kedykoľvek vyprázdniť -- odstrániť z nej všetky načítané bloky. Simulácia na výmenu stránok používa stratégiu \emph{FIFO}, ktorá je popísaná v časti \ref{sec:memmng}.
+Porovnanie týchto dvoch usporiadaní je rozšírené o simuláciu \cache. Užívateľ si môže zvoliť parametre cache -- počet vrcholov $B$, ktoré sa zmestia do jedného bloku a počet blokov $\frac{M}{B}$ v \cache. Tiež je možné \cache kedykoľvek vyprázdniť -- odstrániť z nej všetky načítané bloky. Simulácia na výmenu stránok používa stratégiu \emph{FIFO}, ktorá je popísaná v časti \ref{sec:memmng}.
 
 Táto simulácia zároveň počíta počet pamäťových prístupov k vrcholom pri vyhľadávaní. Prvé počítadlo udáva počet všetkých prístupov a správa sa rovnako pri \vEB{ovom} aj \emph{BFS} usporiadaní a tiež pre ľubovolné parametre \cache. Druhé udáva počet prístupov, pri ktorých bolo potrebné načítanie z disku (\miss) a pri zmene parametrov či usporiadania sa bude správať inak. Cieľom \obliv algoritmov je minimalizovať práve počet takých presunov, ktoré počíta toto druhé počítadlo.
 
@@ -87,7 +87,7 @@ Táto simulácia zároveň počíta počet pamäťových prístupov k vrcholom p
 %    \label{fig:ss_cachesim_compare}
 %\end{figure}
 
-Na vizualizáciu prítomnosti v \cache slúži farba - vrcholy a položky poľa obsahujúce kľúče majú svetlejšiu farbu pozadia v prípade, že je daný blok v \cache a tmavšiu, ak je mimo. V strome je vďaka tomu ľahko vidieť, ktorá časť je načítaná a je možné ňou prechádzať bez ďalších presunov. V prípade \vEB{ovho} usporiadania pôjde prevažne o časť podstromu aktuálne porovnávaného vrcholu, avšak pri klasickom usporiadaní to budú práve vrcholy mimo tohto podstromu, o ktorých už vieme, že nie sú pri vyhľadávaní potrebné.
+Na vizualizáciu prítomnosti v \cache slúži farba -- vrcholy a položky poľa obsahujúce kľúče majú svetlejšiu farbu pozadia v prípade, že je daný blok v \cache a tmavšiu, ak je mimo. V strome je vďaka tomu ľahko vidieť, ktorá časť je načítaná a je možné ňou prechádzať bez ďalších presunov. V prípade \vEB{ovho} usporiadania pôjde prevažne o časť podstromu aktuálne porovnávaného vrcholu, avšak pri klasickom usporiadaní to budú práve vrcholy mimo tohto podstromu, o ktorých už vieme, že nie sú pri vyhľadávaní potrebné.
 
 \begin{figure}
     \centering

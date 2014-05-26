@@ -45,7 +45,7 @@ Klasická časová analýza tohto algoritmu je triviálna ak uvažujeme \emph{RA
 
 V prípade \aware algoritmu by sme pole $A$ mali uložené v $\lceil \frac{N}{B} \rceil$ blokoch veľkosti $B$. Pri výpočte by sme postupne tieto bloky načítali do cache a pracovali s nimi. V rámci jedného bloku počas výpočtu nedochádza k pamäťovým presunom. Zároveň stačí každý prvok spracovať raz a teda celkový počet pamäťových operácií bude presne rovný počtu blokov, $\lceil \frac{N}{B} \rceil$. Tento algoritmus však požaduje znalosť parametra $B$ a zarovnať pole v pamäti tak, aby zabralo najmenší potrebný počet blokov.
 
-Jednoducho však vieme dosiahnuť (takmer) rovnakú zložitosť aj v prípade \obliv algoritmu \ref{alg:aggregate}, ktorý žiadne parametre pamäte zjavne nevyužíva a nepozná. Budeme predpokladať, že pole $A$ je uložené v súvislom úseku pamäte - to je možné dosiahnuť aj bez znalosti parametrov pamäte. Zvyšok algoritmu prebieha rovnako ako v predchádzajúcom prípade. Každý blok obsahujúci nejaký prvok poľa $A$ bude teda presunutý do cache práve raz, a žiadne iné presuny nenastanú. Ostáva zistiť, koľko takých blokov môže byť.
+Jednoducho však vieme dosiahnuť (takmer) rovnakú zložitosť aj v prípade \obliv algoritmu \ref{alg:aggregate}, ktorý žiadne parametre pamäte zjavne nevyužíva a nepozná. Budeme predpokladať, že pole $A$ je uložené v súvislom úseku pamäte -- to je možné dosiahnuť aj bez znalosti parametrov pamäte. Zvyšok algoritmu prebieha rovnako ako v predchádzajúcom prípade. Každý blok obsahujúci nejaký prvok poľa $A$ bude teda presunutý do cache práve raz, a žiadne iné presuny nenastanú. Ostáva zistiť, koľko takých blokov môže byť.
 
 Keďže nepoznáme veľkosti blokov v pamäti, nevieme pri ukladaní prvkov poľa zaručiť zarovnanie so začiatkom bloku. V najhoršom prípade uložíme do prvého bloku iba jeden prvok. Potom bude nasledovať $\lfloor \frac{N}{B} \rfloor$ plných blokov a nakoniec ešte najviac jeden blok, ktorý opäť nie je plný. Spolu máme teda $\lfloor \frac{N}{B} \rfloor + 2$ blokov.
 
@@ -164,7 +164,7 @@ x &\le B-2
 To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je rovnako ako binárne vyhľadávanie horšie v porovnaní s \aware B-stromom.
 
 \subsection{Vyhľadávací strom vo \vEB{ovom} usporiadaní} \label{sec:static-obliv}
-Problémom predošlého riešenia je neefektívne usporiadanie v pamäti - pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
+Problémom predošlého riešenia je neefektívne usporiadanie v pamäti -- pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
 
 Možným riešením je takzvané \vEB{ovo} \emph{usporiadanie} (\vEB{} \emph{layout}, nazvané podla \vEB{ových} stromov s podobnou myšlienkou), ktoré popísali Bender \etal\citep{btreeshort, btreefull}. Toto usporiadanie vznikne rekurzívnym delením, ktoré schéma je na obrázku \ref{fig:veblayout_scheme} a príklad takto uloženého stromu na obrázku \ref{fig:node_order_veb}.
 
@@ -299,7 +299,7 @@ Avšak strom vo \vEB{ovom} usporiadaní potom čo pristúpi k nejakému prvku v 
 \end{sidewaysfigure}
 
 \subsection{Dynamická verzia vyhľadávacieho stromu} 
-V časti \ref{sec:static-obliv} sme popísali štruktúru, ktorá dokáže vyhľadávať v usporiadanej statickej množine optimálne, rovnako ako \aware B-stromy. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky - pri každej zmene by bolo potrebné strom preusporiadať. Dostávame tak \obliv ekvivalent statických \aware B-stromov. 
+V časti \ref{sec:static-obliv} sme popísali štruktúru, ktorá dokáže vyhľadávať v usporiadanej statickej množine optimálne, rovnako ako \aware B-stromy. Problémom tejto dátovej štruktúry je však nemožnosť efektívne vkladať či odoberať prvky -- pri každej zmene by bolo potrebné strom preusporiadať. Dostávame tak \obliv ekvivalent statických \aware B-stromov. 
 
 Na úpravu tohto statického stromu tak, aby efektívne zvládal operácie pridávania a odstraňovania, budeme potrebovať pomocnú dátovú štruktúru, ktorú popíšeme v následovnej sekcii.
 
@@ -382,13 +382,13 @@ q > (\tau_{k+1}-\tau_k)c(v)
 
 Podobne pre prekročenie dolnej hranice je potrebných aspoň $(\rho_k-\rho_{k+1})c(v)$ operácii odstránenia.
 
-Pri úprave intervalu blokov v podstrome vrcholu $u$ je potrebné upraviť najviac $c(u)$ položiek, avšak táto situácia nastane až keď sa potomok $v$ ocitne znovu mimo hraníc hustoty. Priemerná veľkosť intervalu, ktorý treba preusporiadať pri vložení do podintervalu prislúchajúceho vrcholu $v$ teda bude
+Pri úprave intervalu blokov v podstrome vrcholu $u$ je potrebné upraviť najviac $c(u)$ položiek, avšak táto situácia nastane až keď sa potomok $v$ ocitne znovu mimo hraníc hustoty. Amortizovaná veľkosť intervalu, ktorý treba preusporiadať pri vložení do podintervalu prislúchajúceho vrcholu $v$ teda bude
 \[
 \frac{c(u)}{(\tau_{k+1}-\tau_k)c(v)} = \frac{2c(v)}{(\tau_{k+1}-\tau_k)c(v)} = \frac{2}{\tau_{k+1}-\tau_k} = \frac{2d}{\tau_d-\tau_0} = \bigO{\log{T}}
 \]
 keďže $\tau_d$ a $\tau_0$ sú konštanty a výška úplného binárneho stromu $d$ s $T$ listami je $d = \Theta(\log{T})$. Podobným spôsobom dostaneme rovnaký odhad pre odstraňovanie.
 
-Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov -- tie, ktoré prislúchajú vrcholom na ceste z daného listu (bloku) do koreňa. Spolu teda bude veľkosť upraveného intervalu v priemernom prípade $\bigO{\log^2{T}}$.
+Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov -- tie, ktoré prislúchajú vrcholom na ceste z daného listu (bloku) do koreňa. Spolu teda bude amortizovaná veľkosť upraveného intervalu $\bigO{\log^2{T}}$.
 
 V prípade, že je aj koreň mimo hraníc hustoty, je potrebné vytvoriť pole dvojnásobnej veľkosti. Do spôsobí zmenu intervalu veľkosti $\bigO{N}$, avšak najbližších $N$ operácií vkladania môže prebehnúť bez nutnosti zväčšovať pole. Preto je amortizovaná veľkosť týmto spôsobom upraveného intervalu iba $\bigO{1}$ a podobne aj pre odstraňovanie.
 
@@ -477,7 +477,7 @@ Pri \emph{post-order} prechode cez podstrom $T$ prejdeme najskôr cez ľavých s
 Vidíme, že pokiaľ dokážeme udržať v \cache aspoň dva také podstromy, teda za predpokladu $M \ge 4B$, sme schopný takýto \emph{post-order} prechod zrealizovať pomocou $\bigO{1}$ pamäťových operácii pre každý podstrom veľkosti $\le B$. Takéto podstromy majú $\bigO{B}$ listov, pričom  nimi potrebujeme pokryť interval veľkosti $K$ (podstromy, ktorých žiaden list neleží v upravenom intervale nie je potrebné aktualizovať) a teda celkový počet podstromov na spodných dvoch úrovniach, ktoré potrebujeme načítať a upraviť je $\bigO{\frac{K}{B}}$ a stačí nám na to $\bigO{\frac{K}{B}}$ pamäťových presunov.
 
 \subsubsection{Stredná časť -- najbližší spoločný predok}
-Označme ako $T_1,\dotsc,T_\ell$ tie stromy, ktoré obsahujú aktualizované podstromy veľkosti najviac $B$ na spodných dvoch úrovniach. Platí teda $\ell = \bigO{\frac{K}{B}}$. Označme $U$ taký podstrom statického stromu, ktorého koreň je najbližší spoločný predok koreňov $T_1,\dotsc,T_\ell$. Ak je tento koreň v hĺbke $h$ tak $U$ obsahuje všetky vrcholy hĺbky aspoň $h$, ktoré treba aktualizovať - tie mimo $U$ nie sú predkovia upravených vrcholov a teda hodnoty kľúčov ich potomkov neboli v prvej časti zmenené, alebo už boli aktualizované ako súčasť nejakého podstromu $T_i$ na spodnej úrovni.
+Označme ako $T_1,\dotsc,T_\ell$ tie stromy, ktoré obsahujú aktualizované podstromy veľkosti najviac $B$ na spodných dvoch úrovniach. Platí teda $\ell = \bigO{\frac{K}{B}}$. Označme $U$ taký podstrom statického stromu, ktorého koreň je najbližší spoločný predok koreňov $T_1,\dotsc,T_\ell$. Ak je tento koreň v hĺbke $h$ tak $U$ obsahuje všetky vrcholy hĺbky aspoň $h$, ktoré treba aktualizovať -- tie mimo $U$ nie sú predkovia upravených vrcholov a teda hodnoty kľúčov ich potomkov neboli v prvej časti zmenené, alebo už boli aktualizované ako súčasť nejakého podstromu $T_i$ na spodnej úrovni.
 
 Počet vrcholov $U$ je najviac dvojnásobok počtu listov a teda $|U| = \bigO{l} = \bigO{\frac{K}{B}}$. Keďže pri \emph{post-order} prechode navštívime každý vrchol $\bigO{1}$ krát (najprv pri prechode z koreňa ku listom, pričom následne rekurzívne prejdeme ľavého a pravého syna, a potom pri návrate z rekurzie) a teda celkovo budeme potrebovať $\bigO{\frac{K}{B}}$ pamäťových presunov na aktualizáciu $U$.
 
@@ -507,7 +507,7 @@ Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v p
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
 \subsection{Vyhľadávanie}
-Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov - zanedbateľné voči hľadaniu v B-strome - a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$.
+Najskôr vyhľadáme požadovaný blok v B-strome, čo zaberie $\bigO{\log_B{\frac{N}{\log{N}}}} = \bigO{\log_B{N}}$ pamäťových presunov. Následne prejdeme daný blok celý a nájdeme v ňom požadovaný kľúč. To vyžaduje $\bigO{\frac{\log{N}}{B}}$ pamäťových presunov -- zanedbateľné voči hľadaniu v B-strome -- a spolu teda vyhľadávanie vyžaduje rovnako veľa pamäťových presunov ako neupravený B-strom: $\bigO{\log_B{N}}$.
 
 \subsection{Vkladanie a odstraňovanie}
 Po nájdení požadovaného bloku vykonáme vloženie prípadne odstránenie z neho kompletným prepísaním, čo vyžaduje $\bigO{\frac{\log{N}}{B}}$ presunov. Zároveň budeme udržiavať veľkosti blokov medzi $\frac{1}{4}\log{N}$ a $\log{N}$. Príliš malé skupiny môžeme spojiť do väčších a veľké rozdeliť na niekoľko menších. Skupina prekročí svoje hranice najskôr po $\Omega(\log{N})$ operáciách. V takom prípade po rozdelení alebo spojení bude potrebné vykonať vloženie alebo odstránenie z B-stromu. Vydelením dostávame amortizovanú zložitosť vkladania a odstraňovania:
