@@ -1,5 +1,5 @@
 \chapter{Pamäťový model}
-\epigraph{Memory is the thing you forget~with.}{Alexander Chase}
+%\epigraph{Memory is the thing you forget~with.}{Alexander Chase}
 
 Pri časovej analýze algoritmov sa zvyčajne používa takzvaný \RAM (skratka z anglického \emph{Random-Access Machine}, stroj s náhodným prístupom k pamäti) \citep{aho1974design}, v ktorom sa predpokladá možnosť pristupovať k ľubovoľnému úseku pamäte v konštantnom čase. To znamená, že vo výslednej asymptotickej analýze počítame len počet vykonaných operácií.
 
@@ -40,7 +40,7 @@ Jedným zo spôsobov, ako zohľadniť tieto skutočnosti pri analýze algoritmov
 
 Všetky výpočty prebiehajú nad dátami v \cache, ktorá má obmedzenú veľkosť. Ostatné dáta sú uložené na disku neobmedzenej veľkosti, no nemôžeme s nimi priamo manipulovať a je ich potrebné najskôr preniesť do \cache. V samotnej analýze algoritmov potom počítame počet týchto prenosov z disku do \cache a naopak.
 
-Prístup k dátam, ktoré sa práve nachádzajú v \cache voláme \hit (zásah \cache). Naopak prístup, ktorý vyžaduje dáta najskôr presunúť z \disk-u do \cache voláme \miss (minutie \cache). Tieto presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk aj \cache sa skladajú z takýchto blokov a za jednu operáciu považujeme presun jedného bloku medzi nimi. \Cache má obmedzenú veľkosť $M$ a skladá sa teda z $\frac{M}{B}$ blokov.  
+Prístup k dátam, ktoré sa práve nachádzajú v \cache voláme \hit (zásah \cache). Naopak prístup, ktorý vyžaduje dáta najskôr presunúť z disku do \cache voláme \miss (minutie \cache). Tieto presuny sú realizované v \emph{blokoch} pamäte veľkosti $B$. Disk aj \cache sa skladajú z takýchto blokov a za jednu operáciu považujeme presun jedného bloku medzi nimi. \Cache má obmedzenú veľkosť $M$ a skladá sa teda z $\frac{M}{B}$ blokov.  
 
 \begin{figure}
     \centering
@@ -77,6 +77,8 @@ V momente, keď sa \obliv algoritmus pokúsi o vykonanie operácie, ktorá potre
 Stratégia \emph{LRU} (least recently used -- najdlhšie nepoužité) vyberá vždy blok, ktorý bol najdlhšie nepoužitý. Implementácia vyžaduje udržiavať si ku každému bloku počítadlo, ktoré sa pri prístupe nastaví na nulu a pri prístupe k iným blokom zvýši o jedna. Pri potrebe uvoľniť miesto v cache vyberieme blok s najväčšou hodnotou počítadla -- ten, ku ktorému najdlhšie nebol prístup.
 
 Stratégia \emph{FIFO} (first in, first out -- prvé dnu, prvé von) je ešte jednoduchšia -- bloky udržiavame zoradené podľa poradia, v akom sme ich vložili do \cache. Keď vyberáme blok na odstránenie, vezmeme ten, ktorý bol pridaný najskôr.
+
+\subsubsection{Problémy}
 
 Ak by sa táto stratégia správala tak, že vždy odstráni blok, ktorý bude potrebný v ďalšom kroku algoritmu, tak by bolo možné efektívne pracovať len s jedným blokom v \cache, napriek tomu, že by sa ich do \cache zmestilo viac. Vzhľadom na to, že analýza množstva \obliv algoritmov predpokladá istý minimálny počet blokov, ktorý sa zmestí do \cache, bol by tento predpoklad nenaplnený. To by mohlo spôsobiť, že by algoritmus vykonal viac pamäťových presunov ako táto analýza predpovedala.
 
@@ -122,7 +124,7 @@ V tejto práci sa budeme venovať prevažne problému vyhľadávacích stromov, 
             \toprule
             \textbf{Usporiadaná postupnosť} & \textbf{Vkladanie} & \textbf{Prechod}\tnote{1} & & \\ \toprule
             \aware spájaný zoznam & $\bigO{1}$ \amort & $\bigO{\frac{K}{B}}$ & & \citep{demaineoverview,pagh2003basic} \\ 
-            \obliv usporiadané pole & $\bigO{\frac{\log^2{N}}{B}}$ & $\bigO{\frac{K}{B}}$ & & \citep{btreeshort, bender2002ofworstcase} \\
+            \obliv usporiadané pole & $\bigO{\frac{\log^2{N}}{B}}$ & $\bigO{\frac{K}{B}}$ & & \citep{btreeshort, bender2002ofworstcase}, časť \ref{sec:orderedfile} \\
             \toprule
             \textbf{Triedenie} & & & & \\ \toprule    
             \aware mergesort & $\bigO{\frac{N}{B}\log_{M/B}{\frac{N}{B}}}$ & & & \citep{demaineoverview,vitteralgds} \\

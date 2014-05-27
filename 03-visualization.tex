@@ -6,10 +6,10 @@ Cieľom tejto práce je nielen popísať \obliv pamäťový model a rôzne dáto
 Výsledkom práce sú vizualizácie demonštrujúce dátové štruktúry popísané v predchádzajúcich sekciách: \vEB{ovo} usporiadanie (sekcia \ref{sec:static-obliv}) v statickom binárnom vyhľadávacom strome, usporiadané pole (\ref{sec:orderedfile}) a dynamický B-strom (\ref{sec:dynamic-obliv}). Súčasťou je tiež simulácia \cache (sekcia \ref{sec:extmem}) s možnosťou voľby parametrov $B$ a $M$ -- veľkosť bloku a celková veľkosť.
 
 \section{Gnarley trees}
-Tieto vizualizácie sú implementované ako rozšírenie programu \emph{Gnarley trees}, ktorý vznikol ako súčasť bakalárskej práca Jakuba Kováča \citep{algviskuko}. Tento nástroj na vizualizáciu (prevažne stromových) dátových štruktúr bol následne v bakalárskych prácach \citep{algviskotrlova, algvistomkovic, algvislukca} a ročníkových projektoch rozšírený o mnohé ďalšie dátové štruktúry a v súčastnosti podporuje desiatky štruktúr, ako napríklad červeno-čierne, sufixové a intervalové stromy, \emph{union-find}, haldy a mnohé ďalšie.
+Tieto vizualizácie sú implementované ako rozšírenie programu \emph{Gnarley trees}, ktorý vznikol ako súčasť bakalárskej práca Jakuba Kováča \citep{algviskuko}. Tento nástroj na vizualizáciu (prevažne stromových) dátových štruktúr bol následne v bakalárskych prácach \citep{algviskotrlova, algvislukca, algvistomkovic} a ročníkových projektoch rozšírený o mnohé ďalšie dátové štruktúry a v súčastnosti podporuje desiatky štruktúr, ako napríklad červeno-čierne, sufixové a intervalové stromy, \emph{union-find}, haldy a mnohé ďalšie.
 
 \subsection{Spustenie}
-Súčasťou práce je priložené CD obsahujúce zdrojový kód \citep{attsource} tohto programu a tiež skompilovanú verziu \citep{attbin}. Aplikácia na spustenie požaduje \emph{JVM}\footnote{\emph{Java Virtual Machine}, dostupné na \url{https://www.java.com/en/download/}}. Spustenie je možné vykonať spustením súborov \inlcode{start.sh} prípadne \inlcode{start.bat}, podla operačného systému. Dostupné sú tiež individuálne vizualizácie vo forme \emph{Java appletov}, ktoré je možné spustiť otvorením súboru \inlcode{index.html} v preferovanom internetovom prehliadači.
+Súčasťou práce je priložené CD obsahujúce kompletný zdrojový kód \citep{attsource} tohto programu a tiež spustiteľnú verziu \citep{attbin}. Aplikácia požaduje \emph{JVM}\footnote{\emph{Java Virtual Machine}, dostupné na \url{https://www.java.com/en/download/}} a je ju možné spustiť pomocou súborov \inlcode{start.sh} prípadne \inlcode{start.bat}, podla operačného systému. Dostupné sú tiež individuálne vizualizácie vo forme \emph{Java appletov}, ktoré je možné spustiť otvorením súboru \inlcode{index.html} v preferovanom internetovom prehliadači.
 
 Obsah tejto CD prílohy je tiež dostupný na \url{http://school.lacop.net/thesis/cd-contents.zip}.
 
@@ -99,7 +99,7 @@ Na vizualizáciu prítomnosti v \cache slúži farba -- vrcholy a položky poľa
     \hspace{1cm}
     \subtop[Druhý krok]{%
         \includegraphics[width=0.25\textwidth]{figures/screenshots/cachesim_step3.pdf}}
-    \caption[Simulácia \cache počas vyhľadávania kľúča $3$]{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvok kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré sú označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
+    \caption[Simulácia \cache počas vyhľadávania kľúča $3$]{Simulácia \cache počas vyhľadávania kľúča $3$. Pred prvým prístupom je cache prázdna. V prvom kroku načítame koreň, ktorý je označený červenou farbou (\miss), keďže nebol v \cache. Spolu s ním sa v jednom bloku načítali ďalšie vrcholy, ktoré sú označené svetlejšou farbou. V druhom kroku je vrchol s kľúčom $2$ označený zelenou farbou (\hit), keďže už bol do \cache načítaný v predchádzajúcom kroku.}
     \label{fig:ss_cachesim_colors}
 \end{figure}
 

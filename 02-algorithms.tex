@@ -59,7 +59,7 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 Tento rozdiel je spôsobený iným usporiadaním prvkov v pamäti. Keďže majú všetky uvedené prístupy logaritmickú časovú zložitosť bude počet presunutých blokov najviac $\bigO{\log{N}}$. V tomto odhade však nevystupujú žiadne parametre \cache a teda ich zväčšenie tento algoritmus nemusí urýchliť. Ukážeme ale dátovú štruktúru, ktorá dosahuje podstatne lepší výsledok $\bigO{\log_B{N}}$ a bude nám tiež slúžiť ako základ pri riešení dynamickej verzie tohto problému.
 
 \subsection{Binárne vyhľadávanie}
-Ako prvé popíšeme binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde prvok $K$ v usporiadanom poli \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
+Ako prvé popíšeme binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde pozíciu prvku $K$ v usporiadanom poli \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
 
 \begin{algorithm}
     \caption{Implementácia binárneho vyhľadávania}
@@ -117,7 +117,7 @@ Toto odvodenie spravíme rovnako ako v \citep{demaineoverview} technikou informa
 \]
 pamäťových presunov. Tento odhad je na rozdiel od predchádzajúceho dosiahnuteľný, napríklad práve \aware B-stromami.
 
-Vidíme teda, že na rozdiel od \obliv binárneho vyhľadávania, je \aware B-strom asymptoticky optimálnym riešením tohto problému. Chceli by sme teraz nájsť \obliv dátovú štruktúru, ktorá tiež dosahuje túto hranicu.
+Vidíme teda, že na rozdiel od \obliv binárneho vyhľadávania, je \aware B-strom asymptoticky optimálnym riešením tohto problému. Chceli by sme teraz nájsť \obliv dátovú štruktúru, ktorá tiež dosahuje túto spodnú hranicu.
 
 \subsection{Naivné \obliv riešenie} \label{sec:static-naive}
 Predtým ako popíšeme efektívne \obliv riešenie, sa pozrime na klasický binárny vyhľadávací strom. Asi najjednoduchší spôsob, ako usporiadať uzly (statického) binárneho stromu v pamäti, je nasledovný. Koreň uložíme na pozíciu $1$. Ľavého a pravého potomka vrcholu na pozícii $x$ uložíme na pozície $2x$ a $2x+1$. Otec vrcholu $x$ bude teda na pozícii $\lfloor\frac{x}{2}\rfloor$. Toto usporiadanie voláme \emph{BFS usporiadanie} (z anglického \emph{breadth-first search} -- prehľadávanie do šírky), keďže pozície vrcholov sa zvyšujú v rovnakom poradí ako by prebiehalo prehľadávanie tohto stromu do šírky. Príklad takto uloženého stromu je na obrázku \ref{fig:node_order_naive}.
@@ -150,7 +150,7 @@ Výhodou tohto usporiadania sú implicitné vzťahy medzi vrcholmi. Na udržiava
 	\end{minipage}
 \end{algorithm}
 
-Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je\footnote{Nejde o vyvažovaný binárny strom a teda by výška mohla byť až $\bigO{N}$. Keďže však pracujeme so statickými dátami, môžeme ich vopred usporiadať a vyrobiť vyvážený statický strom} $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícii $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
+Nevýhodou je však vysoký počet pamäťových presunov pri vyhľadávaní. Výška tohto stromu je\footnote{Nejde o vyvažovaný binárny strom a teda by výška mohla byť až $\bigO{N}$. Keďže však pracujeme so statickými dátami, môžeme ich vopred usporiadať a vyrobiť vyvážený statický strom.} $\bigO{\log{N}}$. Pri načítaní vrcholu na pozícii $x$ sa v rovnakom bloku nachádzajú vrcholy na pozíciach
 \[
 x-k,\dotsc,x-1,x,x+1,\dotsc,x+\ell
 \]
@@ -161,12 +161,12 @@ kde $k+\ell=B-1$. Pri ďalšom kroku vyhľadávania budeme potrebovať vrchol $2
 x &\le B-2
 \end{aligned}
 \]
-To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je rovnako ako binárne vyhľadávanie horšie v porovnaní s \aware B-stromom.
+To znamená, že pre pozície $x > B - 2$ už bude potrebný pamäťový presun pre každý vrchol. Vrchol s pozíciou $B-2$ bude mať hĺbku $\bigO{\log{B}}$ a teda počet vrcholov na ceste z koreňa do listu, ktorých pozície v pamäti sú väčšie ako $B-2$ bude $\Omega(\log{N}-\log{B})$. Pre každý z nich je potrebné vykonať pamäťový presun a teda vyhľadávanie v takto usporiadanom binárnom strome vykoná aspoň $\Omega(\log{\frac{N}{B}})$ pamäťových presunov, čo je rovnako ako binárne vyhľadávanie horšie v porovnaní s \aware B-stromom.
 
 \subsection{Vyhľadávací strom vo \vEB{ovom} usporiadaní} \label{sec:static-obliv}
 Problémom predošlého riešenia je neefektívne usporiadanie v pamäti -- pri prístupe ku vrcholu sa spolu s ním v rovnakom bloku nachádzajú vrcholy, ktoré nie sú pre ďalší priebeh algoritmu podstatné. 
 
-Možným riešením je takzvané \vEB{ovo} \emph{usporiadanie} (\vEB{} \emph{layout}, nazvané podla \vEB{ových} stromov s podobnou myšlienkou), ktoré popísali Bender \etal\citep{btreeshort, btreefull}. Toto usporiadanie vznikne rekurzívnym delením, ktoré schéma je na obrázku \ref{fig:veblayout_scheme} a príklad takto uloženého stromu na obrázku \ref{fig:node_order_veb}.
+Možným riešením je takzvané \vEB{ovo} \emph{usporiadanie} (\vEB{} \emph{layout}, nazvané podla \vEB{ových} stromov s podobnou myšlienkou), ktoré popísali Bender \etal\citep{btreeshort, btreefull}. Toto usporiadanie vznikne rekurzívnym delením, ktorého schéma je na obrázku \ref{fig:veblayout_scheme} a príklad takto uloženého stromu na obrázku \ref{fig:node_order_veb}.
 
 Uvažujme úplný binárny strom výšky $h$. Ak $h=1$ tak máme iba jeden vrchol $v$ a výstupom usporiadania bude poradie $(v)$.
 
@@ -234,7 +234,7 @@ Rozdiely medzi binárnym vyhľadávaním a statickými vyhľadávacími stromami
     \label{fig:search_comparison_small}
 \end{figure}
 
-Jednotlivé políčka sú položky poľa, pričom v pamäti sú usporiadané v poradí zhora nadol a zľava doprava. Samotné kľúče (vo vrcholoch stromov) sú však usporiadané inak a preto sú tieto prístupy inak efektívne. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 2^h-1\}$, čo je počet vrcholov úplného binárneho stromu výšky $h$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. Bloky sú v zarovnané tak, že jeden stĺpec predstavuje jeden blok a teda sa pri načítaní ľubovolného políčka spolu s ním načíta celý príslušný stĺpec.
+Jednotlivé políčka sú položky poľa, pričom v pamäti sú usporiadané v poradí zhora nadol a zľava doprava. Samotné kľúče (vo vrcholoch stromov) sú však usporiadané inak a práve preto sú tieto prístupy inak efektívne. Vo všetkých prípadoch vyhľadávame prvok v množine $\{1, \dotsc, 2^h-1\}$, čo je počet vrcholov úplného binárneho stromu výšky $h$. Farby označujú stav políčka v simulovanej \cache s veľkosťou bloku $B=4$. Bloky sú zarovnané tak, že jeden stĺpec predstavuje jeden blok a teda sa pri načítaní ľubovolného políčka spolu s ním načíta celý príslušný stĺpec.
 
 Červená farba reprezentuje prvky, ktoré sa v momente prístupu nenachádzali v \cache a bolo potrebné ich načítať (\miss). Zelená naopak označuje prvky, ktoré už v \cache boli (\hit) -- načítali sa spolu s nejakým červeným prvkom v rovnakom bloku. Ostatné prvky, ktoré sa načítali ako súčasť bloku ale neboli použité, sú označené žltou farbou. V tejto simulácii je počet blokov v \cache ($\frac{M}{B}$) pre jednoduchosť neobmedzený.
 
@@ -326,7 +326,7 @@ Nad týmito blokmi zostrojíme (imaginárny) úplný binárny strom (obrázok \r
 
 \subsection{Definícia hustoty}
 
-\emph{Kapacitou} vrcholu $v$, $c(v)$, označíme počet položiek (aj prázdnych) poľa patriacich do blokov v podstrome začínajúcom v tomto vrchole. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. 
+\emph{Kapacitou} vrcholu $v$, $c(v)$, označíme počet položiek (aj prázdnych) poľa patriacich do blokov v podstrome, ktorého koreň je tento vrchol. Kapacita listov bude teda $S$, ich rodičov $2S$ a kapacita koreňa bude $T$. Podobne budeme počet neprázdnych položiek v podstrome vrcholu $v$ volať \emph{obsadnosť} a značiť $o(v)$. 
 
 \emph{Hustotou}, $0 \le d(v) \le 1$, označíme $d(v) = \frac{o(v)}{c(v)}$. Zvoľme ľubovoľné konštanty $\rho_0, \tau_0, \rho_d, \tau_d$ spĺňajúce
 \[
@@ -386,7 +386,7 @@ Pri úprave intervalu blokov v podstrome vrcholu $u$ je potrebné upraviť najvi
 \[
 \frac{c(u)}{(\tau_{k+1}-\tau_k)c(v)} = \frac{2c(v)}{(\tau_{k+1}-\tau_k)c(v)} = \frac{2}{\tau_{k+1}-\tau_k} = \frac{2d}{\tau_d-\tau_0} = \bigO{\log{T}}
 \]
-keďže $\tau_d$ a $\tau_0$ sú konštanty a výška úplného binárneho stromu $d$ s $T$ listami je $d = \Theta(\log{T})$. Podobným spôsobom dostaneme rovnaký odhad pre odstraňovanie.
+keďže $\tau_d$ a $\tau_0$ sú konštanty a výška $d$ úplného binárneho stromu s $T$ listami je $d = \Theta(\log{T})$. Podobným spôsobom dostaneme rovnaký odhad pre odstraňovanie.
 
 Pri vkladaní a odstraňovaní prvku ovplyvníme najviac $d$ podintervalov -- tie, ktoré prislúchajú vrcholom na ceste z daného listu (bloku) do koreňa. Spolu teda bude amortizovaná veľkosť upraveného intervalu $\bigO{\log^2{T}}$.
 
@@ -397,13 +397,13 @@ Táto dátová štruktúra teda udržiava $N$ usporiadaných prvkov v poli veľk
 Existujú tiež verzie tejto štruktúry \citep{bender2002ofworstcase}, ktoré dosahujú rovnaký počet pamäťových operácií nie v amortizovanom, ale najhoršom prípade. V tejto práci sa im však nebudeme venovať.
 
 \section{Dynamický B-strom} \label{sec:dynamic-obliv}
-V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry, ktorú navrhli Bender, Demaine \etal v \citep{btreeshort} a neskôr podrobne popísali v \citep{btreefull}, bola však značne komplikovaná a preto uvedieme zjednodušenú verziu. Tú navrhli Bender, Duan \etal v \citep{bender2002} a dosahuje rovnaké výsledky ale jej popis a analýza sú podstatne jednoduchšie.
+V tejto sekcií popíšeme dynamickú verziu \obliv vyhľadávacieho stromu. Prvá verzia tejto štruktúry, ktorú navrhli Bender, Demaine \etal v \citep{btreeshort} a neskôr podrobne popísali v \citep{btreefull}, bola však značne komplikovaná a preto uvedieme zjednodušenú verziu. Tú navrhli Bender, Duan \etal v \citep{bender2002} a dosahuje rovnaké výsledky, ale jej popis a analýza sú podstatne jednoduchšie.
 
 \subsection{\Aware riešenie}
 V prípade \aware modelu môžeme na riešenie tohto problému opäť použiť B-strom s vetvením $\Theta(B)$ ako v časti \ref{sec:static-aware}. Rovnako ako pre vyhľadávanie bude na vkladanie potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Popis \obliv štruktúry}
-Túto dátovú štruktúru vytvoríme zložením predchádzajúcich dvoch -- statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) -- jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať úplný binárny statický vyhľadávací strom uložený vo \vEB{ovom} usporiadaní. Listy tohto stromu budú prvky usporiadaného poľa (pozri obrázok \ref{fig:cobtree_overview}).
+Túto dátovú štruktúru vytvoríme zložením predchádzajúcich dvoch -- statického stromu (\ref{sec:static-obliv}) a usporiadaného poľa (\ref{sec:of-desc}) -- jednoduchým spôsobom. Majme usporiadané pole veľkosti $\Theta(N)$. Keďže počet položiek v usporiadanom poli je mocnina dvoch, môžeme nad ním vybudovať úplný binárny statický vyhľadávací strom uložený vo \vEB{ovom} usporiadaní. Listy tohto stromu budú naviazané na prvky usporiadaného poľa (pozri obrázok \ref{fig:cobtree_overview}).
 
 \begin{figure}
     \centering
@@ -424,9 +424,9 @@ Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa,
 Toto prehľadávanie prechádza cestu od koreňa k listu v strome hĺbky $\bigO{\log{N}}$ uloženom vo \vEB{ovom} usporiadaní a teda, rovnako ako v časti \ref{sec:static-search}, vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Vkladanie}
-Zaujímavejšou operáciou je vkladanie, ktoré v pôvodnom statickom strome nebolo možné. Prvým krokom je nájdenie pozície, na ktorú tento kľúč patrí. To dosiahneme podobne ako v predošlej sekcii. Budeme ale hľadať predchádzajúci a nasledujúci kľúč. Tým nájdeme v usporiadanom poli dvojicu pozícii, medzi ktoré chceme vložiť novú hodnotu.
+Zaujímavejšou operáciou je vkladanie, ktoré v pôvodnom statickom strome nebolo (efektívne) možné. Prvým krokom je nájdenie pozície, na ktorú tento kľúč patrí. To dosiahneme podobne ako v predošlej sekcii. Budeme ale hľadať predchádzajúci a nasledujúci kľúč. Tým nájdeme v usporiadanom poli dvojicu pozícii, medzi ktoré chceme vložiť novú hodnotu.
 
-Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Následne bude potrebné aktualizovať kľúče v statickom strome, aby opäť obsahovali maximum zo svojich synov. Túto aktualizáciu dosiahneme takzvaným \emph{post-order} prechodom, kedy sa vrchol aktualizuje až po tom, čo boli aktualizovaní jeho synovia. Tým máme zaručené, že po aktualizácii vrchol obsahuje výslednú, korektnú hodnotu. Implementácia takéhoto prechodu je naznačená v algoritme \ref{alg:postorder}.
+Vloženie do usporiadaného pola zmení súvislý interval $I$. Následne bude potrebné aktualizovať kľúče v statickom strome, aby opäť obsahovali maximum zo svojich synov. Túto aktualizáciu dosiahneme takzvaným \emph{post-order} prechodom, kedy sa vrchol aktualizuje až po tom, čo boli aktualizovaní jeho synovia. Tým máme zaručené, že po aktualizácii vrchol obsahuje výslednú, korektnú hodnotu. Implementácia takéhoto prechodu je naznačená v algoritme \ref{alg:postorder}.
 
 \begin{algorithm}
     \caption{Implementácia \emph{post-order} prechodu na aktualizáciu statického stromu}
@@ -462,10 +462,10 @@ Vloženie do usporiadaného pola zmení súvislý interval veľkosti $K$. Násle
     \label{fig:cobtree_analysis_parts}
 \end{figure}
 
-Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať. Budeme predpokladať, že veľkosť zmeneného intervalu v usporiadanom poli je $K$. Pre jednotlivé úrovne spočítame počet potrebných pamäťových presunov a nakoniec ich sčítaním získame výslednú zložitosť operácie vkladania.
+Túto analýzu rozdelíme na tri časti (obrázok \ref{fig:cobtree_analysis_parts}), v ktorých sa postupne pozrieme na rôzne úrovne v statickom strome, ktoré treba po vložení do usporiadaného pola aktualizovať. Budeme predpokladať, že veľkosť zmeneného intervalu $I$ v usporiadanom poli je $K$. Pre jednotlivé úrovne spočítame počet potrebných pamäťových presunov a nakoniec ich sčítaním získame výslednú zložitosť operácie vkladania.
 
 \subsubsection{Spodné dve úrovne}
-Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktorých veľkost je medzi $\sqrt{B}$ a $B$, a teda sa zmestia do najviac dvoch blokov v \cache. Pozrime sa na spodné dve úrovne takýchto podstromov (na obrázku \ref{fig:cobtree_analysis_parts} reprezentovan0 najmenšími trojuholníkmi). Listy spodnej úrovne budú listy celého statického stromu a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
+Uvažujme najskôr ako v časti \ref{sec:static-search} také podstromy \vEB{ovho} delenia, ktorých veľkost je medzi $\sqrt{B}$ a $B$, a teda sa zmestia do najviac dvoch blokov v \cache. Pozrime sa na spodné dve úrovne takýchto podstromov (na obrázku \ref{fig:cobtree_analysis_parts} reprezentované najmenšími trojuholníkmi). Listy spodnej úrovne budú listy celého statického stromu a korene spodnej spodnej úrovne budú synovia listov hornej úrovne. Zvyšok stromu pokračuje nad týmito úrovňami a vrátime sa k nemu neskôr.
 
 Podstromy v tomto delení sa zmestia do najviac dvoch blokov a vieme ich teda načítať pomocou $\bigO{1}$ pamäťových presunov. Tieto podstromy vznikli rekurzívnym \vEB{ovým} delením z podstromu $T$ veľkosti viac než $B$. Označme ich, rovnako, ako v časti \ref{sec:static-obliv}, $\tau_0, \tau_1, \dotsc, \tau_k$, pričom $\tau_0$ je podstrom v hornej úrovni a $\tau_1,\dotsc,\tau_k$ sú podstromy v spodnej úrovni, ktorých korene sú potomkovia listov $\tau_0$.
 
@@ -479,7 +479,7 @@ Vidíme, že pokiaľ dokážeme udržať v \cache aspoň dva také podstromy, te
 \subsubsection{Stredná časť -- najbližší spoločný predok}
 Označme ako $T_1,\dotsc,T_\ell$ tie stromy, ktoré obsahujú aktualizované podstromy veľkosti najviac $B$ na spodných dvoch úrovniach. Platí teda $\ell = \bigO{\frac{K}{B}}$. Označme $U$ taký podstrom statického stromu, ktorého koreň je najbližší spoločný predok koreňov $T_1,\dotsc,T_\ell$. Ak je tento koreň v hĺbke $h$ tak $U$ obsahuje všetky vrcholy hĺbky aspoň $h$, ktoré treba aktualizovať -- tie mimo $U$ nie sú predkovia upravených vrcholov a teda hodnoty kľúčov ich potomkov neboli v prvej časti zmenené, alebo už boli aktualizované ako súčasť nejakého podstromu $T_i$ na spodnej úrovni.
 
-Počet vrcholov $U$ je najviac dvojnásobok počtu listov a teda $|U| = \bigO{l} = \bigO{\frac{K}{B}}$. Keďže pri \emph{post-order} prechode navštívime každý vrchol $\bigO{1}$ krát (najprv pri prechode z koreňa ku listom, pričom následne rekurzívne prejdeme ľavého a pravého syna, a potom pri návrate z rekurzie) a teda celkovo budeme potrebovať $\bigO{\frac{K}{B}}$ pamäťových presunov na aktualizáciu $U$.
+Počet vrcholov $U$ je najviac dvojnásobok počtu listov a teda $|U| = \bigO{\frac{K}{B}}$. Keďže pri \emph{post-order} prechode navštívime každý vrchol $\bigO{1}$ krát (najprv pri prechode z koreňa ku listom, pričom následne rekurzívne prejdeme ľavého a pravého syna, a potom pri návrate z rekurzie) a teda celkovo budeme potrebovať $\bigO{\frac{K}{B}}$ pamäťových presunov na aktualizáciu $U$.
 
 \subsubsection{Horná časť -- cesta z najbližšieho spoločného predka do koreňa}
 Posledná množina vrcholov, ktoré je potrebné aktualizovať,     je cesta z koreňa $U$ do koreňa statického stromu. Dĺžka tejto cesty je obmedzená výškou stromu $\bigO{\log{N}}$ a pri aktualizovaní prechádzame cez jej vrcholy postupne. Podobne ako pri vyhľadávaní (časť \ref{sec:dynamic-obliv-search}) bude potrebných $\bigO{\log_B{N}}$ pamäťových presunov.
@@ -501,7 +501,7 @@ dostávame celkovú zložitosť $\bigO{\log_B{N} + \frac{K}{B}}$. Keďže amorti
 Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli ho odstránime, čím sa zmení súvislý interval amortizovanej veľkosti $\bigO{\log^2{N}}$. Následne aktualizujeme kľúče v statickom poli rovnako ako pri vkladaní. Výsledná zložitosť bude taktiež rovnaká.
 
 \section{Vylepšený dynamický B-strom} \label{sec:dynamic-obliv-improved}
-\epigraph{Any problem in computer science can be solved with another level of indirection.}{David Wheeler}
+\epigraph{Any problem in computer science can be solved with another level of~indirection.}{David Wheeler}
 Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. V prípade, že $B=\Theta(\log{N}\log\log{N})$, bude tento člen zanedbateľný a dosiahneme rovnaký výsledok ako \aware B-stromy. Jednoduchou modifikáciou však môžeme tento člen môžeme odstrániť bez nutnosti tohto predpokladu.
 
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
