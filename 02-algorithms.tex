@@ -109,7 +109,7 @@ Toto je lepší výsledok ako dosahuje binárne vyhľadávanie. Stále však zos
 %To zodpovedá dolnej hranici v predchádzajúcej sekcii a teda toto riešenie je asymptoticky optimálne.
 
 \subsection{Spodná hranica pre vyhľadávanie} \label{sec:tree-lowerbound}
-Pri vyhľadávaní potrebujeme pristúpiť k aspoň $\Omega(\log{N})$ prvkom. Tie by v ideálnom prípade boli uložené v $\Omega(\frac{\log{N}}{B})$ blokoch, čo tvorí spodnú hranica počtu pamäťových presunov. Tento odhad je ale príliš optimistický -- ako ukážeme odvodením väčšej spodnej hranice, nie je možné ho dosiahnuť.
+Pri vyhľadávaní potrebujeme pristúpiť k aspoň $\Omega(\log{N})$ prvkom. Tie by v ideálnom prípade boli uložené v $\Omega(\frac{\log{N}}{B})$ blokoch, čo tvorí spodnú hranicu počtu pamäťových presunov. Tento odhad je ale príliš optimistický -- ako ukážeme odvodením väčšej spodnej hranice, nie je možné ho dosiahnuť.
 
 Toto odvodenie spravíme rovnako ako v \citep{demaineoverview} technikou informačnej zložitosti. Na nájdenie daného prvku v množine obsahujúcej $N$ položiek potrebujeme získať $\lg(2N+1)$ informačných bitov reprezentujúcich pozíciu tohto prvku -- $N$ možných existujúcich prvkov a $N+1$ pozícií medzi nimi (a na okrajoch) pre neexistujúci prvok. V každom pamäťovom presune načítame jeden blok veľkosti $B$, ktorý môže obsahovať najviac $\lg(2B+1)$ bitov informácie -- hľadaný prvok je jeden z týchto $B$ prvkov alebo patrí v usporiadaní niekam medzi ne. V najlepšom prípade je teda potrebných aspoň
 \[
@@ -410,11 +410,11 @@ Túto dátovú štruktúru vytvoríme zložením predchádzajúcich dvoch -- sta
     \resizebox{\textwidth}{!}{
         \input{figures/dynamic_tree/overview}
     }
-    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením usporiadaného poľa a statického stromu vo \vEB{ovom} usporiadaní. Šipky znázorňujú spárovanie listov a položiek pola.}
+    \caption[Dynamický strom]{Dynamický strom, ktorý vznikne spojením usporiadaného poľa a statického stromu vo \vEB{ovom} usporiadaní. Šípky znázorňujú spárovanie listov a položiek pola.}
     \label{fig:cobtree_overview}
 \end{figure}
 
-Kľúče, ktoré táto štruktúra obsahuje, sú uložené v usporiadanom poli (s medzerami). Listy statického stromu obsahujú v svojich kľúčoch rovnakú hodnotu ako k ním prislúchajúce položky usporiadaného poľa. Medzeru reprezentujeme hodnotou, ktorá je pri použitom usporiadaní najmenšia (v prípade číselných kľúčov $-\infty$). Ostatné vrcholy stromu obsahujú ako kľúč maximum z kľúčov svojich synov.
+Kľúče, ktoré táto štruktúra obsahuje, sú uložené v usporiadanom poli (s medzerami). Listy statického stromu obsahujú vo svojich kľúčoch rovnakú hodnotu ako k ním prislúchajúce položky usporiadaného poľa. Medzeru reprezentujeme hodnotou, ktorá je pri použitom usporiadaní najmenšia (v prípade číselných kľúčov $-\infty$). Ostatné vrcholy stromu obsahujú ako kľúč maximum z kľúčov svojich synov.
 
 \subsection{Vyhľadávanie} \label{sec:dynamic-obliv-search}
 Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa, porovnáme hľadaný kľúč s kľúčom v ľavom synovi. Pokiaľ je hľadaný prvok väčší, bude v pravom podstrome (keďže maximum z celého ľavého podstromu je práve kľúč ľavého syna), ktorý rekurzívne prehľadáme. V opačnom prípade prehľadáme ľavý podstrom. Keď dosiahneme list, porovnáme jeho kľúč s hľadaným. Ak sa zhodujú, našli sme požadovanú položku a v opačnom prípade sa v štruktúre nenachádza.
@@ -424,7 +424,7 @@ Vyhľadávanie v tejto štruktúre prebieha jednoducho. Začínajúc od koreňa,
 Toto prehľadávanie prechádza cestu od koreňa k listu v strome hĺbky $\bigO{\log{N}}$ uloženom vo \vEB{ovom} usporiadaní a teda, rovnako ako v časti \ref{sec:static-search}, vykoná $\bigO{\log_B{N}}$ pamäťových presunov.
 
 \subsection{Vkladanie}
-Zaujímavejšou operáciou je vkladanie, ktoré v pôvodnom statickom strome nebolo (efektívne) možné. Prvým krokom je nájdenie pozície, na ktorú tento kľúč patrí. To dosiahneme podobne ako v predošlej sekcii. Budeme ale hľadať predchádzajúci a nasledujúci kľúč. Tým nájdeme v usporiadanom poli dvojicu pozícii, medzi ktoré chceme vložiť novú hodnotu.
+Zaujímavejšou operáciou je vkladanie, ktoré v pôvodnom statickom strome nebolo (efektívne) možné. Prvým krokom je nájdenie pozície, na ktorú tento kľúč patrí. To dosiahneme podobne ako v predošlej sekcii. Budeme ale hľadať predchádzajúci a nasledujúci kľúč. Tým nájdeme v usporiadanom poli dvojicu pozícií, medzi ktoré chceme vložiť novú hodnotu.
 
 Vloženie do usporiadaného pola zmení súvislý interval $I$. Následne bude potrebné aktualizovať kľúče v statickom strome, aby opäť obsahovali maximum zo svojich synov. Túto aktualizáciu dosiahneme takzvaným \emph{post-order} prechodom, kedy sa vrchol aktualizuje až po tom, čo boli aktualizovaní jeho synovia. Tým máme zaručené, že po aktualizácii vrchol obsahuje výslednú, korektnú hodnotu. Implementácia takéhoto prechodu je naznačená v algoritme \ref{alg:postorder}.
 
