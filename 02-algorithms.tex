@@ -474,7 +474,7 @@ Pri \emph{post-order} prechode cez podstrom $T$ prejdeme najskôr cez ľavých s
 \tau_0, \tau_1, \tau_0, \tau_2, \dotsc, \tau_0, \tau_i, \tau_0, \dotsc, \tau_k, \tau_0
 \]
 
-Vidíme, že pokiaľ dokážeme udržať v \cache aspoň dva také podstromy, teda za predpokladu $M \ge 4B$, sme schopný takýto \emph{post-order} prechod zrealizovať pomocou $\bigO{1}$ pamäťových operácii pre každý podstrom veľkosti $\le B$. Takéto podstromy majú $\bigO{B}$ listov, pričom  nimi potrebujeme pokryť interval veľkosti $K$ (podstromy, ktorých žiaden list neleží v upravenom intervale nie je potrebné aktualizovať) a teda celkový počet podstromov na spodných dvoch úrovniach, ktoré potrebujeme načítať a upraviť je $\bigO{\frac{K}{B}}$ a stačí nám na to $\bigO{\frac{K}{B}}$ pamäťových presunov.
+Vidíme, že pokiaľ dokážeme udržať v \cache aspoň dva také podstromy, teda za predpokladu $M \ge 4B$, sme schopní takýto \emph{post-order} prechod zrealizovať pomocou $\bigO{1}$ pamäťových operácií pre každý podstrom veľkosti $\le B$. Takéto podstromy majú $\bigO{B}$ listov, pričom  nimi potrebujeme pokryť interval veľkosti $K$ (podstromy, ktorých žiaden list neleží v upravenom intervale nie je potrebné aktualizovať) a teda celkový počet podstromov na spodných dvoch úrovniach, ktoré potrebujeme načítať a upraviť je $\bigO{\frac{K}{B}}$ a stačí nám na to $\bigO{\frac{K}{B}}$ pamäťových presunov.
 
 \subsubsection{Stredná časť -- najbližší spoločný predok}
 Označme ako $T_1,\dotsc,T_\ell$ tie stromy, ktoré obsahujú aktualizované podstromy veľkosti najviac $B$ na spodných dvoch úrovniach. Platí teda $\ell = \bigO{\frac{K}{B}}$. Označme $U$ taký podstrom statického stromu, ktorého koreň je najbližší spoločný predok koreňov $T_1,\dotsc,T_\ell$. Ak je tento koreň v hĺbke $h$ tak $U$ obsahuje všetky vrcholy hĺbky aspoň $h$, ktoré treba aktualizovať -- tie mimo $U$ nie sú predkovia upravených vrcholov a teda hodnoty kľúčov ich potomkov neboli v prvej časti zmenené, alebo už boli aktualizované ako súčasť nejakého podstromu $T_i$ na spodnej úrovni.
@@ -502,7 +502,7 @@ Algoritmus odstraňovania je analogický, po nájdení prvku v usporiadanom poli
 
 \section{Vylepšený dynamický B-strom} \label{sec:dynamic-obliv-improved}
 \epigraph{Any problem in computer science can be solved with another level of~indirection.}{David Wheeler}
-Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. V prípade, že $B=\Theta(\log{N}\log\log{N})$, bude tento člen zanedbateľný a dosiahneme rovnaký výsledok ako \aware B-stromy. Jednoduchou modifikáciou však môžeme tento člen môžeme odstrániť bez nutnosti tohto predpokladu.
+Oproti \aware B-stromom má pri vkladaní \obliv dynamický strom popísaný v predchádzajúcej sekcii naviac $\bigO{\frac{\log^2{N}}{B}}$ pamäťových presunov. V prípade, že $B=\Theta(\log{N}\log\log{N})$, bude tento člen zanedbateľný a dosiahneme rovnaký výsledok ako \aware B-stromy. Jednoduchou modifikáciou však môžeme tento člen odstrániť bez nutnosti tohto predpokladu.
 
 Vezmeme $N$ kľúčov a rozdelíme ich do $\Theta(\frac{N}{\log{N}})$ blokov veľkosti $\Theta(\log{N})$. Minimum z každej skupiny použijeme ako kľúče v predchádzajúcej dátovej štruktúre, ktorej veľkosť bude $\Theta(\frac{N}{\log{N}})$.
 
