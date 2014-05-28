@@ -59,7 +59,7 @@ Zostrojili sme teda \obliv algoritmus s asymptoticky rovnakou zložitosťou $\bi
 Tento rozdiel je spôsobený iným usporiadaním prvkov v pamäti. Keďže majú všetky uvedené prístupy logaritmickú časovú zložitosť bude počet presunutých blokov najviac $\bigO{\log{N}}$. V tomto odhade však nevystupujú žiadne parametre \cache a teda ich zväčšenie tento algoritmus nemusí urýchliť. Ukážeme ale dátovú štruktúru, ktorá dosahuje podstatne lepší výsledok $\bigO{\log_B{N}}$ a bude nám tiež slúžiť ako základ pri riešení dynamickej verzie tohto problému.
 
 \subsection{Binárne vyhľadávanie}
-Ako prvé popíšeme binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde pozíciu prvku $K$ v usporiadanom poli \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
+Ako prvé popíšeme binárne vyhľadávanie, ktoré je asi najznámejšie. V algoritme \ref{alg:binsearch} uvádzame implementáciu, ktorá nájde pozíciu prvku $K$ v usporiadanom poli \inlcode{A} s $N$ prkvami \inlcode{A[$0,\dotsc,N-1$]}, pre ktoré platí $\forall i,j;~ 0\le i < j < N: \texttt{A[}i\texttt{]} \le \texttt{A[}j\texttt{]}$.
 
 \begin{algorithm}
     \caption{Implementácia binárneho vyhľadávania}
