@@ -1,0 +1,352 @@
+\documentclass{beamer}
+\usetheme{Montpellier}
+\usecolortheme{seahorse}
+
+%\usepackage[slovak]{babel}
+%\usepackage[utf8]{inputenc}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{slovak}
+
+\usepackage{pdfpcnotes}
+
+\usepackage{tikz}
+\input{../tikz-settings}
+
+\newcommand{\bigO}{\ensuremath{\mathcal{O}}}
+
+\title{Cache-oblivious algoritmy a ich vizualizácia}
+\author[Ladislav Pápay]{Ladislav Pápay \\ ~ \\ Vedúci: Mgr. Jakub Kováč, PhD.}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Úvod}
+\begin{frame}
+    \frametitle{Obsah práce}
+    \begin{itemize}
+        \item Vysvetlenie pamäťového modelu
+        \begin{itemize}
+            \item Porovnanie s RAM modelom
+        \end{itemize}
+        \item Prehľad cache-oblivious algoritmov a DŠ
+        \begin{itemize}
+            \item Ich popis a analýza
+        \end{itemize}
+        \item Vizualizácia vybraných DŠ
+    \end{itemize}
+\end{frame}
+
+\section{Pamäťový model}
+\subsection{RAM model}
+\begin{frame}
+    \frametitle{RAM model}% ($\approx$ 1974, Hopcroft)}
+    \emph{Random-Access Machine} -- stroj s náhodným prístupom k pamäti
+    \begin{itemize}
+        \item Klasický model pri časovej analýze algoritmov
+        \item Prístup k ľubovolným dátam vyžaduje $\bigO(1)$ času
+    \end{itemize}
+\end{frame}
+
+\subsection{Problémy RAM modelu}
+\begin{frame}
+    \begin{itemize}
+        \item V skutočnosti však mame viac úrovní pamäte
+        \item Rýchla pamäť je malá a drahá $\Rightarrow$ pamäťová hierarchia
+    \end{itemize}
+    \begin{center}
+		\begin{tabular}{|l|l|l|}
+			\hline
+			Úroveň & Veľkosť & Odozva \\ \hline
+			L1 & $\approx$ 128KiB & 4clk $\approx$ 1ns (pri 3.5GHz) \\ \hline
+			L2 & $\approx$ 1MiB & 10-12clk $\approx$ 3ns (pri 3.5GHz) \\ \hline
+			L3 & $\approx$ 8MiB & 20-50clk $\approx$ 10ns (pri 3.5GHz) \\ \hline
+			RAM & $\approx$ 4GiB & $\approx$ 100ns \\ \hline
+			Disk & $\approx$ 1TiB & $\approx$ 0.1-10ms \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\begin{itemize}
+	    \item Rozdiel v čase môže byť až 10\,000\,000-násobný
+	    \item Môžeme dosiahnuť lepšiu rýchlosť algoritmu ak rozlišujeme ``pomalé'' a ``rýchle'' prístupy
+	\end{itemize}
+\end{frame}
+
+\subsection{External-memory model}
+\begin{frame}
+    \frametitle{External-memory model}% (1988, Aggarwal, Vitter et al.)}
+	\begin{columns}[T]
+		\begin{column}{.4\textwidth}
+			\begin{itemize}
+				\item Cache celkovej veľkosti $M$
+				\item Obsahuje $\frac{M}{B}$ blokov veľkosti $B$
+				\item Disk neobmedzenej veľkosti, tiež zložený z blokov
+			\end{itemize}
+		\end{column}
+		\begin{column}{.6\textwidth}\raggedleft
+		    \resizebox{\textwidth}{!}{%
+                \input{../figures/memory_model/extmem}    
+            }    
+		\end{column}
+	\end{columns}
+	\bigskip
+	Môžeme pracovať len s dátami v cache.
+	
+    Počíta sa počet prenesených blokov (operácie v cache sú zadarmo).
+    
+	
+	%\input{../figures/external_memory_inkscape/drawing.eps_tex} 
+\end{frame}
+
+\begin{frame}
+	\frametitle{External-memory model}
+	\begin{itemize}
+		\item Známe tiež ako cache-aware (kontrast voči cache-oblivious)
+		\item Poznáme $B$ a $M$, každá operácia čítania/zápisu na disk je (potenciálne) explicitne vykonaná algoritmom
+	\end{itemize}
+    Problémy cache-aware algoritmov:
+    \begin{itemize}
+    		\item Ak je cache plná, musí vybrať, ktorý blok zahodí (a jeho obsah treba zapísať na disk)
+            \item Čo ak sa zmenia parametre $B$ alebo $M$?
+		    \item Čo v prípade viac úrovní? Treba pre každú susediacu dvojicu poznať $B, M$  a spravovať bloky
+    \end{itemize}
+	\pnote{Pri zahadzovani bloku v cache ak bol zmeneny treba zapisat}
+	\pnote{B pre disk/ram je cca 4KB}
+	\pnote{Zistenie B a M - pri kompilacii, za behu?}
+	\pnote{Treba pri zmene prekompilovat? Prepisat algoritmus}
+	\pnote{L3 - RAM : 10x pomalsie, 100x vacsie}
+	\pnote{RAM - Disk: 1 000x - 100 000x pomalsie, 1000x vacsie}
+\end{frame}
+
+\subsection{Cache-oblivious model}
+\begin{frame}
+	\frametitle{Cache-oblivious model}% (1999, Prokop, Frigo et al.)}
+	\begin{itemize}
+		\item Chceme (asymptoticky) rovnaký počet presunov ako optimálny cache-aware algoritmus, ale bez znalosti parametrov $B$ a $M$
+		\begin{itemize}
+		    \item Tieto parametre používame počas analýzy, ale algoritmus nepozná a nie je navrhnutý pre žiadne konkrétne hodnoty
+		\end{itemize}
+		\item Rovnaká architektúra, presun blokov prebieha automaticky
+		\begin{itemize}
+			\item Predpokladá optimálne nahrádzanie blokov (offline), ale FIFO/LRU je len konštantne horšie
+		\end{itemize}
+	\end{itemize}
+	Výhody tohto prístupu:
+	\begin{itemize}
+	    \item Funguje pri zmene parametrov bez úprav
+	    \item Funguje pre všetky susedné dvojice v pamäťovej hierarchii
+	\end{itemize}
+	\pnote{Pozname pri analyze, ale nie pocas behu}
+\end{frame}
+
+\section{Algoritmy a dátové štruktúry}
+\begin{frame}
+    \frametitle{Vyhľadávacie stromy}
+    \begin{itemize}
+        \item Často používaná dátová štruktúra
+        \begin{itemize}
+            \item Napríklad databázové systémy, kde máme veľa dát -- oplatí sa optimalizovať pamäťové presuny
+        \end{itemize}
+        \item Cache-aware riešenie -- B-stromy s vetvením $\bigO(B)$
+        \begin{itemize}
+            \item Všetky operácie vykonajú $\bigO(\log_B N)$ pamäťových presunov
+            \item Optimálne riešenie, ale potrebuje poznať $B$
+        \end{itemize}
+        \item Existujú porovnateľné cache-oblivious riešenia
+        \item Najskôr sa pozrime na statický vyhľadávací strom
+        \begin{itemize}
+            \item Na začiatku vybudujeme
+            \item Potom už len vyhľadávanie, bez zmien
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Statický strom}
+\begin{frame}
+    \frametitle{Statický strom v BFS usporiadaní}
+    \begin{itemize}
+        \item Jednoduchý spôsob ako uložiť binárny strom v pamäti -- pole, pričom synovia vrcholu $A[x]$ sú $A[2x]$ a $A[2x+1]$
+    \end{itemize}
+
+    \centerline{\includegraphics[width=1.1\textwidth]{../figures/vEB_tree/node_order_naive}}
+    \begin{itemize}
+        \item Vyhľadávanie ale vykoná aspoň $\Omega(\log\frac{N}{B})$ presunov
+        \begin{itemize}
+            \item Horšie ako cache-aware B-stromy
+            \item V rovnakom bloku sa totiž načítajú prevažne zbytočné vrcholy
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Statický strom vo vEB usporiadaní}
+    \begin{itemize}
+        \item \emph{van Emde Boasovo} usporiadanie (podľa vEB stromov)
+        \begin{itemize}
+            \item Rozdelíme uprostred na horný podstrom a $\sqrt{N}$ spodných podstromov veľkosti $\sqrt{N}$
+            \item Tie rekurzívne rozdelíme a uložíme do súvislého bloku pamäte
+        \end{itemize}
+    \end{itemize}
+    \resizebox{\textwidth}{!}{%
+        \input{../figures/vEB_tree/vEBlayout_scheme}    
+    }  
+    \begin{itemize}
+        \item V rovnakom bloku sa nachádza časť relevantného podstromu presunov
+        \item Vyhľadávanie vykoná $\bigO(\log_B N)$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Ukážka stromu vo vEB usporiadaní}
+    \centerline{\includegraphics[width=1.1\textwidth]{../figures/vEB_tree/node_order_veb}}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Ďalšie štruktúry}
+    \begin{itemize}
+        \item Usporiadané pole
+        \begin{itemize}
+            \item Udržiava usporiadanú postupnosť prvkov v súvislom poli
+            \item Umožňuje efektívne vkladať na ľubovolné miesto
+        \end{itemize}                
+
+        \item Dynamický vyhľadávací strom
+        \begin{itemize}
+            \item Kombinácia statického vEB stromu a usporiadaného poľa
+            \item Podobné výsledky ako cache-aware B-stromy
+        \end{itemize}        
+    \end{itemize}
+\end{frame}
+
+\newcommand{\amort}{{\small \textit{amort.}}}
+\begin{frame}
+    \frametitle{Porovnanie počtu pamäťových presunov}
+    {\renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{lll}
+        \hline \multicolumn{3}{c}{\textbf{Cache-aware B-strom}} \\ \hline
+        Vyhľadávanie & Vkladanie & Prechod \\ \hline
+        $\bigO(\log_B{N})$ & $\bigO(\log_B{N})$ & $\bigO(\frac{K}{B})$ \\
+        \\
+        \hline \multicolumn{3}{c}{\textbf{Cache-oblivious dynamický strom}} \\ \hline 
+        Vyhľadávanie & Vkladanie & Prechod \\ \hline
+        $\bigO(\log_B{N})$ & $\bigO(\log_B{N}+\frac{\log^2{N}}{B})$ \amort & $\bigO(\frac{K}{B})$  \\
+        $\bigO(\log_B{N})$ & $\bigO(\log_B{N})$ \amort & $\bigO(\frac{K}{\min\{B,\log N\}})$
+    \end{tabular}
+    }
+    \pnote{Prechod = SCAN}
+\end{frame}
+
+\section{Vizualizácie}
+\begin{frame}
+    \frametitle{Vizualizácie}
+    \begin{itemize}
+        \item Pridanie týchto dátových štruktúr do \emph{Gnarley Trees} (alg-vis)
+        \item Krokovanie s animáciami, undo/redo
+        \item Vysvetlenie krokov (v angličtine a slovenčine)
+        \item Simulácia cache, nastaviteľné parametre $B$ a $M$
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth]{../figures/screenshots/cachesim_big_step4}
+    \end{center}
+    \pnote{alg-vis (Gnarley trees) - Jakub Kovac, 2007}
+\end{frame}
+
+\begin{frame}[plain]
+\begin{center}
+{\Large Ukážka vizualizácií \dots}
+\end{center}
+\end{frame}
+
+\section{Algoritmy a dátové štruktúry}
+\subsection{Statický vyhľadávací strom vo vEB usporiadaní}
+\begin{frame}
+    \frametitle{Analýza}
+    \begin{itemize}
+        \item Vyhľadávanie ako v klasickom BST (cache-ignorant prístup)
+        \begin{itemize}
+            \item Pozrime sa na takú úroveň delenia, že sú podstromy $\le B$ a teda zmestia sa do najviac dvoch blokov
+            \item Tieto podstromy majú výšku $< \lg{B}$ ale $\ge \frac{1}{2}\lg{B}$
+            \item Vyhladávanie prejde cestu od koreňa do listu dĺžky $\lg N$
+            \item Prejdeme najviac cez $\frac{\lg N}{\frac{1}{2}\lg{B}}$ podstromov a na každý treba najviac 2 pamäťové presuny
+        \end{itemize}
+        \item Spolu teda $\bigO(\log_{B}{N})$ čo je spodná hranica pre external-memory model
+    \end{itemize}
+    \pnote{Analogia v cache-aware je B-strom}
+\end{frame}
+
+\subsection{Ordered file}
+\begin{frame}
+    \frametitle{Ordered file}
+    \begin{itemize}
+        \item Problém: udržiavať usporiadanú postupnosť prvkov, možnosť vkladať/odstraňovať, ako pole veľkosti $\bigO(N)$ $\Rightarrow$ medzery $O(1)$, vieme rýchlo prechádzať
+        \item Riešenie: rozdelíme súvislé pole na imaginárne bloky veľkosti $\bigO(\log N)$ a vyrobíme nad nimi imaginárny úplný binárny strom
+        \item {\em Hustota} vrcholu bude $\frac{\text{počet plných}}{\text{kapacita}}$, udržiavame podla istých hraníc aby nebolo príliš plné (nie je kam vložiť) ani príliš prázdne (pomalé prechádzanie)
+    \end{itemize}
+    \pnote{Hranice hustoty:}
+    \pnote{Listy: 1/4 - 1}
+    \pnote{Koren: 1/2 - 3/4}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+        \includegraphics[width=0.8\textwidth,]{../figures/downloaded_dont_use/fig2-ofm.jpg}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Operácie}
+    \begin{itemize}
+        \item {\em Vloženie prvku}: Upravíme blok a postupujeme hore v strome, kým nenájdeme vrchol, ktorý má hustotu v medziach a rovnomerne prerozdelíme prvky v príslušných blokoch
+        \item {\em Zmazanie prvku} podobne
+        \item Každá operácia upraví súvislý interval veľkosti $\bigO(\lg^2 N)$
+    \end{itemize}
+    \pnote{Imaginarny strom, scan v dvoch smeroch}
+    \pnote{Odhad - amortizovane, dá sa aj worst-case}
+    \pnote{Conjencture lowerbound}    
+\end{frame}
+
+\subsection{Dynamický strom}
+\begin{frame}
+    \frametitle{Dynamický strom}
+    \begin{itemize}
+        \item Skombinujeme predošlé dve štruktúry a dostaneme dynamický vyhľadávací strom
+        \item Máme OF v ktorom sú kľúče a medzery, použijeme ako listy pre BST uložený v vEB layoute
+        \item Vo vnútorných uzloch ukladáme maximum z podstromov
+    \end{itemize}
+    \begin{center}
+        %\includegraphics[height=0.5\textheight]{../figures/downloaded_dont_use/vEBpOFM.pdf}
+        \includegraphics[height=0.5\textheight]{../figures/dynamic_tree/overview}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+        \item Vyhľadávanie: rovnako ako v statickom $\bigO(\log_B N)$
+        \item Vkladanie
+        \begin{itemize}
+            \item Nájdeme nasledujúci kľúč v OF, vložíme nový pred neho
+            \item Musíme upraviť strom pre zmenený interval veľkosti $\bigO(\lg^2 N)$
+            \item Prechod cez zasiahnuté vnútorné uzly vyžaduje $\bigO(\frac{\lg^2 N}{B})$ pamäťových operácií
+        \end{itemize}
+        \item Vkladanie a odstraňovanie spolu potrebuje $\bigO(\log_B N + \frac{\lg^2 N}{B})$
+        \item Dá sa zredukovať na $\bigO(\log_B N)$ ak ukladáme $\bigO(\log N)$ bloky
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth]{../figures/downloaded_dont_use/dyn-insert.pdf}
+    \end{center}
+\end{frame}
+
+\begin{frame}[plain]
+\begin{center}
+{\Large Ďakujem za pozornosť!}
+\vspace{10em}
+
+\url{https://github.com/lacop/thesis} 
+\url{https://github.com/lacop/alg-vis}
+\end{center}
+\end{frame}
+
+\end{document}
