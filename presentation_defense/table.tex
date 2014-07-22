@@ -1,0 +1,54 @@
+\documentclass{standalone}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{slovak}
+
+\usepackage{booktabs} % Better looking tables
+\usepackage{xspace}
+
+\usepackage[table]{xcolor}
+
+\usepackage{amsmath,amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{bm, mathrsfs}
+
+\newcommand{\amort}{\xspace{\small \textit{amort.}}\xspace}
+
+\newcommand{\aware}{\emph{cache-aware}\xspace}
+\newcommand{\Aware}{\emph{Cache-aware}\xspace}
+\newcommand{\obliv}{\emph{cache-oblivious}\xspace}
+
+\newcommand{\bigO}[1]{\ensuremath{\mathcal{O}(#1)}}
+
+%\newcommand{\hl}{\rowcolor{orange!75}}
+\newcommand{\hl}{}
+
+\begin{document}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{r lll}%@{\hskip 1.5cm} l@{\hskip 1cm}l@{\hskip 1cm}l}
+            \toprule
+%            \multicolumn{1}{c}{\textbf{Úroveň}} & \multicolumn{1}{c}{\textbf{Veľkosť}} & \multicolumn{2}{c}{\textbf{Odozva}} & \multicolumn{1}{c}{\textbf{Asociativita}} & \multicolumn{1}{c}{\textbf{Veľkosť bloku}}\\ \toprule
+%            \multicolumn{1}{c}{\textbf{Názov}} & \multicolumn{3}{c}{\textbf{Operácie}} & \\ \toprule
+            \textbf{Vyhľadávacie stromy} & \textbf{Vyhľadávanie} & \textbf{Vkladanie} & \textbf{Prechod} \\ \toprule
+            \aware B-strom & $\bigO{\log_B{N}}$ & $\bigO{\log_B{N}}$ & $\bigO{\frac{K}{B}}$ \\ 
+            \hl \obliv statický strom & $\bigO{\log_B{N}}$ & --- & --- \\
+            \hl \obliv B-strom & $\bigO{\log_B{N}}$ & $\bigO{\log_B{N}+\frac{\log^2{N}}{B}}$ \amort & $\bigO{\frac{K}{B}}$ \\
+            \hl \obliv B-strom & $\bigO{\log_B{N}}$ & $\bigO{\log_B{N}}$ \amort & $\bigO{\frac{K}{\min\{B,\log N\}}}$ \\ 
+            \toprule
+            \textbf{Usporiadaná postupnosť} & \textbf{Vkladanie} & \textbf{Prechod} & \\ \toprule
+            \aware spájaný zoznam & $\bigO{1}$ \amort & $\bigO{\frac{K}{B}}$ \\ 
+            \hl \obliv usporiadané pole & $\bigO{\frac{\log^2{N}}{B}}$ & $\bigO{\frac{K}{B}}$ & \\
+            \toprule
+            \textbf{Triedenie} & & &  \\ \toprule    
+            \aware mergesort & $\bigO{\frac{N}{B}\log_{M/B}{\frac{N}{B}}}$ & &  \\
+            \obliv funnelsort & $\bigO{\frac{N}{B}\log_{M/B}{\frac{N}{B}}}$ & &  \\
+            \toprule
+            \textbf{Prioritné fronty} & \textbf{Vkladanie} & \textbf{Výber minima} &  \\ \toprule
+            \aware buffer tree & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$ \amort & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$ \amort & \\
+            \obliv prioritná fronta & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$ \amort & $\bigO{\frac{1}{B}\log_{M/B}{\frac{N}{B}}}$ \amort & \\
+            \bottomrule
+        \end{tabular}
+        
+\end{document}

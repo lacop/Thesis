@@ -28,10 +28,7 @@
 \begin{frame}
     \frametitle{Obsah práce}
     \begin{itemize}
-        \item Vysvetlenie pamäťového modelu
-        \begin{itemize}
-            \item Porovnanie s RAM modelom
-        \end{itemize}
+        \item RAM model vs. cache-oblivious model
         \item Prehľad cache-oblivious algoritmov a DŠ
         \begin{itemize}
             \item Ich popis a analýza
@@ -54,7 +51,7 @@
 \subsection{Problémy RAM modelu}
 \begin{frame}
     \begin{itemize}
-        \item V skutočnosti však mame viac úrovní pamäte
+        \item V skutočnosti však máme viac úrovní pamäte
         \item Rýchla pamäť je malá a drahá $\Rightarrow$ pamäťová hierarchia
     \end{itemize}
     \begin{center}
@@ -109,7 +106,7 @@
 	\end{itemize}
     Problémy cache-aware algoritmov:
     \begin{itemize}
-    		\item Ak je cache plná, musí vybrať, ktorý blok zahodí (a jeho obsah treba zapísať na disk)
+    		%\item Ak je cache plná, musí vybrať, ktorý blok zahodí (a jeho obsah treba zapísať na disk)
             \item Čo ak sa zmenia parametre $B$ alebo $M$?
 		    \item Čo v prípade viac úrovní? Treba pre každú susediacu dvojicu poznať $B, M$  a spravovať bloky
     \end{itemize}
@@ -142,7 +139,23 @@
 	\pnote{Pozname pri analyze, ale nie pocas behu}
 \end{frame}
 
+
+\newcommand{\amort}{{\small \textit{amort.}}}
+\newcommand{\toprule}{\hline}
+\newcommand{\bottomrule}{\hline}
+\newcommand{\aware}{Cache-aware}
+\newcommand{\obliv}{Cache-oblivious}
+
 \section{Algoritmy a dátové štruktúry}
+\begin{frame}
+    \includegraphics[width=\textwidth]{table}
+\end{frame}
+
+\begin{frame}
+    \includegraphics[width=\textwidth]{table_color}
+\end{frame}
+
+
 \begin{frame}
     \frametitle{Vyhľadávacie stromy}
     \begin{itemize}
@@ -221,7 +234,6 @@
     \end{itemize}
 \end{frame}
 
-\newcommand{\amort}{{\small \textit{amort.}}}
 \begin{frame}
     \frametitle{Porovnanie počtu pamäťových presunov}
     {\renewcommand{\arraystretch}{1.5}
